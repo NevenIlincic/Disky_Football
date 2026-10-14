@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://cl7fbi115tehh"]
+
+[ext_resource type="Script" uid="uid://dbt72206qrssv" path="res://Scenes/Effects/ball_effect.gd" id="1_agqku"]
+
+[sub_resource type="Curve" id="Curve_7una7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dvhrm"]
+curve = SubResource("Curve_7una7")
+
+[sub_resource type="Gradient" id="Gradient_phxyo"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_phxyo"]
+gradient = SubResource("Gradient_phxyo")
+
+[sub_resource type="Curve" id="Curve_jiyva"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0.010752678, 2.6428576), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7una7"]
+curve = SubResource("Curve_jiyva")
+
+[sub_resource type="Curve" id="Curve_phxyo"]
+_data = [Vector2(0, 0.29464293), 0.0, 0.0, 0, 0, Vector2(0.96774197, 0.053571463), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_agqku"]
+curve = SubResource("Curve_phxyo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jjc5n"]
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 1, 0)
+scale_curve = SubResource("CurveTexture_agqku")
+color_ramp = SubResource("GradientTexture1D_phxyo")
+alpha_curve = SubResource("CurveTexture_dvhrm")
+emission_curve = SubResource("CurveTexture_7una7")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agqku"]
+vertex_color_use_as_albedo = true
+emission_operator = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_agqku"]
+material = SubResource("StandardMaterial3D_agqku")
+
+[sub_resource type="Curve" id="Curve_agqku"]
+_data = [Vector2(0, 0.3392858), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jiyva"]
+curve = SubResource("Curve_agqku")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_phxyo"]
+flatness = 1.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 10, 0)
+scale_curve = SubResource("CurveTexture_jiyva")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvhrm"]
+albedo_color = Color(0.19793725, 0.19793722, 0.19793722, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_jiyva"]
+material = SubResource("StandardMaterial3D_dvhrm")
+
+[sub_resource type="Sky" id="Sky_jjc5n"]
+
+[sub_resource type="Environment" id="Environment_06txj"]
+background_mode = 3
+background_energy_multiplier = 3.31
+sky = SubResource("Sky_jjc5n")
+glow_enabled = true
+glow_intensity = 1.65
+glow_hdr_threshold = 1.48
+
+[node name="Fire_Effect" type="GPUParticles3D" unique_id=307419005]
+emitting = false
+amount = 30
+lifetime = 0.4
+speed_scale = 1.5
+process_material = SubResource("ParticleProcessMaterial_jjc5n")
+draw_pass_1 = SubResource("SphereMesh_agqku")
+script = ExtResource("1_agqku")
+
+[node name="Smoke_Effect" type="GPUParticles3D" parent="." unique_id=2103650074]
+emitting = false
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_phxyo")
+draw_pass_1 = SubResource("SphereMesh_jiyva")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1061555200]
+environment = SubResource("Environment_06txj")

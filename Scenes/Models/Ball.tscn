@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://gleiq4l7fbjf"]
+
+[ext_resource type="PackedScene" uid="uid://dx044doqmp68c" path="res://Models/football.glb" id="1_g0ajq"]
+
+[node name="Sketchfab_Scene" unique_id=1199789368 instance=ExtResource("1_g0ajq")]
