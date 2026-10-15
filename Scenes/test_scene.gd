@@ -13,9 +13,13 @@ var is_action: bool = false
 
 #@onready var player: Player = $Player
 @onready var ball: Ball = $Field/Ball
+@onready var ball_spawn_position: Marker3D = $Field/Ball_Spawn_Position
 
 
 var selected_player: Player
+
+var my_spawn_points: Array[Marker3D] = []
+var enemy_spawn_points: Array[Marker3D] = []
 
 #@onready var shooting_indicator: Sprite3D = $Shooting_Indicator
 
@@ -41,6 +45,13 @@ var num_enemies: int = 0
 var players: Array[Player]
 var enemies: Array[Enemy]
 
+var has_game_started: bool = false
+
+var my_score: int = 0
+var enemy_score: int = 0
+@onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
+@onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
+
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
 		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
@@ -51,8 +62,45 @@ func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_released("drag"):
 		is_dragging = false
 		do_action()
-		
 
+
+func reset_entities_position():
+
+	for player: Player in players:
+		player.respawn_entity()
+		
+	for enemy: Enemy in enemies:
+		enemy.respawn_entity()
+	ball.respawn_entity()
+	await get_tree().physics_frame
+	
+	if not is_my_turn:
+		await get_tree().create_timer(1.0).timeout
+		has_game_started = true
+		handle_enemy_turn()
+		
+func spawn_players():
+	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
+		my_spawn_points.append(my_spawn_point)
+	for enemy_spawn_point in get_tree().get_nodes_in_group("enemy_spawn_point"):
+		enemy_spawn_points.append(enemy_spawn_point)
+	
+	for i in range(0, players.size()):
+		var player_spawn_position: Vector3 = my_spawn_points[i].global_position
+		var enemy_spawn_position: Vector3 = enemy_spawn_points[i].global_position
+		
+		players[i].global_position = player_spawn_position
+		enemies[i].global_position = enemy_spawn_position
+		
+		players[i].spawn_position = player_spawn_position
+		enemies[i].spawn_position = enemy_spawn_position
+
+	var ball_spawn_position: Vector3 = ball_spawn_position.global_position
+	ball.global_position = ball_spawn_position
+	ball.spawn_position = ball_spawn_position
+	
+	has_game_started = true
+	
 func _ready() -> void:
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
@@ -71,7 +119,8 @@ func _ready() -> void:
 		enemy.finished_move.connect(_on_enemy_finished_move)
 		enemy.continued_move.connect(_on_enemy_continued_move)
 		num_enemies += 1
-
+	
+	spawn_players()
 func _on_enemy_continued_move(enemy: Enemy):
 	_on_move_continued()
 
@@ -116,7 +165,7 @@ func _on_player_finished_move(player: Player):
 		#_reset_elements_in_action()
 
 func _process(delta: float) -> void:
-	if is_action:
+	if is_action and has_game_started:
 		time_passed += delta * 10
 	
 		var minutes: int = int(time_passed) / 60
@@ -223,6 +272,8 @@ func show_selected_player_elements(player: Player):
 	selected_player.shooting_area_indicator.visible = true
 
 func handle_enemy_turn():
+	if not has_game_started:
+		return
 	var is_ball_in_range: bool = false
 	var closest_enemy_from_ball: Enemy
 	var closest_enemy_distance_from_ball: float = INF
@@ -272,3 +323,26 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 			kick_button.set_pressed_no_signal(false)
 		else:
 			selected_player.set_player_not_moving()
+
+
+func _on_enemy_goal_area_body_entered(body: Node3D) -> void:
+	if body is Ball:
+		enemy_score += 1
+		enemy_score_label.text = str(enemy_score)
+		is_action = false
+		has_game_started = false
+		await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
+		has_game_started = true
+		is_my_turn = true
+
+
+func _on_my_goal_area_body_entered(body: Node3D) -> void:
+	if body is Ball:
+		my_score += 1
+		my_score_label.text = str(my_score)
+		is_action = false
+		has_game_started = false
+		is_my_turn = false
+		await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
+
+		

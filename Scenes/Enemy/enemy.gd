@@ -19,6 +19,8 @@ var settle_timer: float = 0.0
 
 var enemy_id: String
 
+var spawn_position: Vector3 = Vector3.ZERO
+
 func _ready() -> void:
 	enemy_id = str(Time.get_ticks_usec(),"_", randi())
 
@@ -56,3 +58,7 @@ func _on_shooting_area_body_exited(body: Node3D) -> void:
 	if body is Ball:
 		is_ball_in_range = false
 	
+func respawn_entity():
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	global_position = spawn_position

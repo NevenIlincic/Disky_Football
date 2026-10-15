@@ -23,7 +23,7 @@ var settle_timer: float = 0.0
 var has_finished_move: bool = false
 var went_over: bool = false
 
-
+var spawn_position: Vector3 = Vector3.ZERO
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var linear_velocity_length = state.linear_velocity.length()
@@ -64,3 +64,8 @@ func apply_hit_force(drag_direction: Vector3):
 	fire_effect.emit_effects()
 	wave_effect.emitting = true
 	has_finished_move = false
+
+func respawn_entity():
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	global_position = spawn_position
