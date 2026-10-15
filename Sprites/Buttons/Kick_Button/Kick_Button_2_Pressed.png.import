@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c00q7uqepe4gv"
-path="res://.godot/imported/Move_Button_Disabled.png-038112951881cd4fa048f1bf474f8223.ctex"
+uid="uid://dbnykn5w8qtnc"
+path="res://.godot/imported/Kick_Button_2_Pressed.png-e53983c07e5e87ad24fc3c54e586bd37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Buttons/Move_Button/Move_Button_Disabled.png"
-dest_files=["res://.godot/imported/Move_Button_Disabled.png-038112951881cd4fa048f1bf474f8223.ctex"]
+source_file="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png"
+dest_files=["res://.godot/imported/Kick_Button_2_Pressed.png-e53983c07e5e87ad24fc3c54e586bd37.ctex"]
 
 [params]
 

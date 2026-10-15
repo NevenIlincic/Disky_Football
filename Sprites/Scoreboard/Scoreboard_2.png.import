@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxdy2kaasb56"
-path="res://.godot/imported/Kick_Button_Hovered.png-474f09172d989f94777db053ecf1dc29.ctex"
+uid="uid://blf2thx2aysjj"
+path="res://.godot/imported/Scoreboard_2.png-40516d329a59232ab367e019e0853f0d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Buttons/Kick_Button/Kick_Button_Hovered.png"
-dest_files=["res://.godot/imported/Kick_Button_Hovered.png-474f09172d989f94777db053ecf1dc29.ctex"]
+source_file="res://Sprites/Scoreboard/Scoreboard_2.png"
+dest_files=["res://.godot/imported/Scoreboard_2.png-40516d329a59232ab367e019e0853f0d.ctex"]
 
 [params]
 

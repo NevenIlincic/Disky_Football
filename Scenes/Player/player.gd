@@ -19,9 +19,9 @@ var is_ball_in_range: bool = false
 var has_finished_move: bool = false
 var went_over: bool = false
 
-const SPEED_TO_START_MOVE: float = 0.5  # prag za početak
-const SPEED_TO_FINISH_MOVE: float = 0.2  # niži prag za kraj (histerezis)
-const SETTLE_TIME: float = 0.15          # koliko dugo mora biti sporo
+const SPEED_TO_START_MOVE: float = 0.5
+const SPEED_TO_FINISH_MOVE: float = 0.2  
+const SETTLE_TIME: float = 0.15          
 
 var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
@@ -71,6 +71,8 @@ func on_action_done():
 	shooting_area_indicator.visible = false
 
 func apply_hit_force(drag_direction: Vector3):
+	drag_direction.x = clamp(drag_direction.x, -600.0, 600.0)
+	drag_direction.z = clamp(drag_direction.z, -600.0, 600.0)
 	apply_central_impulse(drag_direction * 0.5)
 
 

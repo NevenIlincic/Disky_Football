@@ -1,5 +1,7 @@
 extends Node3D
 
+var is_my_turn: bool = true
+
 #TIME
 var time_passed: float = 0
 
@@ -33,9 +35,11 @@ var selected_player: Player
 var drag_direction: Vector3
 
 var elements_in_action: int = 0
-var num_players: int
+var num_players: int = 0
+var num_enemies: int = 0
 
 var players: Array[Player]
+var enemies: Array[Enemy]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
@@ -60,6 +64,19 @@ func _ready() -> void:
 		player.finished_move.connect(_on_player_finished_move)
 		player.continued_move.connect(_on_player_continued_move)
 		num_players += 1
+	
+	for enemy_obj in get_tree().get_nodes_in_group("enemy"):
+		var enemy: Enemy = enemy_obj
+		enemies.append(enemy)
+		enemy.finished_move.connect(_on_enemy_finished_move)
+		enemy.continued_move.connect(_on_enemy_continued_move)
+		num_enemies += 1
+
+func _on_enemy_continued_move(enemy: Enemy):
+	_on_move_continued()
+
+func _on_enemy_finished_move(enemy: Enemy):
+	_on_move_finished()
 
 func _on_player_continued_move(player: Player):
 	_on_move_continued()	
@@ -69,24 +86,34 @@ func _on_move_continued():
 	elements_in_action += 1
 	if not is_action:
 		is_action = true
+		
+func _on_move_finished():
+	elements_in_action -= 1
+
+	if elements_in_action <= 0 and is_action:
+		is_action = false
+		_reset_elements_in_action()
+		if not is_my_turn:
+			await get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
+	
 func _reset_elements_in_action():
 	elements_in_action = 0
-	#ball.went_over = false
-	#for player: Player in players:
-		#player.went_over = false
+
 
 func _on_ball_finished_move(ball: Ball):
-	elements_in_action -= 1
-	if elements_in_action <= 0 and is_action:
-		is_action = false
-		_reset_elements_in_action()
+	_on_move_finished()
+	#elements_in_action -= 1
+	#if elements_in_action <= 0 and is_action:
+		#is_action = false
+		#_reset_elements_in_action()
 
 func _on_player_finished_move(player: Player):
-	elements_in_action -= 1
-
-	if elements_in_action <= 0 and is_action:
-		is_action = false
-		_reset_elements_in_action()
+	_on_move_finished()
+	#elements_in_action -= 1
+#
+	#if elements_in_action <= 0 and is_action:
+		#is_action = false
+		#_reset_elements_in_action()
 
 func _process(delta: float) -> void:
 	if is_action:
@@ -158,19 +185,31 @@ func on_action_done():
 	power_bar.value = 0.0
 	is_action = true
 	selected_player = null
+	is_my_turn = false
 	
+
 func _on_player_selected(player: Player):
-	if is_action:
+	if is_action or not is_my_turn:
 		return
 	if selected_player:
 		selected_player.on_player_deselected()
-		if selected_player.player_id == player.player_id and not selected_player.is_moving and not selected_player.is_shooting:
-			selected_player = null
-			buttons.visible = false
-			power_bar.visible = false
-			return
+		if selected_player.player_id == player.player_id: 
+			if not selected_player.is_moving and not selected_player.is_shooting:
+				shooting_indicator.visible = false
+				selected_player = null
+				buttons.visible = false
+				power_bar.visible = false
+				return
+		else:
+			kick_button.set_pressed_no_signal(false)
+			move_player_button.set_pressed_no_signal(false)
+			
+			selected_player.set_player_not_shooting()
+			selected_player.set_player_not_moving()
+		
 			
 	selected_player = player
+	shooting_indicator.global_position = selected_player.global_position
 	show_selected_player_elements(selected_player)
 
 
@@ -183,16 +222,42 @@ func show_selected_player_elements(player: Player):
 	power_bar.visible = true
 	selected_player.shooting_area_indicator.visible = true
 
+func handle_enemy_turn():
+	var is_ball_in_range: bool = false
+	var closest_enemy_from_ball: Enemy
+	var closest_enemy_distance_from_ball: float = INF
+	for enemy: Enemy in enemies:
+		if enemy.is_ball_in_range:
+			is_ball_in_range = true
+			break
+		else:
+			var distance_from_ball: float = enemy.global_position.distance_to(ball.global_position)
+			if distance_from_ball < closest_enemy_distance_from_ball:
+				closest_enemy_distance_from_ball = distance_from_ball
+				closest_enemy_from_ball = enemy
+	
+	
+	var direction: Vector3 = Vector3.ZERO
+	direction.x = randf_range(-600, 600.0)
+	direction.z = randf_range(-600.0, 600.0)
+	var intensity: float = randf()
+	
+	if is_ball_in_range: ### SHOOT BALL
+		drag_direction.y = sqrt(direction.length()) * 3
+		ball.apply_hit_force(direction)
+	else: ## MOVE ENEMY
+		var intensity_multiplier: int = randi_range(15, 25)
+		direction.x = (ball.global_position.x - closest_enemy_from_ball.global_position.x) * intensity_multiplier
+		direction.z = (ball.global_position.z - closest_enemy_from_ball.global_position.z) * intensity_multiplier
+		closest_enemy_from_ball.apply_hit_force(direction)
+	is_my_turn = true
+
 func _on_kick_button_pressed() -> void:
 	if selected_player:
 		selected_player.set_player_shooting()
-
-
 func _on_move_player_button_pressed() -> void:
 	if selected_player:
 		selected_player.set_player_moving()
-
-
 func _on_kick_button_toggled(toggled_on: bool) -> void:
 	if selected_player:
 		if toggled_on:
@@ -200,8 +265,6 @@ func _on_kick_button_toggled(toggled_on: bool) -> void:
 			move_player_button.set_pressed_no_signal(false)
 		else:
 			selected_player.set_player_not_shooting()
-
-
 func _on_move_player_button_toggled(toggled_on: bool) -> void:
 	if selected_player:
 		if toggled_on:

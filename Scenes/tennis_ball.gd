@@ -58,6 +58,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 
 func apply_hit_force(drag_direction: Vector3):
 	wave_effect.global_position = global_position
+	drag_direction.x = clamp(drag_direction.x, -600.0, 600.0)
+	drag_direction.z = clamp(drag_direction.z, -600.0, 600.0)
 	apply_central_impulse(drag_direction)
 	fire_effect.emit_effects()
 	wave_effect.emitting = true

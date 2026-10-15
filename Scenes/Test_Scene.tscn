@@ -3,21 +3,22 @@
 [ext_resource type="Script" uid="uid://da6t544jh0j8d" path="res://Scenes/test_scene.gd" id="1_4ms0o"]
 [ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="2_88mxo"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="3_argnq"]
-[ext_resource type="Texture2D" uid="uid://bkq2bccf4bapl" path="res://Sprites/Buttons/Kick_Button/Kick_Button.png" id="4_8c5ma"]
+[ext_resource type="Texture2D" uid="uid://dxig6lu7vv1eg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Enabled.png" id="4_513u8"]
 [ext_resource type="Texture2D" uid="uid://vy5yui2vxfek" path="res://Sprites/Power_Bar/Under.png" id="5_jq7r5"]
-[ext_resource type="Texture2D" uid="uid://b21ghfa3n5b7d" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Disabled.png" id="5_ltieu"]
+[ext_resource type="Texture2D" uid="uid://dbnykn5w8qtnc" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png" id="5_kw30y"]
 [ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="5_svcn8"]
-[ext_resource type="Texture2D" uid="uid://bdbkuiug5gt1s" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Active.png" id="5_yn6en"]
+[ext_resource type="Texture2D" uid="uid://7nx4ywugf6vg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Hovered.png" id="6_518se"]
 [ext_resource type="Texture2D" uid="uid://bfwjhdrc25vlo" path="res://Sprites/Power_Bar/Over.png" id="6_argnq"]
 [ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="6_jq7r5"]
 [ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="6_mykrp"]
-[ext_resource type="Texture2D" uid="uid://bxdy2kaasb56" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Hovered.png" id="6_ofkpl"]
+[ext_resource type="Texture2D" uid="uid://cr1k8jtjh5j4l" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Disabled.png" id="7_ebsyv"]
 [ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="7_mykrp"]
-[ext_resource type="Texture2D" uid="uid://h2o61khkgut" path="res://Sprites/Buttons/Move_Button/Move_Button_Enabled.png" id="8_grcoo"]
-[ext_resource type="Texture2D" uid="uid://crvqnhrkwrpsl" path="res://Sprites/Buttons/Move_Button/Move_Button_Pressed.png" id="9_6uspl"]
-[ext_resource type="Texture2D" uid="uid://d4hvbqd7xfl43" path="res://Sprites/Buttons/Move_Button/Move_Button_Hovered.png" id="9_tq75k"]
-[ext_resource type="Texture2D" uid="uid://c00q7uqepe4gv" path="res://Sprites/Buttons/Move_Button/Move_Button_Disabled.png" id="11_513u8"]
-[ext_resource type="Texture2D" uid="uid://cwpqqaq3fdfh1" path="res://Sprites/Scoreboard/Scoreboard.png" id="14_513u8"]
+[ext_resource type="Texture2D" uid="uid://rhoa01h2l335" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Enabled.png" id="8_513u8"]
+[ext_resource type="Texture2D" uid="uid://dj72b0qoi4138" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Pressed.png" id="9_kw30y"]
+[ext_resource type="Texture2D" uid="uid://bjgk8xw5apx8b" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Hovered.png" id="10_518se"]
+[ext_resource type="Texture2D" uid="uid://cpq3i66b8oi32" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Disabled.png" id="11_ebsyv"]
+[ext_resource type="Texture2D" uid="uid://blf2thx2aysjj" path="res://Sprites/Scoreboard/Scoreboard_2.png" id="14_513u8"]
+[ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="19_kw30y"]
 
 [sub_resource type="Environment" id="Environment_q455q"]
 background_mode = 3
@@ -165,10 +166,10 @@ offset_right = 192.0
 offset_bottom = 124.0
 focus_mode = 0
 toggle_mode = true
-texture_normal = ExtResource("4_8c5ma")
-texture_pressed = ExtResource("5_yn6en")
-texture_hover = ExtResource("6_ofkpl")
-texture_disabled = ExtResource("5_ltieu")
+texture_normal = ExtResource("4_513u8")
+texture_pressed = ExtResource("5_kw30y")
+texture_hover = ExtResource("6_518se")
+texture_disabled = ExtResource("7_ebsyv")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -178,10 +179,10 @@ offset_right = 192.0
 offset_bottom = 244.0
 focus_mode = 0
 toggle_mode = true
-texture_normal = ExtResource("8_grcoo")
-texture_pressed = ExtResource("9_6uspl")
-texture_hover = ExtResource("9_tq75k")
-texture_disabled = ExtResource("11_513u8")
+texture_normal = ExtResource("8_513u8")
+texture_pressed = ExtResource("9_kw30y")
+texture_hover = ExtResource("10_518se")
+texture_disabled = ExtResource("11_ebsyv")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -276,7 +277,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4678345, 12.55129)
 shape = SubResource("BoxShape3D_v6i7x")
 
 [node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1588640632]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.658203, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=471107307]
@@ -315,6 +316,12 @@ one_shot = true
 speed_scale = 2.0
 process_material = SubResource("ParticleProcessMaterial_88mxo")
 draw_pass_1 = SubResource("QuadMesh_8c5ma")
+
+[node name="Enemy" parent="." unique_id=594854611 instance=ExtResource("19_kw30y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.792366, 0.25000095, -0.4760313)
+
+[node name="Enemy2" parent="." unique_id=220316157 instance=ExtResource("19_kw30y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.8000965, 0.25, 7.0285044)
 
 [connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
 [connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]
