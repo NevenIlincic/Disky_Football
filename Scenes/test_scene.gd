@@ -52,6 +52,9 @@ var enemy_score: int = 0
 @onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
 @onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
 
+@onready var my_goal: Goal = $Field/My_Goal
+@onready var enemy_goal: Goal = $Field/Enemy_Goal
+
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
 		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
@@ -72,12 +75,16 @@ func reset_entities_position():
 	for enemy: Enemy in enemies:
 		enemy.respawn_entity()
 	ball.respawn_entity()
+	my_goal.reset_entity()
+	enemy_goal.reset_entity()
 	await get_tree().physics_frame
 	
 	if not is_my_turn:
 		await get_tree().create_timer(1.0).timeout
 		has_game_started = true
 		handle_enemy_turn()
+	else:
+		has_game_started = true
 		
 func spawn_players():
 	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
@@ -96,12 +103,15 @@ func spawn_players():
 		enemies[i].spawn_position = enemy_spawn_position
 
 	var ball_spawn_position: Vector3 = ball_spawn_position.global_position
-	ball.global_position = ball_spawn_position
+	#ball.global_position = ball_spawn_position
 	ball.spawn_position = ball_spawn_position
 	
 	has_game_started = true
 	
 func _ready() -> void:
+	my_goal.goal_scored.connect(_on_goal_scored)
+	enemy_goal.goal_scored.connect(_on_goal_scored)
+	
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
 	
@@ -119,6 +129,8 @@ func _ready() -> void:
 		enemy.finished_move.connect(_on_enemy_finished_move)
 		enemy.continued_move.connect(_on_enemy_continued_move)
 		num_enemies += 1
+		
+	
 	
 	spawn_players()
 func _on_enemy_continued_move(enemy: Enemy):
@@ -158,11 +170,6 @@ func _on_ball_finished_move(ball: Ball):
 
 func _on_player_finished_move(player: Player):
 	_on_move_finished()
-	#elements_in_action -= 1
-#
-	#if elements_in_action <= 0 and is_action:
-		#is_action = false
-		#_reset_elements_in_action()
 
 func _process(delta: float) -> void:
 	if is_action and has_game_started:
@@ -196,7 +203,6 @@ func draw_indicator():
 		power_bar.value = drag_distance_length / 3.0
 	else:
 		power_bar.value = 0.0
-
 
 func calculate_drag_direction():
 	end_position = get_viewport().get_mouse_position()
@@ -236,7 +242,6 @@ func on_action_done():
 	selected_player = null
 	is_my_turn = false
 	
-
 func _on_player_selected(player: Player):
 	if is_action or not is_my_turn:
 		return
@@ -274,6 +279,7 @@ func show_selected_player_elements(player: Player):
 func handle_enemy_turn():
 	if not has_game_started:
 		return
+	print("OVDE")
 	var is_ball_in_range: bool = false
 	var closest_enemy_from_ball: Enemy
 	var closest_enemy_distance_from_ball: float = INF
@@ -325,24 +331,24 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 			selected_player.set_player_not_moving()
 
 
-func _on_enemy_goal_area_body_entered(body: Node3D) -> void:
-	if body is Ball:
-		enemy_score += 1
-		enemy_score_label.text = str(enemy_score)
-		is_action = false
-		has_game_started = false
-		await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
-		has_game_started = true
-		is_my_turn = true
+func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
+	is_action = false
+	has_game_started = false
+	if goal_owner == Goal.GoalOwner.ME:
+		on_enemy_scored()
+	else:
+		on_scored()
+	
+	await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
+	#has_game_started = true
 
+func on_enemy_scored() -> void:
+	enemy_score += 1
+	enemy_score_label.text = str(enemy_score)
+	is_my_turn = true
 
-func _on_my_goal_area_body_entered(body: Node3D) -> void:
-	if body is Ball:
-		my_score += 1
-		my_score_label.text = str(my_score)
-		is_action = false
-		has_game_started = false
-		is_my_turn = false
-		await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
-
+func on_scored() -> void:
+	my_score += 1
+	my_score_label.text = str(my_score)
+	is_my_turn = false
 		

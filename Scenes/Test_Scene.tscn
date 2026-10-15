@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://cpq3i66b8oi32" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Disabled.png" id="11_ebsyv"]
 [ext_resource type="Texture2D" uid="uid://blf2thx2aysjj" path="res://Sprites/Scoreboard/Scoreboard_2.png" id="14_513u8"]
 [ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="19_kw30y"]
+[ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="20_518se"]
 
 [sub_resource type="Environment" id="Environment_q455q"]
 background_mode = 3
@@ -50,12 +51,8 @@ texture_filter = 1
 material = SubResource("StandardMaterial3D_h54ih")
 size = Vector2(80, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_argnq"]
-albedo_color = Color(1, 1, 0.1764706, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_s8jax"]
-material = SubResource("StandardMaterial3D_argnq")
-size = Vector3(80, 5, 1)
+size = Vector3(80.23, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s8jax"]
 size = Vector3(80, 25, 1)
@@ -75,16 +72,28 @@ size = Vector3(80, 25.935669, 1)
 size = Vector3(80, 1, 60)
 
 [sub_resource type="BoxMesh" id="BoxMesh_06txj"]
-size = Vector3(1, 5, 60)
+size = Vector3(1, 5, 19)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jjc5n"]
-size = Vector3(1, 25, 60)
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cl7co"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cl7co"]
+size = Vector3(1, 20, 19)
 
 [sub_resource type="BoxMesh" id="BoxMesh_jjc5n"]
-size = Vector3(1, 5, 60)
+size = Vector3(1, 5, 19)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fhwqp"]
-size = Vector3(1, 25.45459, 60)
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_moqms"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_moqms"]
+size = Vector3(1, 20, 19)
 
 [sub_resource type="Curve" id="Curve_jq7r5"]
 _data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -121,9 +130,6 @@ albedo_texture = ExtResource("5_svcn8")
 [sub_resource type="QuadMesh" id="QuadMesh_8c5ma"]
 material = SubResource("StandardMaterial3D_jjc5n")
 orientation = 1
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_moqms"]
-size = Vector3(25, 1, 25)
 
 [sub_resource type="BoxMesh" id="BoxMesh_fhwqp"]
 
@@ -259,7 +265,7 @@ light_energy = 0.2
 [node name="Field" type="Node3D" parent="." unique_id=1493409086]
 
 [node name="Ball" parent="Field" unique_id=1734501864 instance=ExtResource("7_mykrp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.44498, 0.5592249, 0.8023712)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.392437, 0.5592249, 0.8023712)
 
 [node name="Player2" parent="Field" unique_id=1067493788 instance=ExtResource("6_jq7r5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3827057, 0.25, -0.3622365)
@@ -275,7 +281,6 @@ physics_material_override = SubResource("PhysicsMaterial_mrf6p")
 shape = SubResource("WorldBoundaryShape3D_jjc5n")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Floor" unique_id=453124518]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21115494, 0.091033936, 0.0022411346)
 mesh = SubResource("PlaneMesh_jjc5n")
 
 [node name="Wall" type="StaticBody3D" parent="Field" unique_id=312517496]
@@ -283,7 +288,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
 input_ray_pickable = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=808762756]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
 mesh = SubResource("BoxMesh_s8jax")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall" unique_id=101822466]
@@ -296,6 +301,7 @@ input_ray_pickable = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=268217412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
+visible = false
 mesh = SubResource("BoxMesh_v6i7x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall_2" unique_id=2030264803]
@@ -310,28 +316,44 @@ input_ray_pickable = false
 shape = SubResource("BoxShape3D_06txj")
 
 [node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=1687956656]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.832928, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
 input_ray_pickable = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=916054505]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
 mesh = SubResource("BoxMesh_06txj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=83038642]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.480252, 0)
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=83038642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, 15)
 shape = SubResource("BoxShape3D_jjc5n")
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=964739560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_cl7co")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=1421933821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, -15.374)
+shape = SubResource("BoxShape3D_cl7co")
+
 [node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=866525442]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.62684, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
 input_ray_pickable = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=683238141]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5758786, 0)
+[node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=683238141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
 mesh = SubResource("BoxMesh_jjc5n")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=918448713]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.772705, 0)
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=918448713]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, 15)
 shape = SubResource("BoxShape3D_fhwqp")
+
+[node name="Right_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=1080963679]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_moqms")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=533292015]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, -15.373857)
+shape = SubResource("BoxShape3D_moqms")
 
 [node name="Wave_Effect" type="GPUParticles3D" parent="Field" unique_id=2093427939]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4084432, -0.71547604)
@@ -376,19 +398,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.3573, 0.25, 7.0285044)
 [node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=151517408]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
 
-[node name="Enemy_Goal_Area" type="Area3D" parent="Field" unique_id=2134216025]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.679996, 0.9903586, 6.5155277)
-input_ray_pickable = false
+[node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("20_518se")]
+transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Enemy_Goal_Area" unique_id=1736844605]
-shape = SubResource("BoxShape3D_moqms")
-
-[node name="My_Goal_Area" type="Area3D" parent="Field" unique_id=755957837]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.176174, 0.9903586, 6.5155277)
-input_ray_pickable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/My_Goal_Area" unique_id=1307680466]
-shape = SubResource("BoxShape3D_moqms")
+[node name="Enemy_Goal" parent="Field" unique_id=88894562 instance=ExtResource("20_518se")]
+transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
+goal_owner = 1
 
 [node name="My_Formation_3-3" type="Node3D" parent="." unique_id=325232636]
 
@@ -476,5 +491,3 @@ mesh = SubResource("BoxMesh_fhwqp")
 
 [connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
 [connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]
-[connection signal="body_entered" from="Field/Enemy_Goal_Area" to="." method="_on_enemy_goal_area_body_entered"]
-[connection signal="body_entered" from="Field/My_Goal_Area" to="." method="_on_my_goal_area_body_entered"]

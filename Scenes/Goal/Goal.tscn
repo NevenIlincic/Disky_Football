@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://cctmr66sccguo"]
+
+[ext_resource type="Script" uid="uid://c8ycwb627f3bo" path="res://Scenes/Goal/goal.gd" id="1_duylk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_06txj"]
+size = Vector3(0.25, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jjc5n"]
+size = Vector3(3, 0.2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_06txj"]
+size = Vector3(3, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moqms"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.26666668, 0.11764706, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fhwqp"]
+material = SubResource("StandardMaterial3D_moqms")
+size = Vector3(3, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jjc5n"]
+size = Vector3(3, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fhwqp"]
+size = Vector3(3, 20, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_moqms"]
+size = Vector3(0.25, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cl7co"]
+size = Vector3(0.25, 1, 1)
+
+[node name="Goal" type="StaticBody3D" unique_id=455571177]
+script = ExtResource("1_duylk")
+
+[node name="Left_Goalpost" type="MeshInstance3D" parent="." unique_id=220726475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3714855, 0.7689913, 0)
+mesh = SubResource("BoxMesh_06txj")
+
+[node name="Right_Goal_Post" type="MeshInstance3D" parent="." unique_id=913832651]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3705926, 0.7689913, 0)
+mesh = SubResource("BoxMesh_06txj")
+
+[node name="Crossbar" type="MeshInstance3D" parent="." unique_id=1641058070]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("BoxMesh_jjc5n")
+
+[node name="Behind_Collision_Box" type="CollisionShape3D" parent="." unique_id=555859878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802, -1)
+shape = SubResource("BoxShape3D_06txj")
+
+[node name="Goal_Detection_Area" type="Area3D" parent="." unique_id=2057143544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.643063, -0.2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Goal_Detection_Area" unique_id=1252878322]
+visible = false
+mesh = SubResource("BoxMesh_fhwqp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Goal_Detection_Area" unique_id=598525609]
+shape = SubResource("BoxShape3D_jjc5n")
+
+[node name="Above_Collision_Box" type="CollisionShape3D" parent="." unique_id=1158198863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.1, -0.005)
+shape = SubResource("BoxShape3D_fhwqp")
+
+[node name="Left_Collision_Box" type="CollisionShape3D" parent="." unique_id=720890245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.371, 0.769, 0)
+shape = SubResource("BoxShape3D_moqms")
+
+[node name="Right_Collision_Box" type="CollisionShape3D" parent="." unique_id=392417307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.371, 0.769, 0)
+shape = SubResource("BoxShape3D_cl7co")
+
+[connection signal="body_entered" from="Goal_Detection_Area" to="." method="_on_goal_detection_area_body_entered"]
