@@ -27,6 +27,7 @@ radius = 1.0
 
 [node name="Player" type="RigidBody3D" unique_id=1368321486 groups=["player"]]
 input_ray_pickable = false
+axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 mass = 7.0

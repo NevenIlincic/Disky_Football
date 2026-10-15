@@ -3,12 +3,21 @@
 [ext_resource type="Script" uid="uid://da6t544jh0j8d" path="res://Scenes/test_scene.gd" id="1_4ms0o"]
 [ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="2_88mxo"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="3_argnq"]
+[ext_resource type="Texture2D" uid="uid://bkq2bccf4bapl" path="res://Sprites/Buttons/Kick_Button/Kick_Button.png" id="4_8c5ma"]
 [ext_resource type="Texture2D" uid="uid://vy5yui2vxfek" path="res://Sprites/Power_Bar/Under.png" id="5_jq7r5"]
+[ext_resource type="Texture2D" uid="uid://b21ghfa3n5b7d" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Disabled.png" id="5_ltieu"]
 [ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="5_svcn8"]
+[ext_resource type="Texture2D" uid="uid://bdbkuiug5gt1s" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Active.png" id="5_yn6en"]
 [ext_resource type="Texture2D" uid="uid://bfwjhdrc25vlo" path="res://Sprites/Power_Bar/Over.png" id="6_argnq"]
 [ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="6_jq7r5"]
 [ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="6_mykrp"]
+[ext_resource type="Texture2D" uid="uid://bxdy2kaasb56" path="res://Sprites/Buttons/Kick_Button/Kick_Button_Hovered.png" id="6_ofkpl"]
 [ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="7_mykrp"]
+[ext_resource type="Texture2D" uid="uid://h2o61khkgut" path="res://Sprites/Buttons/Move_Button/Move_Button_Enabled.png" id="8_grcoo"]
+[ext_resource type="Texture2D" uid="uid://crvqnhrkwrpsl" path="res://Sprites/Buttons/Move_Button/Move_Button_Pressed.png" id="9_6uspl"]
+[ext_resource type="Texture2D" uid="uid://d4hvbqd7xfl43" path="res://Sprites/Buttons/Move_Button/Move_Button_Hovered.png" id="9_tq75k"]
+[ext_resource type="Texture2D" uid="uid://c00q7uqepe4gv" path="res://Sprites/Buttons/Move_Button/Move_Button_Disabled.png" id="11_513u8"]
+[ext_resource type="Texture2D" uid="uid://cwpqqaq3fdfh1" path="res://Sprites/Scoreboard/Scoreboard.png" id="14_513u8"]
 
 [sub_resource type="Environment" id="Environment_q455q"]
 background_mode = 3
@@ -128,7 +137,18 @@ sky_mode = 1
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1834525346]
 
-[node name="Shooting_Indicator" type="Sprite3D" parent="HUD" unique_id=1450543370]
+[node name="Control" type="Control" parent="HUD" unique_id=1869695717]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Shooting_Indicator" type="Sprite3D" parent="HUD/Control" unique_id=1450543370]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 12.285764, 0)
 visible = false
 offset = Vector2(0, 60)
@@ -136,43 +156,70 @@ texture_filter = 0
 render_priority = 99
 texture = ExtResource("6_mykrp")
 
-[node name="Buttons" type="Node2D" parent="HUD" unique_id=2025791299]
+[node name="Buttons" type="Node2D" parent="HUD/Control" unique_id=2025791299]
 visible = false
 
-[node name="Kick_Button" type="Button" parent="HUD/Buttons" unique_id=1533741237]
+[node name="Kick_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=300528512]
 offset_top = 24.0
-offset_right = 143.35484
-offset_bottom = 125.0
+offset_right = 192.0
+offset_bottom = 124.0
 focus_mode = 0
-text = "KICK"
+toggle_mode = true
+texture_normal = ExtResource("4_8c5ma")
+texture_pressed = ExtResource("5_yn6en")
+texture_hover = ExtResource("6_ofkpl")
+texture_disabled = ExtResource("5_ltieu")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="Move_Player_Button" type="Button" parent="HUD/Buttons" unique_id=1763562434]
-offset_left = 8.0
-offset_top = 176.0
-offset_right = 149.0
-offset_bottom = 276.0
+[node name="Move_Player_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=752726485]
+offset_top = 144.0
+offset_right = 192.0
+offset_bottom = 244.0
 focus_mode = 0
-text = "MOVE"
+toggle_mode = true
+texture_normal = ExtResource("8_grcoo")
+texture_pressed = ExtResource("9_6uspl")
+texture_hover = ExtResource("9_tq75k")
+texture_disabled = ExtResource("11_513u8")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="Power_Bar" type="TextureProgressBar" parent="HUD" unique_id=1709766598]
-visible = false
-offset_left = 1024.0
-offset_top = 16.0
-offset_right = 1139.0
-offset_bottom = 236.0
+[node name="Power_Bar" type="TextureProgressBar" parent="HUD/Control" unique_id=1709766598]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_bottom = 220.0
+grow_horizontal = 0
 fill_mode = 3
 texture_under = ExtResource("5_jq7r5")
 texture_over = ExtResource("6_argnq")
 texture_progress = SubResource("GradientTexture2D_svcn8")
 texture_progress_offset = Vector2(0, 20)
 
-[node name="Time_Label" type="Label" parent="HUD" unique_id=1181832205]
-texture_filter = 1
-offset_left = 456.0
-offset_top = 8.0
-offset_right = 516.0
-offset_bottom = 31.0
+[node name="Scoreboard" type="Control" parent="HUD/Control" unique_id=2013661075]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Scoreboard_Background" type="Sprite2D" parent="HUD/Control/Scoreboard" unique_id=1514041304]
+position = Vector2(1.335144e-05, 24)
+scale = Vector2(0.1779425, 0.15909092)
+texture = ExtResource("14_513u8")
+
+[node name="Time_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=1181832205]
+layout_mode = 0
+offset_left = -48.0
+offset_right = 49.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1569401414]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
@@ -269,5 +316,5 @@ speed_scale = 2.0
 process_material = SubResource("ParticleProcessMaterial_88mxo")
 draw_pass_1 = SubResource("QuadMesh_8c5ma")
 
-[connection signal="pressed" from="HUD/Buttons/Kick_Button" to="." method="_on_kick_button_pressed"]
-[connection signal="pressed" from="HUD/Buttons/Move_Player_Button" to="." method="_on_move_player_button_pressed"]
+[connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
+[connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]

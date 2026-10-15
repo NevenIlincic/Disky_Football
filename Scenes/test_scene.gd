@@ -2,7 +2,6 @@ extends Node3D
 
 #TIME
 var time_passed: float = 0
-@onready var time_label: Label = $HUD/Time_Label
 
 var is_dragging: bool = false
 var start_position: Vector2
@@ -17,14 +16,19 @@ var is_action: bool = false
 var selected_player: Player
 
 #@onready var shooting_indicator: Sprite3D = $Shooting_Indicator
-@onready var shooting_indicator: Sprite3D = $HUD/Shooting_Indicator
 
 #HUD BUTTONS
-@onready var buttons: Node2D = $HUD/Buttons
-@onready var kick_button: Button = $HUD/Buttons/Kick_Button
-@onready var move_player_button: Button = $HUD/Buttons/Move_Player_Button
-@onready var power_bar: TextureProgressBar = $HUD/Power_Bar
+#@onready var buttons: Node2D = $HUD/Buttons
+#@onready var kick_button: Button = $HUD/Buttons/Kick_Button
+#@onready var move_player_button: Button = $HUD/Buttons/Move_Player_Button
+#@onready var power_bar: TextureProgressBar = $HUD/Power_Bar
 @onready var field: Node3D = $Field
+@onready var shooting_indicator: Sprite3D = $HUD/Control/Shooting_Indicator
+@onready var buttons: Node2D = $HUD/Control/Buttons
+@onready var kick_button: TextureButton = $HUD/Control/Buttons/Kick_Button
+@onready var move_player_button: TextureButton = $HUD/Control/Buttons/Move_Player_Button
+@onready var power_bar: TextureProgressBar = $HUD/Control/Power_Bar
+@onready var time_label: Label = $HUD/Control/Scoreboard/Time_Label
 
 var drag_direction: Vector3
 
@@ -149,6 +153,8 @@ func on_action_done():
 	power_bar.visible = false
 	shooting_indicator.visible = false
 	selected_player.on_action_done()
+	kick_button.set_pressed_no_signal(false)
+	move_player_button.set_pressed_no_signal(false)
 	power_bar.value = 0.0
 	is_action = true
 	selected_player = null
@@ -185,3 +191,21 @@ func _on_kick_button_pressed() -> void:
 func _on_move_player_button_pressed() -> void:
 	if selected_player:
 		selected_player.set_player_moving()
+
+
+func _on_kick_button_toggled(toggled_on: bool) -> void:
+	if selected_player:
+		if toggled_on:
+			selected_player.set_player_shooting()
+			move_player_button.set_pressed_no_signal(false)
+		else:
+			selected_player.set_player_not_shooting()
+
+
+func _on_move_player_button_toggled(toggled_on: bool) -> void:
+	if selected_player:
+		if toggled_on:
+			selected_player.set_player_moving()
+			kick_button.set_pressed_no_signal(false)
+		else:
+			selected_player.set_player_not_moving()

@@ -28,11 +28,7 @@ var went_over: bool = false
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var linear_velocity_length = state.linear_velocity.length()
 	var speed: float = linear_velocity_length + state.angular_velocity.length() * 0.5
-	if linear_velocity_length <= 0.0:
-		return
-		
-		
-		
+	
 	if linear_velocity_length > MAX_SPEED:
 		state.linear_velocity = state.linear_velocity.normalized() * MAX_SPEED
 	
@@ -57,19 +53,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 					finished_move.emit(self)
 			else:
 				settle_timer = 0.0
-	#
-	#if linear_velocity_length > SPEED_TO_FINISH_MOVE and has_finished_move:
-		#has_finished_move = false
-		#continued_move.emit(self)
-		#return
-	#if linear_velocity_length > SPEED_TO_FINISH_MOVE and not went_over:
-		#went_over = true
-		#return
-#
-	#if linear_velocity_length < SPEED_TO_FINISH_MOVE and went_over and not has_finished_move:
-		#has_finished_move = true
-		#went_over = false
-		#finished_move.emit(self)
+
 
 
 func apply_hit_force(drag_direction: Vector3):
