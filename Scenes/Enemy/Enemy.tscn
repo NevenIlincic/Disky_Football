@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bo1fmfxbah87d" path="res://Scenes/Enemy/enemy.gd" id="1_i1u57"]
 [ext_resource type="Material" uid="uid://nbgp8qrq27m1" path="res://Materials/Enemy_Material.tres" id="2_3l8kd"]
+[ext_resource type="AudioStream" uid="uid://c6ya1gpj13qcy" path="res://Audio/player_move_sound.mp3" id="3_e0oyi"]
+[ext_resource type="AudioStream" uid="uid://bxisrrdrfathw" path="res://Audio/player_collide_sound.mp3" id="4_02vxf"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3l8kd"]
 bounce = 0.3
@@ -29,6 +31,8 @@ mass = 7.0
 physics_material_override = SubResource("PhysicsMaterial_3l8kd")
 can_sleep = false
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 2
 script = ExtResource("1_i1u57")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1080201915]
@@ -43,5 +47,14 @@ input_ray_pickable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Shooting_Area" unique_id=1924733661]
 shape = SubResource("CylinderShape3D_fw0yv")
 
+[node name="Swish_Sound" type="AudioStreamPlayer" parent="." unique_id=69981244]
+stream = ExtResource("3_e0oyi")
+pitch_scale = 2.0
+
+[node name="Player_Collide_Sound" type="AudioStreamPlayer" parent="." unique_id=1724098862]
+stream = ExtResource("4_02vxf")
+pitch_scale = 1.1
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="Shooting_Area" to="." method="_on_shooting_area_body_entered"]
 [connection signal="body_exited" from="Shooting_Area" to="." method="_on_shooting_area_body_exited"]

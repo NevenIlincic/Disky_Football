@@ -51,9 +51,16 @@ var my_score: int = 0
 var enemy_score: int = 0
 @onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
 @onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
+@onready var goal_scored_sprite: Sprite2D = $HUD/Control/Goal_Scored_Node/Goal_Scored_Sprite
 
 @onready var my_goal: Goal = $Field/My_Goal
 @onready var enemy_goal: Goal = $Field/Enemy_Goal
+
+var is_initial_kick: bool = true
+
+#AUDIO
+@onready var referee_whistle_sound: AudioStreamPlayer = $Referee_Whistle_Sound
+@onready var goal_scored_sound: AudioStreamPlayer = $Goal_Scored_Sound
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
@@ -77,14 +84,17 @@ func reset_entities_position():
 	ball.respawn_entity()
 	my_goal.reset_entity()
 	enemy_goal.reset_entity()
+	goal_scored_node.visible = false
 	await get_tree().physics_frame
 	
+	referee_whistle_sound.play()
 	if not is_my_turn:
 		await get_tree().create_timer(1.0).timeout
 		has_game_started = true
 		handle_enemy_turn()
 	else:
 		has_game_started = true
+		
 		
 func spawn_players():
 	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
@@ -107,6 +117,7 @@ func spawn_players():
 	ball.spawn_position = ball_spawn_position
 	
 	has_game_started = true
+	referee_whistle_sound.play()
 	
 func _ready() -> void:
 	my_goal.goal_scored.connect(_on_goal_scored)
@@ -214,6 +225,12 @@ func do_action():
 	var drag_distance: Vector2 = start_position - end_position
 	if drag_distance.length() < 35.0:
 		return
+	if is_initial_kick:
+		is_initial_kick = false
+		for player: Player in players:
+			player.can_play_sound = true
+		for enemy: Enemy in enemies:
+			enemy.can_play_sound = true
 	ball.has_finished_move = false
 	for player: Player in players:
 		player.has_finished_move = false
@@ -330,17 +347,58 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 		else:
 			selected_player.set_player_not_moving()
 
+@onready var goal_scored_node: Control = $HUD/Control/Goal_Scored_Node
 
 func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
 	is_action = false
 	has_game_started = false
+	goal_scored_node.visible = true
+	play_goal_effect()
+	play_cheer_effect()
+
 	if goal_owner == Goal.GoalOwner.ME:
 		on_enemy_scored()
 	else:
 		on_scored()
 	
-	await get_tree().create_timer(2.0).timeout.connect(reset_entities_position)
+	await get_tree().create_timer(3.0).timeout.connect(reset_entities_position)
 	#has_game_started = true
+@onready var football_fans: Node2D = $HUD/Control/Goal_Scored_Node/Football_Fans
+
+func play_cheer_effect() -> void:
+		
+	for football_fan in football_fans.get_children():
+		var tween: Tween = create_tween()
+		var start_pos: Vector2 = football_fan.position
+		tween.tween_interval(randf_range(0.1, 0.5))
+		for i in range(0, 5):
+			tween.tween_property(football_fan, "scale", Vector2(1.2, 0.8), 0.1)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+			# 2. Odskoči: uži i viši, istovremeno ide gore
+			tween.set_parallel(true)
+			tween.tween_property(football_fan, "scale", Vector2(0.85, 1.2), 0.15)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tween.tween_property(football_fan, "position:y", start_pos.y - 60, 0.25)\
+				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+			# 3. Vrati se dole
+			tween.set_parallel(false)
+			tween.tween_property(football_fan, "position:y", start_pos.y, 0.25)\
+				.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+			tween.parallel().tween_property(football_fan, "scale", Vector2(1.0, 1.0), 0.25)\
+				.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+func play_goal_effect() -> void:
+	goal_scored_sound.play()
+	goal_scored_sprite.visible = true
+	goal_scored_sprite.scale = Vector2.ZERO
+
+	var tween := create_tween()
+	tween.tween_property(goal_scored_sprite, "scale", Vector2(1.3, 1.3), 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(goal_scored_sprite, "scale", Vector2(1.0, 1.0), 0.5)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
 func on_enemy_scored() -> void:
 	enemy_score += 1

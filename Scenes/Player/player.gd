@@ -28,6 +28,10 @@ var settle_timer: float = 0.0
 
 var spawn_position: Vector3 = Vector3.ZERO
 
+#AUDIO
+var can_play_sound: bool = false
+@onready var swish_sound: AudioStreamPlayer = $Swish_Sound
+@onready var player_collide_sound: AudioStreamPlayer = $Player_Collide_Sound
 
 func _ready() -> void:
 	player_id = str(Time.get_ticks_usec(),"_", randi())
@@ -76,6 +80,8 @@ func on_action_done():
 func apply_hit_force(drag_direction: Vector3):
 	drag_direction.x = clamp(drag_direction.x, -600.0, 600.0)
 	drag_direction.z = clamp(drag_direction.z, -600.0, 600.0)
+	swish_sound.pitch_scale = randf_range(1.5, 2.0)
+	swish_sound.play()
 	apply_central_impulse(drag_direction * 0.5)
 
 
@@ -100,3 +106,14 @@ func respawn_entity():
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	global_position = spawn_position
+
+func play_collide_sound() -> void:
+	if can_play_sound:
+		player_collide_sound.pitch_scale = randf_range(0.9, 1.1)
+		player_collide_sound.play()
+func _on_body_entered(body: Node) -> void:
+	if body.is_in_group("player") or body.is_in_group("enemy"):
+		if get_instance_id() > body.get_instance_id():
+			play_collide_sound()
+	else:
+		play_collide_sound()

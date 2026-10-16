@@ -18,8 +18,14 @@
 [ext_resource type="Texture2D" uid="uid://bjgk8xw5apx8b" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Hovered.png" id="10_518se"]
 [ext_resource type="Texture2D" uid="uid://cpq3i66b8oi32" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Disabled.png" id="11_ebsyv"]
 [ext_resource type="Texture2D" uid="uid://blf2thx2aysjj" path="res://Sprites/Scoreboard/Scoreboard_2.png" id="14_513u8"]
+[ext_resource type="Texture2D" uid="uid://b0ae2py0kauie" path="res://Sprites/Goal_Scored/GOAL.png" id="15_ebsyv"]
+[ext_resource type="Texture2D" uid="uid://bqta7micod8yo" path="res://Sprites/Goal_Scored/Football Fan.png" id="16_w2bir"]
+[ext_resource type="Texture2D" uid="uid://cfk1hasv2i3ym" path="res://Sprites/Goal_Scored/Football Fan 2.png" id="17_7tbrw"]
+[ext_resource type="Texture2D" uid="uid://djrfpc7gogide" path="res://Sprites/Goal_Scored/Football Fan 3.png" id="18_q2r4x"]
 [ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="19_kw30y"]
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="20_518se"]
+[ext_resource type="AudioStream" uid="uid://c8c7stegv8vly" path="res://Audio/referee_whistle_sound .mp3" id="25_q2r4x"]
+[ext_resource type="AudioStream" uid="uid://w5orqjfikx3d" path="res://Audio/goal_scored_sound.mp3" id="26_nja13"]
 
 [sub_resource type="Environment" id="Environment_q455q"]
 background_mode = 3
@@ -254,9 +260,57 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=199679577]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Goal_Scored_Sprite" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node" unique_id=1362330790]
+position = Vector2(72, 272)
+texture = ExtResource("15_ebsyv")
+
+[node name="Football_Fans" type="Node2D" parent="HUD/Control/Goal_Scored_Node" unique_id=1388165561]
+position = Vector2(-568, 0)
+
+[node name="FootballFan" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1238828909]
+position = Vector2(464, 536)
+texture = ExtResource("16_w2bir")
+
+[node name="FootballFan2" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=474623342]
+position = Vector2(760, 536)
+texture = ExtResource("17_7tbrw")
+
+[node name="FootballFan3" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=947807136]
+position = Vector2(207.5, 536)
+texture = ExtResource("18_q2r4x")
+
+[node name="FootballFan4" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=820311818]
+position = Vector2(79.5, 536)
+texture = ExtResource("17_7tbrw")
+
+[node name="FootballFan5" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=373723522]
+position = Vector2(327.5, 536)
+texture = ExtResource("17_7tbrw")
+
+[node name="FootballFan6" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=721067644]
+position = Vector2(608, 536)
+texture = ExtResource("16_w2bir")
+
+[node name="FootballFan7" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1625536793]
+position = Vector2(904, 536)
+texture = ExtResource("18_q2r4x")
+
+[node name="FootballFan8" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1722785190]
+position = Vector2(1072, 536)
+texture = ExtResource("18_q2r4x")
+
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1569401414]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
 light_energy = 0.2
+shadow_enabled = true
 
 [node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=372053612]
 transform = Transform3D(-0.05663065, 0.7930336, -0.60653996, -0.0737223, -0.60917795, -0.78959954, -0.9956696, -1.8557891e-09, 0.09296241, -52.470604, 17.136568, 0)
@@ -488,6 +542,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -6.80
 mesh = SubResource("BoxMesh_fhwqp")
 
 [node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D6" unique_id=1158522272 groups=["enemy_spawn_point"]]
+
+[node name="Referee_Whistle_Sound" type="AudioStreamPlayer" parent="." unique_id=181847429]
+stream = ExtResource("25_q2r4x")
+
+[node name="Goal_Scored_Sound" type="AudioStreamPlayer" parent="." unique_id=12602259]
+stream = ExtResource("26_nja13")
 
 [connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
 [connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]
