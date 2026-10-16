@@ -12,15 +12,26 @@ bounce = 0.3
 height = 0.5
 radius = 1.0
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_02vxf"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fw0yv"]
+height = 1.0
+radius = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jmcll"]
 material = ExtResource("2_3l8kd")
+top_radius = 1.0
+height = 0.001
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fw0yv"]
 top_radius = 1.0
 bottom_radius = 1.0
 height = 0.5
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_fw0yv"]
-height = 1.0
-radius = 3.0
+[sub_resource type="CylinderMesh" id="CylinderMesh_06txj"]
+material = ExtResource("2_3l8kd")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.001
+cap_top = false
 
 [node name="Enemy" type="RigidBody3D" unique_id=594854611 groups=["enemy"]]
 input_ray_pickable = false
@@ -38,9 +49,6 @@ script = ExtResource("1_i1u57")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1080201915]
 shape = SubResource("CylinderShape3D_e0oyi")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1576239710]
-mesh = SubResource("CylinderMesh_02vxf")
-
 [node name="Shooting_Area" type="Area3D" parent="." unique_id=403226140]
 input_ray_pickable = false
 
@@ -54,6 +62,17 @@ pitch_scale = 2.0
 [node name="Player_Collide_Sound" type="AudioStreamPlayer" parent="." unique_id=1724098862]
 stream = ExtResource("4_02vxf")
 pitch_scale = 1.1
+
+[node name="Top_Part" type="MeshInstance3D" parent="." unique_id=33492167]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25011238, 0)
+mesh = SubResource("CylinderMesh_jmcll")
+
+[node name="Middle_Part" type="MeshInstance3D" parent="." unique_id=707707566]
+mesh = SubResource("CylinderMesh_fw0yv")
+
+[node name="Bottom_Part" type="MeshInstance3D" parent="." unique_id=1879534921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+mesh = SubResource("CylinderMesh_06txj")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="Shooting_Area" to="." method="_on_shooting_area_body_entered"]

@@ -17,7 +17,8 @@ radius = 1.0
 material = ExtResource("2_h54ih")
 top_radius = 1.0
 bottom_radius = 1.0
-height = 0.5
+height = 0.001
+cap_bottom = false
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fhwqp"]
 height = 1.0
@@ -26,6 +27,18 @@ radius = 3.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_jq7r5"]
 height = 1.0
 radius = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cl7co"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fhwqp"]
+material = ExtResource("2_h54ih")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.001
+cap_top = false
 
 [node name="Player" type="RigidBody3D" unique_id=1368321486 groups=["player"]]
 input_ray_pickable = false
@@ -43,7 +56,8 @@ script = ExtResource("1_s0eop")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=370914854]
 shape = SubResource("CylinderShape3D_l3ax4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1862883230]
+[node name="Top_Part" type="MeshInstance3D" parent="." unique_id=1862883230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25011238, 0)
 mesh = SubResource("CylinderMesh_06txj")
 
 [node name="Shooting_Area" type="Area3D" parent="." unique_id=1343521968]
@@ -70,6 +84,13 @@ pitch_scale = 2.0
 [node name="Player_Collide_Sound" type="AudioStreamPlayer" parent="." unique_id=1035532667]
 stream = ExtResource("5_jmcll")
 pitch_scale = 1.1
+
+[node name="Middle_Part" type="MeshInstance3D" parent="." unique_id=1888555717]
+mesh = SubResource("CylinderMesh_cl7co")
+
+[node name="Bottom_Part" type="MeshInstance3D" parent="." unique_id=1049186905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+mesh = SubResource("CylinderMesh_fhwqp")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="Shooting_Area" to="." method="_on_shooting_area_body_entered"]
