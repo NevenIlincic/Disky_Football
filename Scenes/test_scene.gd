@@ -119,7 +119,7 @@ func spawn_players():
 	has_game_started = true
 	referee_whistle_sound.play()
 	
-func _ready() -> void:
+func _ready() -> void:	
 	my_goal.goal_scored.connect(_on_goal_scored)
 	enemy_goal.goal_scored.connect(_on_goal_scored)
 	

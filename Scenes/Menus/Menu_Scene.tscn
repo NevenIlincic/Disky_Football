@@ -356,4 +356,28 @@ expand_mode = 1
 [node name="LevelSelectionButton" parent="HUD/Control/Level_Selection_Menu" unique_id=1137878850 instance=ExtResource("14_yfte3")]
 position = Vector2(72, 296)
 
+[node name="Create_Button" type="Button" parent="HUD" unique_id=1658840603]
+offset_left = 216.0
+offset_top = 48.0
+offset_right = 282.0
+offset_bottom = 82.0
+text = "CREATE"
+
+[node name="Join_Button" type="Button" parent="HUD" unique_id=1497942743]
+offset_left = 416.0
+offset_top = 48.0
+offset_right = 458.0
+offset_bottom = 82.0
+text = "JOIN"
+
+[node name="Connect_Button" type="Button" parent="HUD" unique_id=30480020]
+offset_left = 64.0
+offset_top = 48.0
+offset_right = 142.0
+offset_bottom = 82.0
+text = "CONNECT"
+
 [connection signal="pressed" from="HUD/Control/Buttons_Control/Start_Button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="HUD/Create_Button" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="HUD/Join_Button" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="HUD/Connect_Button" to="." method="_on_connect_button_pressed"]

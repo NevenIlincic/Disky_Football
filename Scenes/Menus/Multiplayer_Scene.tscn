@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dpsnlw7g6wmfq"]
+
+[ext_resource type="Script" uid="uid://ggv2sp3a3kqh" path="res://Scenes/Menus/multiplayer_scene.gd" id="1_xqaua"]
+
+[node name="MultiplayerScene" type="Node2D" unique_id=1392904219]
+script = ExtResource("1_xqaua")
+
+[node name="Host_Name_Label" type="Label" parent="." unique_id=542686236]
+offset_top = 64.0
+offset_right = 1152.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 32
+text = "ASDJASHDKASLDJKAS"
+horizontal_alignment = 1
+
+[node name="Guest_Name_Label" type="Label" parent="." unique_id=1450992590]
+offset_top = 384.0
+offset_right = 1144.0
+offset_bottom = 520.0
+theme_override_font_sizes/font_size = 32
+text = "GUEST"
+horizontal_alignment = 1
+vertical_alignment = 1
