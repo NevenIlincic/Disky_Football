@@ -4,12 +4,16 @@ var ready_players: Dictionary = {}
 
 var id: String
 var match_scene: PackedScene
+var my_name: String = str("AA", "_", randi())   
+var names: Dictionary = {}                 # player_id -> ime
+
+
+signal match_found()
 
 func _ready():
 	match_scene = preload("uid://dpsnlw7g6wmfq")
 	Fusion.register_broadcast_receiver(self)
-	#Fusion.set_scene_load_mode(Fusion.SCENE_LOAD_AUTO)
-	#Fusion.set_scene_parent(get_tree().root)
+
 	id = str(Time.get_ticks_usec(),"_", randi())
 	connect_to_signals()
 
@@ -18,31 +22,12 @@ func connect_to_signals():
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.player_joined.connect(_on_player_joined)
 
-func _on_scene_load_requested(index: int, scene: PackedScene):
-	#var match_instance = scene.instantiate()
-#
-	#var old_scene = get_tree().current_scene
-	#if old_scene:
-		#old_scene.queue_free()
-#
-	#get_tree().root.add_child(match_instance)
-	#get_tree().current_scene = match_instance
-#
-	#Fusion.notify_scene_ready(match_instance, index)
-	print("ZATRAZIO: ", id)
 
-func _on_scene_ready(index: int):
-	print("AAAA")
-	var current_scene: Node = get_tree().current_scene
-	if current_scene:
-		current_scene.queue_free()
-	
 func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	print(id)
-	#Fusion.join_or_create_room()
+	pass
 
 func create_room():
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
@@ -59,6 +44,8 @@ func _notification(what: int) -> void:
 		Fusion.disconnect_from_photon()
 		get_tree().quit()
 
+func leave_room() -> void:
+	Fusion.leave_room()
 
 func join_room() -> void:
 	#var room_options: FusionRoomOptions = FusionRoomOptions.new()
@@ -76,21 +63,17 @@ func player_ready(player_id: String):
 		return
 	ready_players[player_id] = true
 	if ready_players.size() == 2:
-		Fusion.rpc(start_match)
+		match_found.emit()
+		#Fusion.rpc(start_match)
 
 @rpc("any_peer", "call_local")
 func start_match():
-	print(names)
 	get_tree().change_scene_to_file.call_deferred("res://Scenes/Menus/Multiplayer_Scene.tscn")
-
-var my_name := str("AA", "_", randi())   
-var names := {}                 # player_id -> ime
 
 func _on_room_joined():
 	names[id] = my_name
 	
 	Fusion.rpc(introduce, id, my_name)
-	#Fusion.rpc(request_names, id)
 	Fusion.rpc(player_ready, id)
 
 @rpc("any_peer", "call_remote")
@@ -99,3 +82,11 @@ func introduce(player_id: String, player_name: String):
 	names[player_id] = player_name
 	if is_new:
 		Fusion.rpc(introduce, player_id, names[player_id])
+
+func get_opponents_name() -> String:
+	var opponents_name: String
+	for player_id: String in names:
+		if player_id != id:
+			opponents_name = names[player_id]
+			break
+	return opponents_name
