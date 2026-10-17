@@ -1,0 +1,511 @@
+[gd_scene format=3 uid="uid://8m2gl8grkosy"]
+
+[ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="1_1jnck"]
+[ext_resource type="Script" uid="uid://docdj3hrtlhcq" path="res://Scenes/Multiplayer/multiplayer_scene.gd" id="1_7luwv"]
+[ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="2_7luwv"]
+[ext_resource type="Texture2D" uid="uid://dxig6lu7vv1eg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Enabled.png" id="3_lrmkq"]
+[ext_resource type="Texture2D" uid="uid://dbnykn5w8qtnc" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png" id="4_88s4d"]
+[ext_resource type="Texture2D" uid="uid://7nx4ywugf6vg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Hovered.png" id="5_8tr4o"]
+[ext_resource type="Texture2D" uid="uid://cr1k8jtjh5j4l" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Disabled.png" id="6_fwowi"]
+[ext_resource type="Texture2D" uid="uid://rhoa01h2l335" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Enabled.png" id="7_moaut"]
+[ext_resource type="Texture2D" uid="uid://dj72b0qoi4138" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Pressed.png" id="8_kpfb7"]
+[ext_resource type="Texture2D" uid="uid://bjgk8xw5apx8b" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Hovered.png" id="9_pau3y"]
+[ext_resource type="Texture2D" uid="uid://cpq3i66b8oi32" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Disabled.png" id="10_44psr"]
+[ext_resource type="Texture2D" uid="uid://vy5yui2vxfek" path="res://Sprites/Power_Bar/Under.png" id="11_ybvlx"]
+[ext_resource type="Texture2D" uid="uid://bfwjhdrc25vlo" path="res://Sprites/Power_Bar/Over.png" id="12_7t8ws"]
+[ext_resource type="Texture2D" uid="uid://blf2thx2aysjj" path="res://Sprites/Scoreboard/Scoreboard_2.png" id="13_f45bt"]
+[ext_resource type="Texture2D" uid="uid://b0ae2py0kauie" path="res://Sprites/Goal_Scored/GOAL.png" id="14_oqgkb"]
+[ext_resource type="Texture2D" uid="uid://bqta7micod8yo" path="res://Sprites/Goal_Scored/Football Fan.png" id="15_wtevs"]
+[ext_resource type="Texture2D" uid="uid://cfk1hasv2i3ym" path="res://Sprites/Goal_Scored/Football Fan 2.png" id="16_ifrsi"]
+[ext_resource type="Texture2D" uid="uid://djrfpc7gogide" path="res://Sprites/Goal_Scored/Football Fan 3.png" id="17_yvxgm"]
+[ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="20_bi8w5"]
+[ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="21_ujlgx"]
+[ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="23_k3iuy"]
+[ext_resource type="AudioStream" uid="uid://c8c7stegv8vly" path="res://Audio/referee_whistle_sound .mp3" id="24_hh84i"]
+[ext_resource type="AudioStream" uid="uid://w5orqjfikx3d" path="res://Audio/goal_scored_sound.mp3" id="25_xstoj"]
+
+[sub_resource type="Environment" id="Environment_4iii2"]
+background_mode = 3
+background_energy_multiplier = 0.0
+glow_enabled = true
+glow_intensity = 2.18
+glow_bloom = 0.06
+
+[sub_resource type="Gradient" id="Gradient_argnq"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_72tm3"]
+gradient = SubResource("Gradient_argnq")
+width = 110
+height = 180
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ub488"]
+rough = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kcebh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+albedo_texture = ExtResource("20_bi8w5")
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4vm5g"]
+material = SubResource("StandardMaterial3D_h54ih")
+size = Vector2(80, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_llka4"]
+size = Vector3(80.23, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7qj7h"]
+size = Vector3(80, 25, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.25490198)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hycsl"]
+material = SubResource("StandardMaterial3D_mwjvy")
+size = Vector3(80, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xi12t"]
+size = Vector3(80, 25.935669, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sdnxn"]
+size = Vector3(80, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1ccg8"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ll4rt"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eqeyr"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_01yrl"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s62fa"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o801l"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lgv78"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bfcab"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="Curve" id="Curve_ms33v"]
+_data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+curve = SubResource("Curve_ms33v")
+
+[sub_resource type="Gradient" id="Gradient_scjt1"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+gradient = SubResource("Gradient_scjt1")
+
+[sub_resource type="Curve" id="Curve_mepe5"]
+_limits = [0.0, 20.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+curve = SubResource("Curve_mepe5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vn3hk"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_dvlam")
+color_ramp = SubResource("GradientTexture1D_7una7")
+alpha_curve = SubResource("CurveTexture_0wwvh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("21_ujlgx")
+
+[sub_resource type="QuadMesh" id="QuadMesh_s8n1f"]
+material = SubResource("StandardMaterial3D_jjc5n")
+orientation = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_xlfdk"]
+
+[node name="MultiplayerScene" type="Node3D" unique_id=417657300 groups=["multiplayer_scene"]]
+script = ExtResource("1_7luwv")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1261097317]
+transform = Transform3D(1, 0, 0, 0, 0.5029197, 0.8643332, 0, -0.8643332, 0.5029197, -0.5304804, 28.236576, 23.581345)
+script = ExtResource("1_1jnck")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1712662930]
+environment = SubResource("Environment_4iii2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1461753141]
+transform = Transform3D(1, 0, 0, 0, 0.36029094, 0.93284, 0, -0.93284, 0.36029094, -4.3613186, 12.102816, 7.406451)
+sky_mode = 1
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=2119774401]
+
+[node name="Control" type="Control" parent="HUD" unique_id=624255238]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Shooting_Indicator" type="Sprite3D" parent="HUD/Control" unique_id=1913243173]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 12.285764, 0)
+visible = false
+offset = Vector2(0, 60)
+texture_filter = 0
+render_priority = 99
+texture = ExtResource("2_7luwv")
+
+[node name="Buttons" type="Node2D" parent="HUD/Control" unique_id=1367435765]
+visible = false
+
+[node name="Kick_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=1604476591]
+offset_top = 24.0
+offset_right = 192.0
+offset_bottom = 124.0
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_lrmkq")
+texture_pressed = ExtResource("4_88s4d")
+texture_hover = ExtResource("5_8tr4o")
+texture_disabled = ExtResource("6_fwowi")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Move_Player_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=2076514704]
+offset_top = 144.0
+offset_right = 192.0
+offset_bottom = 244.0
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("7_moaut")
+texture_pressed = ExtResource("8_kpfb7")
+texture_hover = ExtResource("9_pau3y")
+texture_disabled = ExtResource("10_44psr")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Power_Bar" type="TextureProgressBar" parent="HUD/Control" unique_id=248760935]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_bottom = 220.0
+grow_horizontal = 0
+fill_mode = 3
+texture_under = ExtResource("11_ybvlx")
+texture_over = ExtResource("12_7t8ws")
+texture_progress = SubResource("GradientTexture2D_72tm3")
+texture_progress_offset = Vector2(0, 20)
+
+[node name="Scoreboard" type="Control" parent="HUD/Control" unique_id=1520599613]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Scoreboard_Background" type="Sprite2D" parent="HUD/Control/Scoreboard" unique_id=1826847128]
+position = Vector2(1.335144e-05, 24)
+scale = Vector2(0.1779425, 0.15909092)
+texture = ExtResource("13_f45bt")
+
+[node name="Time_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=1998048604]
+layout_mode = 0
+offset_left = -48.0
+offset_right = 49.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="My_Score_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=610793231]
+layout_mode = 0
+offset_left = -128.0
+offset_right = -56.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Enemy_Score_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=1413848360]
+layout_mode = 0
+offset_left = 56.0
+offset_right = 128.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=1299776774]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Goal_Scored_Sprite" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node" unique_id=189144966]
+position = Vector2(72, 272)
+texture = ExtResource("14_oqgkb")
+
+[node name="Football_Fans" type="Node2D" parent="HUD/Control/Goal_Scored_Node" unique_id=564715997]
+position = Vector2(-568, 0)
+
+[node name="FootballFan" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=796720826]
+position = Vector2(464, 536)
+texture = ExtResource("15_wtevs")
+
+[node name="FootballFan2" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=529630892]
+position = Vector2(760, 536)
+texture = ExtResource("16_ifrsi")
+
+[node name="FootballFan3" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1637204445]
+position = Vector2(207.5, 536)
+texture = ExtResource("17_yvxgm")
+
+[node name="FootballFan4" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1131785660]
+position = Vector2(79.5, 536)
+texture = ExtResource("16_ifrsi")
+
+[node name="FootballFan5" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=2034859250]
+position = Vector2(327.5, 536)
+texture = ExtResource("16_ifrsi")
+
+[node name="FootballFan6" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=424879187]
+position = Vector2(608, 536)
+texture = ExtResource("15_wtevs")
+
+[node name="FootballFan7" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1855000691]
+position = Vector2(904, 536)
+texture = ExtResource("17_yvxgm")
+
+[node name="FootballFan8" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=726146407]
+position = Vector2(1072, 536)
+texture = ExtResource("17_yvxgm")
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
+transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=1886961522]
+transform = Transform3D(-0.05663065, 0.7930336, -0.60653996, -0.0737223, -0.60917795, -0.78959954, -0.9956696, -1.8557891e-09, 0.09296241, -52.470604, 17.136568, 0)
+light_energy = 0.2
+
+[node name="Field" type="Node3D" parent="." unique_id=1525963902]
+
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=510854489]
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_ub488")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Floor" unique_id=1562290450]
+shape = SubResource("WorldBoundaryShape3D_kcebh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Floor" unique_id=1318700878]
+mesh = SubResource("PlaneMesh_4vm5g")
+
+[node name="Wall" type="StaticBody3D" parent="Field" unique_id=1334804161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=1311391244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
+mesh = SubResource("BoxMesh_llka4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall" unique_id=1353329605]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -6.9647083)
+shape = SubResource("BoxShape3D_7qj7h")
+
+[node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=706004618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=1707745269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
+visible = false
+mesh = SubResource("BoxMesh_hycsl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall_2" unique_id=621560441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4678345, 12.55129)
+shape = SubResource("BoxShape3D_xi12t")
+
+[node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1200014371]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1433161925]
+shape = SubResource("BoxShape3D_sdnxn")
+
+[node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=1435718674]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=753717014]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_1ccg8")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=1451263137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, 15)
+shape = SubResource("BoxShape3D_ll4rt")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=782778581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_eqeyr")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=592082042]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, -15.374)
+shape = SubResource("BoxShape3D_01yrl")
+
+[node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=398903582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
+input_ray_pickable = false
+
+[node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=732235063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_s62fa")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1786679176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, 15)
+shape = SubResource("BoxShape3D_o801l")
+
+[node name="Right_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=1253846125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_lgv78")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1325780475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, -15.373857)
+shape = SubResource("BoxShape3D_bfcab")
+
+[node name="Wave_Effect" type="GPUParticles3D" parent="Field" unique_id=847269725 groups=["wave_effect"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4084432, -0.71547604)
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_vn3hk")
+draw_pass_1 = SubResource("QuadMesh_s8n1f")
+
+[node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=820798048]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+
+[node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("23_k3iuy")]
+transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
+
+[node name="Enemy_Goal" parent="Field" unique_id=730633266 instance=ExtResource("23_k3iuy")]
+transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
+goal_owner = 1
+
+[node name="My_Formation_3-3" type="Node3D" parent="." unique_id=1153216101]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1734000353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, 8.168045)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D" unique_id=2037455887 groups=["host_spawn_point"]]
+visible = false
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1628700315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -0.80334044)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D2" unique_id=1321511931 groups=["host_spawn_point", "my_spawn_point"]]
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1972871814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -6.8007593)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D3" unique_id=129533481 groups=["host_spawn_point", "my_spawn_point"]]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1758292205]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, 8.168045)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D4" unique_id=1276191003 groups=["host_spawn_point", "my_spawn_point"]]
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=141923202]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -0.80334044)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D5" unique_id=446211095 groups=["host_spawn_point", "my_spawn_point"]]
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=926212837]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -6.8007593)
+visible = false
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D6" unique_id=468085791 groups=["host_spawn_point", "my_spawn_point"]]
+
+[node name="Enemy_Formation_3-3" type="Node3D" parent="." unique_id=2006468027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.997684, 0, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=363237179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, 8.168045)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D" unique_id=556128311 groups=["guest_spawn_point"]]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=789656263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -0.80334044)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D2" unique_id=1952580960 groups=["guest_spawn_point"]]
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=1777867220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -6.8007593)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D3" unique_id=921941998 groups=["guest_spawn_point"]]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=992643502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, 8.168045)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D4" unique_id=547872202 groups=["guest_spawn_point"]]
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=290832733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -0.80334044)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D5" unique_id=1029026675 groups=["guest_spawn_point"]]
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=843293307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -6.8007593)
+mesh = SubResource("BoxMesh_xlfdk")
+
+[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D6" unique_id=748541012 groups=["guest_spawn_point"]]
+
+[node name="Referee_Whistle_Sound" type="AudioStreamPlayer" parent="." unique_id=947798521]
+stream = ExtResource("24_hh84i")
+
+[node name="Goal_Scored_Sound" type="AudioStreamPlayer" parent="." unique_id=2094840179]
+stream = ExtResource("25_xstoj")
+
+[node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1420256094]

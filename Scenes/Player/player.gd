@@ -1,10 +1,17 @@
 class_name Player extends RigidBody3D
 
+var is_fusion_connected: bool = Fusion.is_connected_to_photon()
+
 signal player_selected(player: Player)
 signal finished_move(player: Player)
 signal continued_move(player: Player)
 
 enum MoveState { IDLE, MOVING }
+
+enum MultiplayerPlayer {
+	HOST,
+	GUEST
+}
 
 var player_id: String
 
@@ -27,6 +34,8 @@ var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
 
 var spawn_position: Vector3 = Vector3.ZERO
+
+var is_owner_host: bool = false
 
 #AUDIO
 var can_play_sound: bool = false
@@ -90,7 +99,11 @@ func on_player_deselected():
 
 func _on_selection_area_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		player_selected.emit(self)
+		if is_fusion_connected:
+			if is_owner():
+				player_selected.emit(self)
+		else:
+			player_selected.emit(self)
 
 
 func _on_shooting_area_body_entered(body: Node3D) -> void:
@@ -117,3 +130,14 @@ func _on_body_entered(body: Node) -> void:
 			play_collide_sound()
 	else:
 		play_collide_sound()
+
+func is_owner():
+	var is_master_client: bool = Fusion.is_master_client()
+	if is_master_client:
+		if is_owner_host:
+			return true
+		return false
+	
+	if not is_owner_host:
+		return true
+	return false

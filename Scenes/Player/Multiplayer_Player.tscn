@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://bop3seu5ydqe1"]
+
+[ext_resource type="Script" uid="uid://cttaxdq765jim" path="res://Scenes/Player/multiplayer_player.gd" id="1_3lluj"]
+[ext_resource type="Material" uid="uid://b2sd64lfjxf7i" path="res://Materials/Player_Material.tres" id="1_c2dbo"]
+[ext_resource type="Texture2D" uid="uid://dvtquyqdfav87" path="res://Sprites/Player/Shoot_Area_Indicator.png" id="2_3lluj"]
+[ext_resource type="AudioStream" uid="uid://c6ya1gpj13qcy" path="res://Audio/player_move_sound.mp3" id="3_e42fg"]
+[ext_resource type="AudioStream" uid="uid://bxisrrdrfathw" path="res://Audio/player_collide_sound.mp3" id="4_v5mm1"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_072lr"]
+bounce = 0.3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8vnr6"]
+height = 0.5
+radius = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_55xwr"]
+material = ExtResource("1_c2dbo")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.001
+cap_bottom = false
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_iyoov"]
+height = 1.0
+radius = 3.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ueqe8"]
+height = 1.0
+radius = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_yrjg2"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fl6ts"]
+material = ExtResource("1_c2dbo")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.001
+cap_top = false
+
+[sub_resource type="FusionReplicationConfig" id="FusionReplicationConfig_3lluj"]
+
+[node name="MultiplayerPlayer" type="RigidBody3D" unique_id=982662902 groups=["multiplayer_player"]]
+input_ray_pickable = false
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 7.0
+physics_material_override = SubResource("PhysicsMaterial_072lr")
+can_sleep = false
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("1_3lluj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=364193560]
+shape = SubResource("CylinderShape3D_8vnr6")
+
+[node name="Top_Part" type="MeshInstance3D" parent="." unique_id=1325111260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25011238, 0)
+mesh = SubResource("CylinderMesh_55xwr")
+
+[node name="Shooting_Area" type="Area3D" parent="." unique_id=648245798]
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Shooting_Area" unique_id=926797411]
+shape = SubResource("CylinderShape3D_iyoov")
+
+[node name="Selection_Area" type="Area3D" parent="." unique_id=194459488]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Selection_Area" unique_id=1026776724]
+shape = SubResource("CylinderShape3D_ueqe8")
+
+[node name="Shooting_Area_Indicator" type="Sprite3D" parent="." unique_id=556645806]
+transform = Transform3D(3, 0, 0, 0, -1.3113416e-07, 3, 0, -3, -1.3113416e-07, 0, 0, 0)
+visible = false
+texture_filter = 0
+texture = ExtResource("2_3lluj")
+
+[node name="Swish_Sound" type="AudioStreamPlayer" parent="." unique_id=1217650926]
+stream = ExtResource("3_e42fg")
+pitch_scale = 2.0
+
+[node name="Player_Collide_Sound" type="AudioStreamPlayer" parent="." unique_id=1949618544]
+stream = ExtResource("4_v5mm1")
+pitch_scale = 1.1
+
+[node name="Middle_Part" type="MeshInstance3D" parent="." unique_id=472919575]
+mesh = SubResource("CylinderMesh_yrjg2")
+
+[node name="Bottom_Part" type="MeshInstance3D" parent="." unique_id=1861864372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+mesh = SubResource("CylinderMesh_fl6ts")
+
+[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=1939614666]
+owner_mode = 3
+replication_config = SubResource("FusionReplicationConfig_3lluj")
+root_replication_mode = 1
+root_global_coordinates = true
+root_interpolation_mode = 2
+process_priority = -2147483647
+process_physics_priority = -2147483647

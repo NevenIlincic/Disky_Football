@@ -31,7 +31,7 @@ func _on_match_found():
 		host_name_label.text = opponents_name
 		guest_name_label.text = FusionSdk.my_name
 	
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(1.0).timeout
 	if Fusion.is_master_client():
 		Fusion.rpc(FusionSdk.start_match)
 		Fusion.unregister_broadcast_receiver(self)

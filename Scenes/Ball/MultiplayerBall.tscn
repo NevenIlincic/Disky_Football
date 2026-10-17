@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dxnb72c54pep1"]
+
+[ext_resource type="Script" uid="uid://l5md3xs0xbh3" path="res://Scenes/Ball/multiplayer_ball.gd" id="1_lu428"]
+[ext_resource type="Texture2D" uid="uid://lg7tta6ljwgo" path="res://Sprites/Group 14 (3).png" id="2_se4j6"]
+[ext_resource type="PackedScene" uid="uid://cl7fbi115tehh" path="res://Scenes/Effects/Ball_Effect.tscn" id="3_8hsay"]
+[ext_resource type="PackedScene" uid="uid://dx044doqmp68c" path="res://Models/football.glb" id="4_ke7jr"]
+[ext_resource type="AudioStream" uid="uid://dvgr72tdkreqj" path="res://Audio/kick_sound.mp3" id="5_dn0fa"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xo6r3"]
+bounce = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvc57"]
+albedo_texture = ExtResource("2_se4j6")
+
+[sub_resource type="SphereMesh" id="SphereMesh_argnq"]
+material = SubResource("StandardMaterial3D_dvc57")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g8do5"]
+
+[node name="MultiplayerBall" type="RigidBody3D" unique_id=1734501864]
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_xo6r3")
+can_sleep = false
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 4
+angular_damp = 5.0
+script = ExtResource("1_lu428")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=778521021]
+mesh = SubResource("SphereMesh_argnq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=950076990]
+shape = SubResource("SphereShape3D_g8do5")
+
+[node name="Fire_Effect" parent="." unique_id=307419005 instance=ExtResource("3_8hsay")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Sketchfab_Scene" parent="." unique_id=1199789368 instance=ExtResource("4_ke7jr")]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+visible = false
+
+[node name="Kick_Sound" type="AudioStreamPlayer" parent="." unique_id=1085789463]
+stream = ExtResource("5_dn0fa")
+pitch_scale = 0.7
+
+[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=515831605]
+root_replication_mode = 1
+root_interpolation_mode = 2
+process_priority = -2147483647
+process_physics_priority = -2147483647
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="spawned" from="FusionSharedReplicator" to="." method="_on_fusion_shared_replicator_spawned"]

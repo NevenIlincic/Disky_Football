@@ -8,10 +8,6 @@
 
 config_version=5
 
-[addons]
-
-photon/connection/app_id="4e07bb6c-81aa-4f7f-ad6d-ebe7aaf66292"
-
 [application]
 
 config/name="New Game Project"
@@ -25,9 +21,9 @@ FusionSdk="*uid://dirxpm6bjesk6"
 
 [display]
 
-window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/mode=1
 
 [editor_plugins]
 

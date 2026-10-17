@@ -11,7 +11,6 @@ var names: Dictionary = {}                 # player_id -> ime
 signal match_found()
 
 func _ready():
-	match_scene = preload("uid://dpsnlw7g6wmfq")
 	Fusion.register_broadcast_receiver(self)
 
 	id = str(Time.get_ticks_usec(),"_", randi())
@@ -30,12 +29,13 @@ func _on_connected():
 	pass
 
 func create_room():
+#
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
 	room_options.custom_properties = {
-		"fusion_map_data": "default_map"
+		"fusion_map_data": "YWxza2Q="
 	}
-	Fusion.join_or_create_room("TEST_ROOM_1", room_options)
+	Fusion.join_or_create_room("1", room_options)
 
 
 func _notification(what: int) -> void:
@@ -52,7 +52,7 @@ func join_room() -> void:
 	#room_options.custom_properties = {
 		#"fusion_map_data": "default_map"
 	#}
-	Fusion.join_room("TEST_ROOM_1", null)
+	Fusion.join_room("TEST_ROOM_1")
 
 func _on_player_joined(player_id: int, user_id: String):
 	pass
@@ -68,7 +68,7 @@ func player_ready(player_id: String):
 
 @rpc("any_peer", "call_local")
 func start_match():
-	get_tree().change_scene_to_file.call_deferred("res://Scenes/Menus/Multiplayer_Scene.tscn")
+	get_tree().change_scene_to_file.call_deferred("res://Scenes/Multiplayer/Multiplayer_Scene.tscn")
 
 func _on_room_joined():
 	names[id] = my_name
