@@ -5,7 +5,14 @@ const BALL_SCENE = preload("res://Scenes/Ball/MultiplayerBall.tscn")
 @onready var fusion_spawner: FusionSpawner = $FusionSpawner
 
 
-var is_my_turn: bool = true
+var is_my_turn: bool = true:
+	set(value):
+		is_my_turn = value
+		if value:
+			turn_label.text = "YOUR TURN"
+		else:
+			turn_label.text = "OPPONENT's TURN"
+@onready var turn_label: Label = $HUD/Control/Turn_Label
 
 #TIME
 var time_passed: float = 0
@@ -71,17 +78,23 @@ var ball: MultiplayerBall
 var loaded_peers := {}
 var field_spawned := false
 
-func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("drag"):
-		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
-			is_dragging = true
-			start_position = get_viewport().get_mouse_position()
-			shooting_indicator.visible = true
-			
-	if Input.is_action_just_released("drag"):
-		is_dragging = false
-		do_action()
+var snapshot_tick: int = 0
+var target_positions: Dictionary = {}
+var ball_target_pos: Vector3 = Vector3.ZERO
+var ball_target_rot: Quaternion = Quaternion.IDENTITY
+var has_snapshot: bool = false
 
+func _unhandled_input(event: InputEvent) -> void:
+	if is_my_turn:
+		if Input.is_action_just_pressed("drag"):
+			if selected_player and (selected_player.is_moving or selected_player.is_shooting):
+				is_dragging = true
+				start_position = get_viewport().get_mouse_position()
+				shooting_indicator.visible = true
+				
+		if Input.is_action_just_released("drag"):
+			is_dragging = false
+			do_action()
 
 
 func reset_entities_position():
@@ -97,79 +110,95 @@ func reset_entities_position():
 	referee_whistle_sound.play()
 	if not is_my_turn:
 		await get_tree().create_timer(1.0).timeout
-		has_game_started = true
+		Fusion.rpc(game_started)
+		#has_game_started = true
 		#handle_enemy_turn()
 	else:
-		has_game_started = true
+		Fusion.rpc(game_started)
+		#has_game_started = true
 		
 		
 func spawn_players():
-	for i in range(0, 12):
-		var player = fusion_spawner.spawn(PLAYER_SCENE)
-		
-		if i <= 5:
-			player.is_owner_host = true
-			
 	for host_spawn_point in get_tree().get_nodes_in_group("host_spawn_point"):
 		host_spawn_points.append(host_spawn_point)
 	for guest_spawn_point in get_tree().get_nodes_in_group("guest_spawn_point"):
 		guest_spawn_points.append(guest_spawn_point)
-	
-	for i in range(0, multiplayer_players.size()):
-		var player: MultiplayerPlayer = multiplayer_players[i]
-		var player_spawn_position: Vector3
-		if i <= 5:
-			player_spawn_position = host_spawn_points[i].global_position
-		else:
-			player_spawn_position = guest_spawn_points[i - 6].global_position
 		
-		multiplayer_players[i].global_position = player_spawn_position
-		multiplayer_players[i].spawn_position = player_spawn_position
+	for i in range(0, 12):
+		var player: MultiplayerPlayer = PLAYER_SCENE.instantiate()
+		add_child(player)
+	
+	#for i in range(0, multiplayer_players.size()):
+		#var player: MultiplayerPlayer = multiplayer_players[i]
+		#var player_spawn_position: Vector3
+		#if i <= 5:
+			#player_spawn_position = host_spawn_points[i].global_position
+		#else:
+			#player_spawn_position = guest_spawn_points[i - 6].global_position
+		#
+		#multiplayer_players[i].global_position = player_spawn_position
+		#multiplayer_players[i].spawn_position = player_spawn_position
 
+
+var next_player_id: int = 0
 
 func register_player(player: MultiplayerPlayer) -> void:
+	player.player_id = next_player_id
+	
+	var player_spawn_position: Vector3
+	if next_player_id <= 5:
+		if Fusion.is_master_client():
+			player.is_owner = true
+		player_spawn_position = host_spawn_points[next_player_id].global_position
+	else:
+		if not Fusion.is_master_client():
+			player.is_owner = true
+		player_spawn_position = guest_spawn_points[next_player_id - 6].global_position
+	
+	player.global_position = player_spawn_position
+	player.spawn_position = player_spawn_position
+		
+	player.player_selected.connect(_on_player_selected)
+	player.finished_move.connect(_on_player_finished_move)
+	player.continued_move.connect(_on_player_continued_move)
+
 	multiplayer_players.append(player)
 	num_players += 1
-	player.player_selected.connect(_on_player_selected)
-	if Fusion.is_master_client():
-		player.finished_move.connect(_on_player_finished_move)
-		player.continued_move.connect(_on_player_continued_move)
-
+	next_player_id += 1
+	
 func register_ball(b: MultiplayerBall) -> void:
 	ball = b
-	if Fusion.is_master_client():
-		ball.finished_move.connect(_on_ball_finished_move)
-		ball.continued_move.connect(_on_ball_continued_move)
+	ball.finished_move.connect(_on_ball_finished_move)
+	ball.continued_move.connect(_on_ball_continued_move)
 		
 
 func spawn_ball():
-	ball = fusion_spawner.spawn(BALL_SCENE)
-	#var ball_spawn_position: Vector3 = ball_spawn_position.global_position
-	ball.position = ball_spawn_position.position
-	print(ball_spawn_position.position)
+	ball = BALL_SCENE.instantiate()
+	add_child(ball)
+	ball.global_position = ball_spawn_position.global_position
 	ball.spawn_position = ball.global_position
 
 func _enter_tree() -> void:
 	Fusion.register_broadcast_receiver(self)
 
-
-func _ready() -> void:	
-	fusion_spawner.add_spawnable_scene(PLAYER_SCENE)
-	fusion_spawner.add_spawnable_scene(BALL_SCENE)
-	fusion_spawner.spawned.connect(func(n): print("[spawned] ", n.name, " master=", Fusion.is_master_client()))
-
-	child_entered_tree.connect(func(n): print("[child] ", n.name))
+func _exit_tree() -> void:
+	Fusion.unregister_broadcast_receiver(self)
+	
+func _ready() -> void:
+	is_my_turn = Fusion.is_master_client()
+	
 	my_goal.goal_scored.connect(_on_goal_scored)
 	enemy_goal.goal_scored.connect(_on_goal_scored)
 	
-	await get_tree().process_frame
 	var my_id = FusionSdk.id
+	spawn_field()
+	#Fusion.rpc(game_started)
+	#has_game_started = true
+	referee_whistle_sound.play()
 	if Fusion.is_master_client():
 		peer_scene_ready(my_id)
 	else:
 		Fusion.rpc_to(Fusion.TARGET_MASTER, peer_scene_ready, my_id)
-	has_game_started = true
-	referee_whistle_sound.play()
 	
 @rpc("any_peer", "call_local")
 func peer_scene_ready(pid: String) -> void:
@@ -177,13 +206,14 @@ func peer_scene_ready(pid: String) -> void:
 		return
 	loaded_peers[pid] = true
 	if loaded_peers.size() == 2:
-		field_spawned = true
-		spawn_field()
+		Fusion.rpc(game_started)
+		#field_spawned = true
+		#spawn_field()
 		
 func spawn_field():
 	spawn_ball()
-	await get_tree().physics_frame
-	#spawn_players()
+	#await get_tree().physics_frame
+	spawn_players()
 
 func _on_enemy_continued_move(enemy: Enemy):
 	_on_move_continued()
@@ -192,8 +222,10 @@ func _on_enemy_finished_move(enemy: Enemy):
 	_on_move_finished()
 
 func _on_player_continued_move(player: MultiplayerPlayer):
+	if not is_my_turn: return
 	_on_move_continued()	
 func _on_ball_continued_move(ball: MultiplayerBall):
+	if not is_my_turn: return
 	_on_move_continued()
 func _on_move_continued():
 	elements_in_action += 1
@@ -204,7 +236,9 @@ func _on_move_finished():
 	elements_in_action -= 1
 
 	if elements_in_action <= 0 and is_action:
-		is_action = false
+		Fusion.rpc(action_ended)
+		Fusion.rpc(turn_changed)
+		Fusion.rpc(reset_target_positions)
 		_reset_elements_in_action()
 		#if not is_my_turn:
 			#await get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
@@ -213,14 +247,15 @@ func _reset_elements_in_action():
 	elements_in_action = 0
 
 
-func _on_ball_finished_move(ball: Ball):
+func _on_ball_finished_move(ball: MultiplayerBall):
+	if not is_my_turn: return
 	_on_move_finished()
 	#elements_in_action -= 1
 	#if elements_in_action <= 0 and is_action:
 		#is_action = false
 		#_reset_elements_in_action()
 
-func _on_player_finished_move(player: Player):
+func _on_player_finished_move(player: MultiplayerPlayer):
 	_on_move_finished()
 
 func _process(delta: float) -> void:
@@ -279,13 +314,16 @@ func do_action():
 		if selected_player.is_moving:
 			selected_player.apply_hit_force(drag_direction)
 			selected_player.on_action_done()
+			
+			#Fusion.rpc(move_player, drag_direction, selected_player.player_id)
 			on_action_done()
 
 		elif selected_player.is_shooting:
-			drag_direction.y = sqrt(drag_distance.length()) * 3
+			#Fusion.rpc(shoot_ball, drag_direction, drag_distance)
+			drag_direction.y =  roundi(sqrt(drag_distance.length()) * 3)
 			ball.apply_hit_force(drag_direction)
 			on_action_done()
-		
+	
 func on_action_done():
 	buttons.visible = false
 	power_bar.visible = false
@@ -294,9 +332,10 @@ func on_action_done():
 	kick_button.set_pressed_no_signal(false)
 	move_player_button.set_pressed_no_signal(false)
 	power_bar.value = 0.0
-	is_action = true
+	Fusion.rpc(action_started)
+	#is_action = true
 	selected_player = null
-	is_my_turn = false
+	#is_my_turn = false
 	
 func _on_player_selected(player: MultiplayerPlayer):
 	if is_action or not is_my_turn:
@@ -332,38 +371,6 @@ func show_selected_player_elements(player: MultiplayerPlayer):
 	power_bar.visible = true
 	selected_player.shooting_area_indicator.visible = true
 
-#func handle_enemy_turn():
-	#if not has_game_started:
-		#return
-	#print("OVDE")
-	#var is_ball_in_range: bool = false
-	#var closest_enemy_from_ball: Enemy
-	#var closest_enemy_distance_from_ball: float = INF
-	#for enemy: Enemy in enemies:
-		#if enemy.is_ball_in_range:
-			#is_ball_in_range = true
-			#break
-		#else:
-			#var distance_from_ball: float = enemy.global_position.distance_to(ball.global_position)
-			#if distance_from_ball < closest_enemy_distance_from_ball:
-				#closest_enemy_distance_from_ball = distance_from_ball
-				#closest_enemy_from_ball = enemy
-	#
-	#
-	#var direction: Vector3 = Vector3.ZERO
-	#direction.x = randf_range(-600, 600.0)
-	#direction.z = randf_range(-600.0, 600.0)
-	#var intensity: float = randf()
-	#
-	#if is_ball_in_range: ### SHOOT BALL
-		#drag_direction.y = sqrt(direction.length()) * 3
-		#ball.apply_hit_force(direction)
-	#else: ## MOVE ENEMY
-		#var intensity_multiplier: int = randi_range(15, 25)
-		#direction.x = (ball.global_position.x - closest_enemy_from_ball.global_position.x) * intensity_multiplier
-		#direction.z = (ball.global_position.z - closest_enemy_from_ball.global_position.z) * intensity_multiplier
-		#closest_enemy_from_ball.apply_hit_force(direction)
-	#is_my_turn = true
 
 func _on_kick_button_pressed() -> void:
 	if selected_player:
@@ -389,8 +396,10 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 @onready var goal_scored_node: Control = $HUD/Control/Goal_Scored_Node
 
 func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
-	is_action = false
-	has_game_started = false
+	Fusion.rpc(action_ended)
+	#is_action = false
+	Fusion.rpc(game_paused)
+	#has_game_started = false
 	goal_scored_node.visible = true
 	play_goal_effect()
 	play_cheer_effect()
@@ -449,3 +458,96 @@ func on_scored() -> void:
 	my_score_label.text = str(my_score)
 	is_my_turn = false
 		
+#@rpc("any_peer", "call_local")
+#func move_player(drag_direction: Vector3, selected_player_id: int):
+	#var player_to_move: MultiplayerPlayer = get_selected_player(selected_player_id)
+	#if player_to_move:
+		#player_to_move.apply_hit_force(drag_direction)
+		#player_to_move.on_action_done()
+#
+#@rpc("any_peer", "call_local")
+#func shoot_ball(drag_direction_vector: Vector3, drag_distance: Vector2):
+	#print(Fusion.is_master_client(), "  ", drag_distance)
+	#drag_direction_vector.y =  roundi(sqrt(drag_distance.length()) * 3)
+	#ball.apply_hit_force(drag_direction_vector)
+
+	
+func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
+	var found_player: MultiplayerPlayer
+	for player: MultiplayerPlayer in multiplayer_players:
+		if player.player_id == selected_player_id:
+			found_player = player
+			break
+	return found_player
+
+func _physics_process(delta: float) -> void:
+	if not is_action or not ball:
+		return
+	if is_my_turn:
+		snapshot_tick += 1
+		if snapshot_tick % 3 == 0 and is_action:
+			var s := build_snapshot()
+			Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot)
+	else:
+		apply_targets()
+
+func build_snapshot() -> Dictionary:
+	var ids: Array = []
+	var positions: Array = []
+	for p: MultiplayerPlayer in multiplayer_players:
+		ids.append(p.player_id)
+		positions.append(p.global_position)
+	return {
+		"ids": ids,
+		"positions": positions,
+		"ball_pos": ball.global_position,
+		"ball_rot": ball.global_basis.get_rotation_quaternion(),
+	}
+
+@rpc("any_peer", "call_remote")
+func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot: Quaternion) -> void:
+	if is_my_turn:
+		return
+	for i in ids.size():
+		target_positions[ids[i]] = positions[i]
+	ball_target_pos = ball_pos
+	ball_target_rot = ball_rot
+	has_snapshot = true
+
+func apply_targets() -> void:
+	if not has_snapshot or not ball:
+		return
+	for id in target_positions:
+		var p := get_selected_player(id)
+		if p:
+			p.global_position = p.global_position.lerp(target_positions[id], 0.3)
+	ball.global_position = ball.global_position.lerp(ball_target_pos, 0.3)
+	var cur := ball.global_basis.get_rotation_quaternion()
+	ball.global_basis = Basis(cur.slerp(ball_target_rot, 0.3))
+
+
+#RPC
+@rpc("any_peer", "call_remote")
+func action_started() -> void:
+	is_action = true
+
+@rpc("any_peer", "call_local")
+func action_ended() -> void:
+	is_action = false
+
+@rpc("any_peer", "call_local")
+func turn_changed() -> void:
+	is_my_turn = !is_my_turn
+	
+	
+@rpc("any_peer", "call_local")
+func game_started() -> void:
+	has_game_started = true
+
+@rpc("any_peer", "call_local")
+func game_paused() -> void:
+	has_game_started = false
+
+@rpc("any_peer", "call_local")
+func reset_target_positions():
+	target_positions.clear()

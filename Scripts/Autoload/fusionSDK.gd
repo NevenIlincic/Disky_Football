@@ -33,7 +33,7 @@ func create_room():
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
 	room_options.custom_properties = {
-		"fusion_map_data": "YWxza2Q="
+		"fusion_map_data": "deafult_map"
 	}
 	Fusion.join_or_create_room("1", room_options)
 

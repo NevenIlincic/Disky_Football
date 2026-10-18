@@ -44,11 +44,11 @@ visible = false
 stream = ExtResource("5_dn0fa")
 pitch_scale = 0.7
 
-[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=515831605]
+[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=1403201015]
 root_replication_mode = 1
+root_global_coordinates = true
 root_interpolation_mode = 2
 process_priority = -2147483647
 process_physics_priority = -2147483647
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="spawned" from="FusionSharedReplicator" to="." method="_on_fusion_shared_replicator_spawned"]

@@ -34,10 +34,7 @@ func _ready() -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	check_should_play_hit_sound(state)
-	
-	if not Fusion.is_master_client():
-		return 
-	
+
 	var linear_velocity_length = state.linear_velocity.length()
 	var speed: float = linear_velocity_length + state.angular_velocity.length() * 0.5
 	
@@ -120,7 +117,3 @@ func check_should_play_hit_sound(state: PhysicsDirectBodyState3D) -> void:
 			kick_sound.play()
 			_cooldown_left = COOLDOWN
 			break
-
-
-func _on_fusion_shared_replicator_spawned() -> void:
-	print("AAA")

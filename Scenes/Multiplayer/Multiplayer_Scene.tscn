@@ -304,6 +304,12 @@ texture = ExtResource("17_yvxgm")
 position = Vector2(1072, 536)
 texture = ExtResource("17_yvxgm")
 
+[node name="Turn_Label" type="Label" parent="HUD/Control" unique_id=924916707]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 26.0
+text = "YOUR TURN"
+
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
 light_energy = 0.2
@@ -408,7 +414,7 @@ process_material = SubResource("ParticleProcessMaterial_vn3hk")
 draw_pass_1 = SubResource("QuadMesh_s8n1f")
 
 [node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=820798048]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.433443, 0.72427344, 0)
 
 [node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("23_k3iuy")]
 transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
@@ -508,4 +514,7 @@ stream = ExtResource("24_hh84i")
 [node name="Goal_Scored_Sound" type="AudioStreamPlayer" parent="." unique_id=2094840179]
 stream = ExtResource("25_xstoj")
 
-[node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1420256094]
+[node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1440459462]
+
+[connection signal="pressed" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_pressed"]
+[connection signal="pressed" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_pressed"]

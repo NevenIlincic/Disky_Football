@@ -40,8 +40,6 @@ bottom_radius = 1.0
 height = 0.001
 cap_top = false
 
-[sub_resource type="FusionReplicationConfig" id="FusionReplicationConfig_3lluj"]
-
 [node name="MultiplayerPlayer" type="RigidBody3D" unique_id=982662902 groups=["multiplayer_player"]]
 input_ray_pickable = false
 axis_lock_angular_x = true
@@ -94,11 +92,6 @@ mesh = SubResource("CylinderMesh_yrjg2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 mesh = SubResource("CylinderMesh_fl6ts")
 
-[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=1939614666]
-owner_mode = 3
-replication_config = SubResource("FusionReplicationConfig_3lluj")
-root_replication_mode = 1
-root_global_coordinates = true
-root_interpolation_mode = 2
-process_priority = -2147483647
-process_physics_priority = -2147483647
+[connection signal="body_entered" from="Shooting_Area" to="." method="_on_shooting_area_body_entered"]
+[connection signal="body_exited" from="Shooting_Area" to="." method="_on_shooting_area_body_exited"]
+[connection signal="input_event" from="Selection_Area" to="." method="_on_selection_area_input_event"]
