@@ -31,7 +31,7 @@ color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
 [node name="You_Won_Lost_Label" type="Label" parent="." unique_id=1461445454]
 layout_mode = 0
 offset_right = 1160.0
-offset_bottom = 76.0
+offset_bottom = 300.0
 theme_override_font_sizes/font_size = 48
 text = "YOU WON!"
 horizontal_alignment = 1

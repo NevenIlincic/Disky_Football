@@ -3,6 +3,7 @@ extends Node2D
 var ready_players: Dictionary = {}
 
 var id: String
+var room_id: int
 var match_scene: PackedScene
 var my_name: String = str("AA", "_", randi())   
 var names: Dictionary = {}                 # player_id -> ime
@@ -57,7 +58,8 @@ func join_room() -> void:
 	Fusion.join_room("TEST_ROOM_1")
 
 func _on_player_joined(player_id: int, user_id: String):
-	pass
+	if id == user_id:
+		room_id = player_id
 
 @rpc("any_peer", "call_local")
 func player_ready(player_id: String):
