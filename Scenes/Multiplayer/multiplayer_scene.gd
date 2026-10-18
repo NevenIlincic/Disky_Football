@@ -63,6 +63,7 @@ var enemy_score: int = 0
 @onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
 @onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
 @onready var goal_scored_sprite: Sprite2D = $HUD/Control/Goal_Scored_Node/Goal_Scored_Sprite
+@onready var synchronizing_label: Label = $HUD/Control/Synchronizing_Label
 
 @onready var my_goal: Goal = $Field/My_Goal
 @onready var enemy_goal: Goal = $Field/Enemy_Goal
@@ -83,6 +84,8 @@ var target_positions: Dictionary = {}
 var ball_target_pos: Vector3 = Vector3.ZERO
 var ball_target_rot: Quaternion = Quaternion.IDENTITY
 var has_snapshot: bool = false
+
+var is_synchronization_done: bool = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_my_turn:
@@ -212,14 +215,8 @@ func peer_scene_ready(pid: String) -> void:
 		
 func spawn_field():
 	spawn_ball()
-	#await get_tree().physics_frame
 	spawn_players()
 
-func _on_enemy_continued_move(enemy: Enemy):
-	_on_move_continued()
-
-func _on_enemy_finished_move(enemy: Enemy):
-	_on_move_finished()
 
 func _on_player_continued_move(player: MultiplayerPlayer):
 	if not is_my_turn: return
@@ -236,9 +233,10 @@ func _on_move_finished():
 	elements_in_action -= 1
 
 	if elements_in_action <= 0 and is_action:
+		synchronizing_label.visible = true
 		Fusion.rpc(action_ended)
-		Fusion.rpc(turn_changed)
-		Fusion.rpc(reset_target_positions)
+		var s := build_snapshot()
+		Fusion.rpc(handle_end_turn_synhronization, s, time_passed)
 		_reset_elements_in_action()
 		#if not is_my_turn:
 			#await get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
@@ -256,6 +254,7 @@ func _on_ball_finished_move(ball: MultiplayerBall):
 		#_reset_elements_in_action()
 
 func _on_player_finished_move(player: MultiplayerPlayer):
+	if not is_my_turn: return
 	_on_move_finished()
 
 func _process(delta: float) -> void:
@@ -371,13 +370,6 @@ func show_selected_player_elements(player: MultiplayerPlayer):
 	power_bar.visible = true
 	selected_player.shooting_area_indicator.visible = true
 
-
-func _on_kick_button_pressed() -> void:
-	if selected_player:
-		selected_player.set_player_shooting()
-func _on_move_player_button_pressed() -> void:
-	if selected_player:
-		selected_player.set_player_moving()
 func _on_kick_button_toggled(toggled_on: bool) -> void:
 	if selected_player:
 		if toggled_on:
@@ -458,20 +450,6 @@ func on_scored() -> void:
 	my_score_label.text = str(my_score)
 	is_my_turn = false
 		
-#@rpc("any_peer", "call_local")
-#func move_player(drag_direction: Vector3, selected_player_id: int):
-	#var player_to_move: MultiplayerPlayer = get_selected_player(selected_player_id)
-	#if player_to_move:
-		#player_to_move.apply_hit_force(drag_direction)
-		#player_to_move.on_action_done()
-#
-#@rpc("any_peer", "call_local")
-#func shoot_ball(drag_direction_vector: Vector3, drag_distance: Vector2):
-	#print(Fusion.is_master_client(), "  ", drag_distance)
-	#drag_direction_vector.y =  roundi(sqrt(drag_distance.length()) * 3)
-	#ball.apply_hit_force(drag_direction_vector)
-
-	
 func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 	var found_player: MultiplayerPlayer
 	for player: MultiplayerPlayer in multiplayer_players:
@@ -487,7 +465,7 @@ func _physics_process(delta: float) -> void:
 		snapshot_tick += 1
 		if snapshot_tick % 3 == 0 and is_action:
 			var s := build_snapshot()
-			Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot)
+			Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot, false)
 	else:
 		apply_targets()
 
@@ -505,7 +483,7 @@ func build_snapshot() -> Dictionary:
 	}
 
 @rpc("any_peer", "call_remote")
-func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot: Quaternion) -> void:
+func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot: Quaternion, is_synchronizing: bool) -> void:
 	if is_my_turn:
 		return
 	for i in ids.size():
@@ -513,6 +491,9 @@ func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot:
 	ball_target_pos = ball_pos
 	ball_target_rot = ball_rot
 	has_snapshot = true
+	
+	#if is_synchronizing:
+		#apply_targets()
 
 func apply_targets() -> void:
 	if not has_snapshot or not ball:
@@ -525,6 +506,35 @@ func apply_targets() -> void:
 	var cur := ball.global_basis.get_rotation_quaternion()
 	ball.global_basis = Basis(cur.slerp(ball_target_rot, 0.3))
 
+#@rpc("any_peer", "call_remote")
+func apply_end_turn_targets_synchronization(snapshot: Dictionary) -> void:
+	var ids: Array = snapshot["ids"]
+	var positions: Array = snapshot["positions"]
+	var ball_position = snapshot["ball_pos"]
+	for i in ids.size():
+		target_positions[ids[i]] = positions[i]
+	for id in ids:
+		var p := get_selected_player(id)
+		if p:
+			p.global_position = target_positions[id]
+	ball.global_position = ball_target_pos
+	#ball.global_basis = ball_target_rot
+	target_positions.clear()
+	
+	on_synchronization_done()
+
+func on_synchronization_done():
+	Fusion.rpc(turn_changed)
+	Fusion.rpc(reset_target_positions)
+
+func set_body_authority(body: RigidBody3D) -> void:
+	if is_my_turn:
+		body.freeze = false
+	else:
+		body.linear_velocity = Vector3.ZERO
+		body.angular_velocity = Vector3.ZERO
+		body.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
+		body.freeze = true
 
 #RPC
 @rpc("any_peer", "call_remote")
@@ -538,7 +548,7 @@ func action_ended() -> void:
 @rpc("any_peer", "call_local")
 func turn_changed() -> void:
 	is_my_turn = !is_my_turn
-	
+	synchronizing_label.visible = false
 	
 @rpc("any_peer", "call_local")
 func game_started() -> void:
@@ -551,3 +561,15 @@ func game_paused() -> void:
 @rpc("any_peer", "call_local")
 func reset_target_positions():
 	target_positions.clear()
+
+@rpc("any_peer", "call_remote")
+func handle_end_turn_synhronization(snapshot: Dictionary, time: float):
+	time_passed = time
+	var minutes: int = int(time_passed) / 60
+	var seconds: int = int(time_passed) % 60
+	
+	time_label.text = "%02d:%02d" % [minutes, seconds]
+	
+	apply_end_turn_targets_synchronization(snapshot)
+	#var s := build_snapshot()
+	#Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot)

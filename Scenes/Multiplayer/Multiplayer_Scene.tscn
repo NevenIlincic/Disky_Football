@@ -54,11 +54,17 @@ texture_filter = 1
 material = SubResource("StandardMaterial3D_h54ih")
 size = Vector2(80, 50)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nja13"]
+friction = 0.1
+
 [sub_resource type="BoxMesh" id="BoxMesh_llka4"]
 size = Vector3(80.23, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7qj7h"]
 size = Vector3(80, 25, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0pcd1"]
+friction = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
 transparency = 1
@@ -71,8 +77,14 @@ size = Vector3(80, 5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xi12t"]
 size = Vector3(80, 25.935669, 1)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jrvm5"]
+friction = 0.1
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_sdnxn"]
 size = Vector3(80, 1, 60)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1jnck"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_1ccg8"]
 size = Vector3(1, 5, 19)
@@ -85,6 +97,9 @@ size = Vector3(1, 5, 19.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_01yrl"]
 size = Vector3(1, 20, 19)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7luwv"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_s62fa"]
 size = Vector3(1, 5, 19)
@@ -310,6 +325,15 @@ offset_right = 40.0
 offset_bottom = 26.0
 text = "YOUR TURN"
 
+[node name="Synchronizing_Label" type="Label" parent="HUD/Control" unique_id=791762688]
+visible = false
+layout_mode = 0
+offset_left = 8.0
+offset_top = 608.0
+offset_right = 259.0
+offset_bottom = 634.0
+text = "Synchronizing positions and time..."
+
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
 light_energy = 0.2
@@ -334,6 +358,7 @@ mesh = SubResource("PlaneMesh_4vm5g")
 [node name="Wall" type="StaticBody3D" parent="Field" unique_id=1334804161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_nja13")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=1311391244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
@@ -346,6 +371,7 @@ shape = SubResource("BoxShape3D_7qj7h")
 [node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=706004618]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_0pcd1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=1707745269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
@@ -359,6 +385,7 @@ shape = SubResource("BoxShape3D_xi12t")
 [node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1200014371]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_jrvm5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1433161925]
 shape = SubResource("BoxShape3D_sdnxn")
@@ -366,6 +393,7 @@ shape = SubResource("BoxShape3D_sdnxn")
 [node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=1435718674]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_1jnck")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=753717014]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
@@ -386,6 +414,7 @@ shape = SubResource("BoxShape3D_01yrl")
 [node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=398903582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_7luwv")
 
 [node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=732235063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
@@ -516,5 +545,5 @@ stream = ExtResource("25_xstoj")
 
 [node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1440459462]
 
-[connection signal="pressed" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_pressed"]
-[connection signal="pressed" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_pressed"]
+[connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
+[connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]

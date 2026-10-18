@@ -57,11 +57,17 @@ texture_filter = 1
 material = SubResource("StandardMaterial3D_h54ih")
 size = Vector2(80, 50)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e42fg"]
+friction = 0.1
+
 [sub_resource type="BoxMesh" id="BoxMesh_s8jax"]
 size = Vector3(80.23, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s8jax"]
 size = Vector3(80, 25, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nja13"]
+friction = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
 transparency = 1
@@ -74,8 +80,14 @@ size = Vector3(80, 5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_v6i7x"]
 size = Vector3(80, 25.935669, 1)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s8unp"]
+friction = 0.1
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_06txj"]
 size = Vector3(80, 1, 60)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3y4ie"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_06txj"]
 size = Vector3(1, 5, 19)
@@ -88,6 +100,9 @@ size = Vector3(1, 5, 19.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cl7co"]
 size = Vector3(1, 20, 19)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3xug"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_jjc5n"]
 size = Vector3(1, 5, 19)
@@ -340,6 +355,7 @@ mesh = SubResource("PlaneMesh_jjc5n")
 [node name="Wall" type="StaticBody3D" parent="Field" unique_id=312517496]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_e42fg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=808762756]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
@@ -352,6 +368,7 @@ shape = SubResource("BoxShape3D_s8jax")
 [node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=1782743635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_nja13")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=268217412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
@@ -365,6 +382,7 @@ shape = SubResource("BoxShape3D_v6i7x")
 [node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1588640632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_s8unp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=471107307]
 shape = SubResource("BoxShape3D_06txj")
@@ -372,6 +390,7 @@ shape = SubResource("BoxShape3D_06txj")
 [node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=1687956656]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_3y4ie")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=916054505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
@@ -392,6 +411,7 @@ shape = SubResource("BoxShape3D_cl7co")
 [node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=866525442]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_l3xug")
 
 [node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=683238141]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)

@@ -25,15 +25,16 @@ var has_finished_move: bool = false
 var went_over: bool = false
 
 var spawn_position: Vector3 = Vector3.ZERO
-
+var scene: MultiplayerScene
 func _ready() -> void:
 	wave_effect = get_tree().get_first_node_in_group("wave_effect")
-	var scene = get_tree().get_first_node_in_group("multiplayer_scene")
+	scene = get_tree().get_first_node_in_group("multiplayer_scene")
 	if scene:
 		scene.register_ball(self) 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	check_should_play_hit_sound(state)
+	if not scene.is_my_turn: return
 
 	var linear_velocity_length = state.linear_velocity.length()
 	var speed: float = linear_velocity_length + state.angular_velocity.length() * 0.5

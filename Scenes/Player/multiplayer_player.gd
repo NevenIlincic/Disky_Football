@@ -6,10 +6,10 @@ signal continued_move(player: MultiplayerPlayer)
 
 enum MoveState { IDLE, MOVING }
 
-enum MultiplayerPlayer {
-	HOST,
-	GUEST
-}
+#enum MultiplayerPlayer {
+	#HOST,
+	#GUEST
+#}
 
 var player_id: int
 
@@ -40,12 +40,15 @@ var can_play_sound: bool = false
 @onready var swish_sound: AudioStreamPlayer = $Swish_Sound
 @onready var player_collide_sound: AudioStreamPlayer = $Player_Collide_Sound
 
+var scene: MultiplayerScene
+
 func _ready() -> void:
-	var scene = get_tree().get_first_node_in_group("multiplayer_scene")
+	scene = get_tree().get_first_node_in_group("multiplayer_scene")
 	if scene:
 		scene.register_player(self)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	if not scene.is_my_turn: return
 	var linear_velocity_length = state.linear_velocity.length()
 	var speed: float = linear_velocity_length + state.angular_velocity.length() * 0.5
 		
