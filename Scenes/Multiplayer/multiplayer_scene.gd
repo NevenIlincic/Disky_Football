@@ -111,15 +111,7 @@ func reset_entities_position():
 	await get_tree().physics_frame
 	
 	referee_whistle_sound.play()
-	if not is_my_turn:
-		await get_tree().create_timer(1.0).timeout
-		Fusion.rpc(game_started)
-		#has_game_started = true
-		#handle_enemy_turn()
-	else:
-		Fusion.rpc(game_started)
-		#has_game_started = true
-		
+	Fusion.rpc(game_started)
 		
 func spawn_players():
 	for host_spawn_point in get_tree().get_nodes_in_group("host_spawn_point"):
@@ -131,18 +123,6 @@ func spawn_players():
 		var player: MultiplayerPlayer = PLAYER_SCENE.instantiate()
 		add_child(player)
 	
-	#for i in range(0, multiplayer_players.size()):
-		#var player: MultiplayerPlayer = multiplayer_players[i]
-		#var player_spawn_position: Vector3
-		#if i <= 5:
-			#player_spawn_position = host_spawn_points[i].global_position
-		#else:
-			#player_spawn_position = guest_spawn_points[i - 6].global_position
-		#
-		#multiplayer_players[i].global_position = player_spawn_position
-		#multiplayer_players[i].spawn_position = player_spawn_position
-
-
 var next_player_id: int = 0
 
 func register_player(player: MultiplayerPlayer) -> void:
@@ -388,20 +368,16 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 @onready var goal_scored_node: Control = $HUD/Control/Goal_Scored_Node
 
 func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
+	await get_tree().create_timer(0.2).timeout
 	Fusion.rpc(action_ended)
 	#is_action = false
 	Fusion.rpc(game_paused)
 	#has_game_started = false
-	goal_scored_node.visible = true
-	play_goal_effect()
-	play_cheer_effect()
+	Fusion.rpc(handle_goal_scored, goal_owner)
+	#goal_scored_node.visible = true
+	#play_goal_effect()
+	#play_cheer_effect()
 
-	if goal_owner == Goal.GoalOwner.ME:
-		on_enemy_scored()
-	else:
-		on_scored()
-	
-	await get_tree().create_timer(3.0).timeout.connect(reset_entities_position)
 	#has_game_started = true
 @onready var football_fans: Node2D = $HUD/Control/Goal_Scored_Node/Football_Fans
 
@@ -442,13 +418,20 @@ func play_goal_effect() -> void:
 
 func on_enemy_scored() -> void:
 	enemy_score += 1
+	print("OVDE SAM")
 	enemy_score_label.text = str(enemy_score)
-	is_my_turn = true
+	if Fusion.is_master_client():
+		is_my_turn = true
+	else:
+		is_my_turn = false
 
 func on_scored() -> void:
 	my_score += 1
 	my_score_label.text = str(my_score)
-	is_my_turn = false
+	if Fusion.is_master_client():
+		is_my_turn = false
+	else:
+		is_my_turn = true
 		
 func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 	var found_player: MultiplayerPlayer
@@ -460,7 +443,9 @@ func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 
 func _physics_process(delta: float) -> void:
 	if not is_action or not ball:
+		synchronizing_label.visible = false
 		return
+	synchronizing_label.visible = true
 	if is_my_turn:
 		snapshot_tick += 1
 		if snapshot_tick % 3 == 0 and is_action:
@@ -573,3 +558,15 @@ func handle_end_turn_synhronization(snapshot: Dictionary, time: float):
 	apply_end_turn_targets_synchronization(snapshot)
 	#var s := build_snapshot()
 	#Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot)
+
+@rpc("any_peer", "call_local")
+func handle_goal_scored(goal_owner: Goal.GoalOwner):
+	goal_scored_node.visible = true
+	play_goal_effect()
+	play_cheer_effect()
+	await get_tree().create_timer(3.0).timeout
+	if goal_owner == Goal.GoalOwner.ME:
+		on_enemy_scored()
+	else:
+		on_scored()
+	reset_entities_position()
