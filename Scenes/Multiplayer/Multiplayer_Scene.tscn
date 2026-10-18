@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="1_1jnck"]
 [ext_resource type="Script" uid="uid://docdj3hrtlhcq" path="res://Scenes/Multiplayer/multiplayer_scene.gd" id="1_7luwv"]
 [ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="2_7luwv"]
+[ext_resource type="PackedScene" uid="uid://bjfmp8qqsc7pr" path="res://Scenes/2D/Post_Match_Screen.tscn" id="3_jrvm5"]
 [ext_resource type="Texture2D" uid="uid://dxig6lu7vv1eg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Enabled.png" id="3_lrmkq"]
 [ext_resource type="Texture2D" uid="uid://dbnykn5w8qtnc" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png" id="4_88s4d"]
 [ext_resource type="Texture2D" uid="uid://7nx4ywugf6vg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Hovered.png" id="5_8tr4o"]
@@ -333,6 +334,10 @@ offset_top = 608.0
 offset_right = 259.0
 offset_bottom = 634.0
 text = "Synchronizing positions and time..."
+
+[node name="PostMatchScreen" parent="HUD/Control" unique_id=162344343 instance=ExtResource("3_jrvm5")]
+visible = false
+layout_mode = 0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)

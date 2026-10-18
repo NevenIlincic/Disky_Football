@@ -13,6 +13,10 @@ func _ready() -> void:
 	Fusion.connected_to_photon.connect(_on_online_connected)
 	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
 
+func _exit_tree() -> void:
+	if Fusion.connected_to_photon.is_connected(_on_online_connected):
+		Fusion.connected_to_photon.disconnect(_on_online_connected)
+		
 func _on_start_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Test_Scene.tscn")
 
@@ -21,10 +25,11 @@ func _on_multiplayer_button_pressed() -> void:
 	connecting_label.visible = true
 
 func _on_online_connected():
-	connecting_label.visible = false
-	
-	hide_main_menu_nodes()
-	multiplayer_menu.visible = true
+	get_tree().change_scene_to_file("res://Scenes/Menus/Multiplayer_Menu_Scene.tscn")
+	#connecting_label.visible = false
+	#
+	#hide_main_menu_nodes()
+	#multiplayer_menu.visible = true
 
 func _on_disconnected_from_multiplayer():
 	show_main_menu_nodes()

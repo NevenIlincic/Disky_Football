@@ -18,6 +18,12 @@ func _ready() -> void:
 	Fusion.room_left.connect(_on_search_canceled)
 	FusionSdk.match_found.connect(prepare_match_info)
 
+func _exit_tree() -> void:
+	Fusion.unregister_broadcast_receiver(self)
+	if Fusion.room_left.is_connected(_on_search_canceled):
+		Fusion.room_left.disconnect(_on_search_canceled)
+	if FusionSdk.match_found.is_connected(prepare_match_info):
+		FusionSdk.match_found.disconnect(prepare_match_info)
 @rpc("any_peer","call_local")
 func _on_match_found():
 	not_searching_node.visible = false
@@ -47,9 +53,8 @@ func _on_join_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	Fusion.disconnect_from_photon()
-	disconnected_from_multiplayer.emit()
+	get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 	
-
 
 func _on_cancel_searching_button_pressed() -> void:
 	FusionSdk.leave_room()

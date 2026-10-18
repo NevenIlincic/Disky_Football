@@ -1,0 +1,311 @@
+[gd_scene format=3 uid="uid://c21sfpm8ls508"]
+
+[ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="1_aofhr"]
+[ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="2_pl276"]
+[ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="3_vjdmb"]
+[ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="4_lpe02"]
+[ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="5_p62xj"]
+[ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="6_1qbg4"]
+[ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="7_equfj"]
+
+[sub_resource type="Environment" id="Environment_vh7gt"]
+background_mode = 3
+background_energy_multiplier = 0.0
+glow_enabled = true
+glow_intensity = 2.18
+glow_bloom = 0.06
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jis2f"]
+rough = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_jj5e7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+albedo_texture = ExtResource("3_vjdmb")
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wocfn"]
+material = SubResource("StandardMaterial3D_h54ih")
+size = Vector2(80, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jugs0"]
+size = Vector3(80.23, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s52gw"]
+size = Vector3(80, 25, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.25490198)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fr7wc"]
+material = SubResource("StandardMaterial3D_mwjvy")
+size = Vector3(80, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oh6io"]
+size = Vector3(80, 25.935669, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2c463"]
+size = Vector3(80, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tqtit"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5q4g0"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ickxi"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6fc6a"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6itrs"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwe5n"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_366p2"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0farc"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="Curve" id="Curve_hg654"]
+_data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+curve = SubResource("Curve_hg654")
+
+[sub_resource type="Gradient" id="Gradient_6aoa2"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+gradient = SubResource("Gradient_6aoa2")
+
+[sub_resource type="Curve" id="Curve_pf1em"]
+_limits = [0.0, 20.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+curve = SubResource("Curve_pf1em")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dw1qy"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_dvlam")
+color_ramp = SubResource("GradientTexture1D_7una7")
+alpha_curve = SubResource("CurveTexture_0wwvh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_lpe02")
+
+[sub_resource type="QuadMesh" id="QuadMesh_6iqh4"]
+material = SubResource("StandardMaterial3D_jjc5n")
+orientation = 1
+
+[node name="MultiplayerMenuScene" type="Node3D" unique_id=1991357341]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1269440910]
+transform = Transform3D(1, 0, 0, 0, 0.5029197, 0.8643332, 0, -0.8643332, 0.5029197, -0.5304804, 21.78799, 21.533604)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1894035110]
+environment = SubResource("Environment_vh7gt")
+
+[node name="Field" type="Node3D" parent="." unique_id=1719224589]
+
+[node name="Ball" parent="Field" unique_id=1734501864 instance=ExtResource("1_aofhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9993095, 0.5592249, 4.0355825)
+
+[node name="Player2" parent="Field" unique_id=1368321486 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3827057, 0.25, -0.3622365)
+
+[node name="Player" parent="Field" unique_id=1755052311 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.407911, 0.25, -2.0692425)
+
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=54569675]
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_jis2f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Floor" unique_id=1987947151]
+shape = SubResource("WorldBoundaryShape3D_jj5e7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Floor" unique_id=80997414]
+mesh = SubResource("PlaneMesh_wocfn")
+
+[node name="Wall" type="StaticBody3D" parent="Field" unique_id=329685609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=2097522349]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
+mesh = SubResource("BoxMesh_jugs0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall" unique_id=135752137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -6.9647083)
+shape = SubResource("BoxShape3D_s52gw")
+
+[node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=1386262282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=242876688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
+visible = false
+mesh = SubResource("BoxMesh_fr7wc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall_2" unique_id=685392688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4678345, 12.55129)
+shape = SubResource("BoxShape3D_oh6io")
+
+[node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1045601423]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1162773198]
+shape = SubResource("BoxShape3D_2c463")
+
+[node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=300591690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=2115132342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_tqtit")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=881418289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, 15)
+shape = SubResource("BoxShape3D_5q4g0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=1231573707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_ickxi")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=2053069183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, -15.374)
+shape = SubResource("BoxShape3D_6fc6a")
+
+[node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=1961282345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
+input_ray_pickable = false
+
+[node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=1772970278]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_6itrs")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1076834671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, 15)
+shape = SubResource("BoxShape3D_lwe5n")
+
+[node name="Right_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=856580317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_366p2")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=570259543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, -15.373857)
+shape = SubResource("BoxShape3D_0farc")
+
+[node name="Wave_Effect" type="GPUParticles3D" parent="Field" unique_id=516244076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4084432, -0.71547604)
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_dw1qy")
+draw_pass_1 = SubResource("QuadMesh_6iqh4")
+
+[node name="Enemy" parent="Field" unique_id=594854611 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.792366, 0.25000095, -14.882816)
+
+[node name="Enemy2" parent="Field" unique_id=1662037996 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6036835, 0.25, 7.0285044)
+
+[node name="Player3" parent="Field" unique_id=1948892246 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.391686, 0.25, -10.641853)
+
+[node name="Player5" parent="Field" unique_id=590177898 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.932785, 0.25, 14.114393)
+
+[node name="Player7" parent="Field" unique_id=1292889362 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6495457, 0.25, -7.0221105)
+
+[node name="Player8" parent="Field" unique_id=1242713012 instance=ExtResource("2_pl276")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.041312, 0.25, 0.1139822)
+
+[node name="Enemy3" parent="Field" unique_id=37485218 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.702248, 0.25000095, -7.8006506)
+
+[node name="Enemy4" parent="Field" unique_id=2083771880 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.926107, 0.25, 7.0285044)
+
+[node name="Enemy5" parent="Field" unique_id=2129232570 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.10329, 0.25000095, 2.18999)
+
+[node name="Enemy6" parent="Field" unique_id=2116037546 instance=ExtResource("5_p62xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5326462, 0.25, 15.456355)
+
+[node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=1447642634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+
+[node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("6_1qbg4")]
+transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
+
+[node name="Enemy_Goal" parent="Field" unique_id=963722144 instance=ExtResource("6_1qbg4")]
+transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
+goal_owner = 1
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1020375850]
+transform = Transform3D(1, 0, 0, 0, 0.36029094, 0.93284, 0, -0.93284, 0.36029094, -4.3613186, 12.102816, 7.406451)
+sky_mode = 1
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1953695260]
+transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=409129612]
+transform = Transform3D(-0.05663065, 0.7930336, -0.60653996, -0.0737223, -0.60917795, -0.78959954, -0.9956696, -1.8557891e-09, 0.09296241, -52.470604, 17.136568, 0)
+light_energy = 0.2
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=6510591]
+
+[node name="Background" type="ColorRect" parent="HUD" unique_id=758392867]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 168.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
+
+[node name="Main_Menu_Nodes" type="Control" parent="HUD" unique_id=2028232651]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Multiplayer_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1760143121]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1152.0
+offset_top = -648.0
+offset_right = -1112.0
+offset_bottom = -608.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("7_equfj")]
+layout_mode = 0

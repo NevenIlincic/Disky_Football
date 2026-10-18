@@ -31,12 +31,12 @@ rough = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8hk6q"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6l0r"]
 albedo_texture = ExtResource("4_26fja")
 texture_filter = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vu58q"]
-material = SubResource("StandardMaterial3D_h54ih")
+material = SubResource("StandardMaterial3D_l6l0r")
 size = Vector2(80, 50)
 
 [sub_resource type="BoxMesh" id="BoxMesh_l6l0r"]
@@ -45,12 +45,12 @@ size = Vector3(80.23, 5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jg06a"]
 size = Vector3(80, 25, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jg06a"]
 transparency = 1
 albedo_color = Color(1, 1, 0, 0.25490198)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sp3pi"]
-material = SubResource("StandardMaterial3D_mwjvy")
+material = SubResource("StandardMaterial3D_jg06a")
 size = Vector3(80, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i3d3d"]
@@ -87,13 +87,13 @@ size = Vector3(1, 20, 19)
 _data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+[sub_resource type="CurveTexture" id="CurveTexture_sp3pi"]
 curve = SubResource("Curve_il16n")
 
 [sub_resource type="Gradient" id="Gradient_qn25q"]
 colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i3d3d"]
 gradient = SubResource("Gradient_qn25q")
 
 [sub_resource type="Curve" id="Curve_bohc2"]
@@ -101,22 +101,22 @@ _limits = [0.0, 20.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+[sub_resource type="CurveTexture" id="CurveTexture_tingw"]
 curve = SubResource("Curve_bohc2")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_powv0"]
 gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_dvlam")
-color_ramp = SubResource("GradientTexture1D_7una7")
-alpha_curve = SubResource("CurveTexture_0wwvh")
+scale_curve = SubResource("CurveTexture_tingw")
+color_ramp = SubResource("GradientTexture1D_i3d3d")
+alpha_curve = SubResource("CurveTexture_sp3pi")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eertt"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("5_23287")
 
 [sub_resource type="QuadMesh" id="QuadMesh_015ep"]
-material = SubResource("StandardMaterial3D_jjc5n")
+material = SubResource("StandardMaterial3D_eertt")
 orientation = 1
 
 [node name="MenuScene" type="Node3D" unique_id=175652418]

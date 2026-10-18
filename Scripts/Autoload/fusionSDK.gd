@@ -45,6 +45,8 @@ func _notification(what: int) -> void:
 		get_tree().quit()
 
 func leave_room() -> void:
+	ready_players.clear()
+	names.clear()
 	Fusion.leave_room()
 
 func join_room() -> void:

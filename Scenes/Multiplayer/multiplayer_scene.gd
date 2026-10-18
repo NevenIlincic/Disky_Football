@@ -1,8 +1,20 @@
 class_name MultiplayerScene extends Node3D
 
+enum MatchState{
+	PLAYING,
+	WON,
+	LOST
+}
+
+const GOALS_TO_WIN: int = 1
+var match_state: MatchState = MatchState.PLAYING
+
 const PLAYER_SCENE = preload("uid://bop3seu5ydqe1")
 const BALL_SCENE = preload("res://Scenes/Ball/MultiplayerBall.tscn")
 @onready var fusion_spawner: FusionSpawner = $FusionSpawner
+@onready var post_match_screen: PostMatchScreen = $HUD/Control/PostMatchScreen
+
+
 
 
 var is_my_turn: bool = true:
@@ -87,6 +99,7 @@ var has_snapshot: bool = false
 
 var is_synchronization_done: bool = false
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_my_turn:
 		if Input.is_action_just_pressed("drag"):
@@ -101,18 +114,32 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func reset_entities_position():
-	for player: MultiplayerPlayer in multiplayer_players:
-		player.respawn_entity()
+	match match_state:
+		MatchState.PLAYING:
+			for player: MultiplayerPlayer in multiplayer_players:
+				player.respawn_entity()
 
-	ball.respawn_entity()
-	my_goal.reset_entity()
-	enemy_goal.reset_entity()
+			ball.respawn_entity()
+			my_goal.reset_entity()
+			enemy_goal.reset_entity()
+			goal_scored_node.visible = false
+			await get_tree().physics_frame
+			
+			referee_whistle_sound.play()
+			Fusion.rpc(game_started)
+		MatchState.WON:
+			FusionSdk.leave_room()
+		MatchState.LOST:
+			FusionSdk.leave_room()
+
+func _on_match_finished():
 	goal_scored_node.visible = false
-	await get_tree().physics_frame
-	
-	referee_whistle_sound.play()
-	Fusion.rpc(game_started)
-		
+	post_match_screen.visible = true
+	post_match_screen.do_after_match()
+
+
+
+
 func spawn_players():
 	for host_spawn_point in get_tree().get_nodes_in_group("host_spawn_point"):
 		host_spawn_points.append(host_spawn_point)
@@ -166,8 +193,14 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	Fusion.unregister_broadcast_receiver(self)
-	
+	if Fusion.room_left.is_connected(_on_match_finished):
+		Fusion.room_left.disconnect(_on_match_finished)
+	if my_goal.goal_scored.is_connected(_on_goal_scored):
+		my_goal.goal_scored.disconnect(_on_goal_scored)
+	if enemy_goal.goal_scored.is_connected(_on_goal_scored):
+		enemy_goal.goal_scored.disconnect(_on_goal_scored)
 func _ready() -> void:
+	Fusion.room_left.connect(_on_match_finished)
 	is_my_turn = Fusion.is_master_client()
 	
 	my_goal.goal_scored.connect(_on_goal_scored)
@@ -418,20 +451,34 @@ func play_goal_effect() -> void:
 
 func on_enemy_scored() -> void:
 	enemy_score += 1
-	print("OVDE SAM")
 	enemy_score_label.text = str(enemy_score)
-	if Fusion.is_master_client():
-		is_my_turn = true
+	if enemy_score < GOALS_TO_WIN:
+		if Fusion.is_master_client():
+			is_my_turn = true
+		else:
+			is_my_turn = false
 	else:
-		is_my_turn = false
+		if Fusion.is_master_client():
+			match_state = MatchState.LOST
+		else:
+			match_state = MatchState.WON
+
+func handle_match_lost():
+	print("POBEDIO!")
 
 func on_scored() -> void:
 	my_score += 1
 	my_score_label.text = str(my_score)
-	if Fusion.is_master_client():
-		is_my_turn = false
+	if my_score < GOALS_TO_WIN:
+		if Fusion.is_master_client():
+			is_my_turn = false
+		else:
+			is_my_turn = true
 	else:
-		is_my_turn = true
+		if Fusion.is_master_client():
+			match_state = MatchState.WON
+		else:
+			match_state = MatchState.LOST
 		
 func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 	var found_player: MultiplayerPlayer
