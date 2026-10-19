@@ -12,7 +12,6 @@ func _ready() -> void:
 func do_after_match():
 	if has_done: return
 	has_done = true
-	print("AAAAAAAAAAAAAAAAAAAAAA")
 	set_won_lost_label_text()
 	await get_tree().create_timer(1.0).timeout
 	

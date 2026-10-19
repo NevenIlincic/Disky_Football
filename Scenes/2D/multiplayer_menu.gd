@@ -57,7 +57,8 @@ func _on_back_button_pressed() -> void:
 	
 
 func _on_cancel_searching_button_pressed() -> void:
-	FusionSdk.leave_room()
+	if Fusion.is_in_room():
+		FusionSdk.leave_room()
 	
 func _on_search_canceled():
 	show_not_searching_node()

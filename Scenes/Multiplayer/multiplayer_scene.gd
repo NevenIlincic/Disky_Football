@@ -218,8 +218,8 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	Fusion.unregister_broadcast_receiver(self)
-	if Fusion.room_left.is_connected(_on_match_finished):
-		Fusion.room_left.disconnect(_on_match_finished)
+	#if Fusion.room_left.is_connected(_on_match_finished):
+		#Fusion.room_left.disconnect(_on_match_finished)
 	if Fusion.player_left.is_connected(_on_player_left):
 		Fusion.player_left.disconnect(_on_player_left)
 	if my_goal.goal_scored.is_connected(_on_goal_scored):
@@ -227,7 +227,7 @@ func _exit_tree() -> void:
 	if enemy_goal.goal_scored.is_connected(_on_goal_scored):
 		enemy_goal.goal_scored.disconnect(_on_goal_scored)
 func _ready() -> void:
-	Fusion.room_left.connect(_on_match_finished)
+	#Fusion.room_left.connect(_on_match_finished)
 	Fusion.player_left.connect(_on_player_left)
 	is_my_turn = Fusion.is_master_client()
 	is_initialy_host = Fusion.is_master_client()
