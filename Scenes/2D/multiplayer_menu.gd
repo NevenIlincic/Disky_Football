@@ -13,6 +13,8 @@ var logged_in_player_stats: LoggedPlayerStats
 @onready var searching_label: Label = $While_Searching_Node/Searching_Label
 @onready var host_name_label: Label = $Match_Found_Node/Host_Name_Label
 @onready var guest_name_label: Label = $Match_Found_Node/Guest_Name_Label
+@onready var host_team_name_label: Label = $Match_Found_Node/Host_Team_Name_Label
+@onready var guest_team_name_label: Label = $Match_Found_Node/Guest_Team_Name_Label
 
 
 func _ready() -> void:
@@ -34,14 +36,19 @@ func _on_match_found():
 	while_searching_node.visible = false
 	match_found_node.visible = true
 	var opponents_name: String = FusionSdk.get_opponents_name()
+	var opponents_team_name: String = FusionSdk.get_opponents_team_name()
 	if Fusion.is_master_client():
-		host_name_label.text = FusionSdk.my_name
-		guest_name_label.text = opponents_name
+		host_name_label.text = get_my_name()
+		guest_name_label.text = str("COACH: ", opponents_name)
+		host_team_name_label.text = get_my_team_name()
+		guest_team_name_label.text = opponents_team_name
 	else:
-		host_name_label.text = opponents_name
-		guest_name_label.text = FusionSdk.my_name
-	
-	await get_tree().create_timer(1.0).timeout
+		host_name_label.text = str("COACH: ", opponents_name)
+		guest_name_label.text = get_my_name()
+		host_team_name_label.text = opponents_team_name
+		guest_team_name_label.text = get_my_team_name()
+		
+	await get_tree().create_timer(3.0).timeout
 	if Fusion.is_master_client():
 		Fusion.rpc(FusionSdk.start_match)
 		Fusion.unregister_broadcast_receiver(self)
@@ -78,3 +85,10 @@ func show_while_searching_node():
 	searching_animation_player.play("Searching_Animation")
 	not_searching_node.visible = false
 	while_searching_node.visible = true
+
+func get_my_name() -> String:
+	#ZAMENI SA PLAYGAMA SDK
+	return str("COACH: ", FusionSdk.my_name) 
+
+func get_my_team_name() -> String:
+	return str("TEAM: ", FusionSdk.my_team_name)

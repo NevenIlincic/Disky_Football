@@ -5,9 +5,10 @@ var ready_players: Dictionary = {}
 var id: String
 var room_id: int
 var match_scene: PackedScene
-var my_name: String = str("AA", "_", randi())   
+var my_name: String = str("MeXa", "_", randi())   
+var my_team_name: String
 var names: Dictionary = {}                 # player_id -> ime
-
+var teams: Dictionary = {} #player_id -> naziv_tima
 
 signal match_found()
 
@@ -15,6 +16,7 @@ func _ready():
 	Fusion.register_broadcast_receiver(self)
 
 	id = str(Time.get_ticks_usec(),"_", randi())
+	my_team_name = get_random_3_letter_string()
 	connect_to_signals()
 
 func connect_to_signals():
@@ -48,6 +50,7 @@ func _notification(what: int) -> void:
 func leave_room() -> void:
 	ready_players.clear()
 	names.clear()
+	teams.clear()
 	Fusion.leave_room()
 
 func join_room() -> void:
@@ -76,16 +79,18 @@ func start_match():
 
 func _on_room_joined():
 	names[id] = my_name
+	teams[id] = my_team_name
 	
-	Fusion.rpc(introduce, id, my_name)
+	Fusion.rpc(introduce, id, my_name, my_team_name)
 	Fusion.rpc(player_ready, id)
 
 @rpc("any_peer", "call_remote")
-func introduce(player_id: String, player_name: String):
+func introduce(player_id: String, player_name: String, player_team_name: String):
 	var is_new = not names.has(player_id)
 	names[player_id] = player_name
+	teams[player_id] = player_team_name
 	if is_new:
-		Fusion.rpc(introduce, player_id, names[player_id])
+		Fusion.rpc(introduce, player_id, names[player_id], teams[player_id])
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -94,3 +99,25 @@ func get_opponents_name() -> String:
 			opponents_name = names[player_id]
 			break
 	return opponents_name
+
+func get_opponents_team_name() -> String:
+	var opponents_team_name: String
+	for player_id: String in teams:
+		if player_id != id:
+			opponents_team_name = teams[player_id]
+			break
+	return opponents_team_name
+
+func get_team_name() -> String:
+	#ZAMENITI SA PLAYGAMA SDK
+	return get_random_3_letter_string()
+
+func get_random_3_letter_string() -> String:
+	var alphabet: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" # ili "abcdefghijklmnopqrstuvwxyz" za mala slova
+	var result: String = ""
+	
+	for i in range(3):
+		var random_index = randi() % alphabet.length()
+		result += alphabet[random_index]
+		
+	return result

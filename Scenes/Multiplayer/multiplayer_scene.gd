@@ -87,6 +87,8 @@ var enemy_score: int = 0
 @onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
 @onready var goal_scored_sprite: Sprite2D = $HUD/Control/Goal_Scored_Node/Goal_Scored_Sprite
 @onready var synchronizing_label: Label = $HUD/Control/Synchronizing_Label
+@onready var host_team_name: Label = $HUD/Control/Scoreboard/Host_Team_Name
+@onready var guest_team_name: Label = $HUD/Control/Scoreboard/Guest_Team_Name
 
 @onready var my_goal: Goal = $Field/My_Goal
 @onready var enemy_goal: Goal = $Field/Enemy_Goal
@@ -227,11 +229,21 @@ func _exit_tree() -> void:
 		my_goal.goal_scored.disconnect(_on_goal_scored)
 	if enemy_goal.goal_scored.is_connected(_on_goal_scored):
 		enemy_goal.goal_scored.disconnect(_on_goal_scored)
+		
+func set_team_name_labels() -> void:
+	if Fusion.is_master_client():
+		host_team_name.text = FusionSdk.my_team_name
+		guest_team_name.text = FusionSdk.get_opponents_team_name()
+	else:
+		host_team_name.text = FusionSdk.get_opponents_team_name()
+		guest_team_name.text = FusionSdk.my_team_name
+		
 func _ready() -> void:
 	#Fusion.room_left.connect(_on_match_finished)
 	Fusion.player_left.connect(_on_player_left)
 	is_my_turn = Fusion.is_master_client()
 	is_initialy_host = Fusion.is_master_client()
+	set_team_name_labels()
 	
 	my_goal.goal_scored.connect(_on_goal_scored)
 	enemy_goal.goal_scored.connect(_on_goal_scored)

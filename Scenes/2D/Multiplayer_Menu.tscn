@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dve6yuggeuxb2" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Enabled.png" id="11_bvym8"]
 [ext_resource type="Texture2D" uid="uid://dn8k2u4g6y16a" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Pressed.png" id="12_56gmq"]
 [ext_resource type="Texture2D" uid="uid://bndr5vrayev4h" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Hovered.png" id="13_bsyyq"]
+[ext_resource type="Texture2D" uid="uid://blm7hrlfgyju3" path="res://Sprites/Multiplayer_Info/Formation/player.png" id="14_56gmq"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_skhyc"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -170,17 +171,151 @@ texture = ExtResource("10_1e1ep")
 layout_mode = 0
 offset_left = 122.58203
 offset_top = 564.0
-offset_right = 226.58203
+offset_right = 468.0
 offset_bottom = 590.0
 text = "HOST NAME"
 
 [node name="Guest_Name_Label" type="Label" parent="Match_Found_Node" unique_id=2017688196]
 layout_mode = 0
-offset_left = 570.58203
+offset_left = 484.0
 offset_top = 172.0
 offset_right = 828.58203
 offset_bottom = 198.0
 text = "GUEST NAME"
+horizontal_alignment = 2
+text_overrun_behavior = 3
+
+[node name="Host_Formation" type="Node2D" parent="Match_Found_Node" unique_id=1281225926]
+
+[node name="3-3_Standard_Formation" type="Node2D" parent="Match_Found_Node/Host_Formation" unique_id=463188209]
+
+[node name="Player_1" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=196198844]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 324.0
+offset_top = 284.0
+offset_right = 364.0
+offset_bottom = 324.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_2" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=269161534]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 324.0
+offset_top = 364.0
+offset_right = 364.0
+offset_bottom = 404.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_3" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=156641735]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 324.0
+offset_top = 444.0
+offset_right = 364.0
+offset_bottom = 484.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_4" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=1617227368]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 244.0
+offset_top = 284.0
+offset_right = 284.0
+offset_bottom = 324.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_5" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=345973711]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 244.0
+offset_top = 364.0
+offset_right = 284.0
+offset_bottom = 404.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_6" type="TextureRect" parent="Match_Found_Node/Host_Formation/3-3_Standard_Formation" unique_id=1438751221]
+modulate = Color(0, 0.54901963, 1, 1)
+offset_left = 244.0
+offset_top = 444.0
+offset_right = 284.0
+offset_bottom = 484.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Guest_Formation" type="Node2D" parent="Match_Found_Node" unique_id=1469966859]
+
+[node name="3-3_Standard_Formation" type="Node2D" parent="Match_Found_Node/Guest_Formation" unique_id=1677169764]
+
+[node name="Player_1" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=841896045]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 668.0
+offset_top = 284.0
+offset_right = 708.0
+offset_bottom = 324.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_2" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=833296594]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 668.0
+offset_top = 364.0
+offset_right = 708.0
+offset_bottom = 404.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_3" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=2112550151]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 668.0
+offset_top = 444.0
+offset_right = 708.0
+offset_bottom = 484.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_4" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=1359615021]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 588.0
+offset_top = 284.0
+offset_right = 628.0
+offset_bottom = 324.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_5" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=898963133]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 588.0
+offset_top = 364.0
+offset_right = 628.0
+offset_bottom = 404.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Player_6" type="TextureRect" parent="Match_Found_Node/Guest_Formation/3-3_Standard_Formation" unique_id=741943953]
+modulate = Color(0.9490196, 0.54901963, 1, 1)
+offset_left = 588.0
+offset_top = 444.0
+offset_right = 628.0
+offset_bottom = 484.0
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="Host_Team_Name_Label" type="Label" parent="Match_Found_Node" unique_id=1129376611]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 532.0
+offset_right = 268.0
+offset_bottom = 558.0
+text = "TEAM:"
+
+[node name="Guest_Team_Name_Label" type="Label" parent="Match_Found_Node" unique_id=1771417230]
+layout_mode = 0
+offset_left = 685.0
+offset_top = 203.0
+offset_right = 829.0
+offset_bottom = 229.0
+text = "TEAM:"
 horizontal_alignment = 2
 
 [connection signal="pressed" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_pressed"]
