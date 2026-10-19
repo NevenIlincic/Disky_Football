@@ -10,11 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://dc4d7tqgmc5rw" path="res://Sprites/Buttons/Start_Button/Start_Button_Enabled.png" id="7_ntokn"]
 [ext_resource type="Texture2D" uid="uid://8yh80csuric" path="res://Sprites/Buttons/Start_Button/Start_Button_Pressed.png" id="8_26fja"]
 [ext_resource type="Texture2D" uid="uid://bbe0iy2vjxxlp" path="res://Sprites/Buttons/Start_Button/Start_Button_Hovered.png" id="9_23287"]
-[ext_resource type="Texture2D" uid="uid://dve6yuggeuxb2" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Enabled.png" id="10_0s8ga"]
-[ext_resource type="Texture2D" uid="uid://dn8k2u4g6y16a" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Pressed.png" id="11_i8opw"]
 [ext_resource type="Texture2D" uid="uid://c172t8165eagf" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Enabled.png" id="11_vu58q"]
 [ext_resource type="Texture2D" uid="uid://d1qeqeen0jyml" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Pressed.png" id="12_l6l0r"]
-[ext_resource type="Texture2D" uid="uid://bndr5vrayev4h" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Hovered.png" id="12_yfte3"]
 [ext_resource type="Texture2D" uid="uid://5xffkq60k8qr" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Hovered.png" id="13_jg06a"]
 [ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="14_yfte3"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="18_l6l0r"]
@@ -343,18 +340,6 @@ texture_hover = ExtResource("13_jg06a")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Shop_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Buttons_Control" unique_id=832999412]
-layout_mode = 0
-offset_left = -144.0
-offset_top = -96.0
-offset_right = 136.0
-offset_bottom = 8.0
-texture_normal = ExtResource("10_0s8ga")
-texture_pressed = ExtResource("11_i8opw")
-texture_hover = ExtResource("12_yfte3")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="Level_Selection_Menu" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1218758376]
 anchors_preset = 0
 offset_right = 40.0
@@ -389,6 +374,11 @@ grow_vertical = 0
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("18_l6l0r")]
 visible = false
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Connecting_Label" type="Label" parent="HUD" unique_id=174976378]
 visible = false

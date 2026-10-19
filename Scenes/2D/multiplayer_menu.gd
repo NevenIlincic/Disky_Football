@@ -2,6 +2,8 @@ class_name MultiplayerMenu extends Control
 
 signal disconnected_from_multiplayer()
 
+var logged_in_player_stats: LoggedPlayerStats
+
 @onready var not_searching_node: Control = $Not_Searching_Node
 @onready var while_searching_node: Control = $While_Searching_Node
 @onready var match_found_node: Control = $Match_Found_Node
@@ -17,6 +19,7 @@ func _ready() -> void:
 	Fusion.register_broadcast_receiver(self)
 	Fusion.room_left.connect(_on_search_canceled)
 	FusionSdk.match_found.connect(prepare_match_info)
+	logged_in_player_stats = get_tree().get_first_node_in_group("logged_player_stats")
 
 func _exit_tree() -> void:
 	Fusion.unregister_broadcast_receiver(self)
@@ -26,6 +29,7 @@ func _exit_tree() -> void:
 		FusionSdk.match_found.disconnect(prepare_match_info)
 @rpc("any_peer","call_local")
 func _on_match_found():
+	logged_in_player_stats.hide_stats()
 	not_searching_node.visible = false
 	while_searching_node.visible = false
 	match_found_node.visible = true

@@ -3,11 +3,16 @@ class_name PostMatchScreen extends Control
 @onready var you_won_lost_label: Label = $You_Won_Lost_Label
 var has_done: bool = false
 var scene: MultiplayerScene
-@onready var progress_bar: TextureProgressBar = $Progress_Bar/Progress_Bar
+
+#PROGRESS BAR
+@onready var progress_bar: TextureProgressBar = $Gained_Stats/Progress_Bar/Progress_Bar
+@onready var percentage_to_new_level_label: Label = $Gained_Stats/Progress_Bar/Percentage_To_New_Level_Label
 
 func _ready() -> void:
 	scene = get_tree().get_first_node_in_group("multiplayer_scene")
-
+	var percentage = int((progress_bar.value / progress_bar.max_value) * 100)
+	percentage_to_new_level_label.text = str(percentage) + "%"
+	
 #UZMI EXPERIENCE I LEVEL IGRACA PREKO SDK-a
 func do_after_match():
 	if has_done: return
@@ -24,8 +29,16 @@ func do_after_match():
 	var duration: float = (remaining_distance / max_value) * total_duration
 
 	var tween: Tween = create_tween()
-	tween.tween_property(progress_bar, "value", max_value, duration)
-	
+	tween.tween_method(
+		func(val: float):
+			progress_bar.value = val
+			var percentage = int((val / progress_bar.max_value) * 100)
+			percentage_to_new_level_label.text = str(percentage) + "%",
+		progress_bar.value,
+		progress_bar.max_value,
+		duration
+	)
+
 
 func set_won_lost_label_text():
 	match scene.match_state:

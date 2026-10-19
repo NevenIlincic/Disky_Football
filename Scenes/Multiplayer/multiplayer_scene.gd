@@ -14,6 +14,7 @@ enum MatchFinishState {
 	FINISHED_BY_DISCONNECTION
 }
 
+const MATCH_DURATION: float = 2700
 const GOALS_TO_WIN: int = 1
 var match_state: MatchState = MatchState.PLAYING
 var match_finish_state: MatchFinishState = MatchFinishState.FINISHED_NORMAL
@@ -530,7 +531,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		apply_targets()
 		
-	if time_passed > 10 and match_state == MatchState.PLAYING:
+	if time_passed < MATCH_DURATION:
+		if Fusion.is_master_client():
+			print(time_passed)
+	
+	if time_passed > MATCH_DURATION and match_state == MatchState.PLAYING:
 		for player: MultiplayerPlayer in multiplayer_players:
 			freeze_entities(player)
 		freeze_entities(ball)

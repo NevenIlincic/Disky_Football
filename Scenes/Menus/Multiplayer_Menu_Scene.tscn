@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="5_p62xj"]
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="6_1qbg4"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="7_equfj"]
+[ext_resource type="PackedScene" uid="uid://dj2f1f5t7a06g" path="res://Scenes/Multiplayer/Logged_Player_Stats/Logged_Player_Stats.tscn" id="8_pl276"]
 
 [sub_resource type="Environment" id="Environment_vh7gt"]
 background_mode = 3
@@ -309,3 +310,5 @@ grow_vertical = 0
 
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("7_equfj")]
 layout_mode = 0
+
+[node name="LoggedPlayerStats" parent="HUD" unique_id=363541360 instance=ExtResource("8_pl276")]

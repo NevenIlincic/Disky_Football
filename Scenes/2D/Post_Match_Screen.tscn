@@ -5,6 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://bqwlq6qdx6hiw" path="res://Sprites/Progress_Bar/Experience_Fill_Bar.png" id="3_0a4kr"]
 [ext_resource type="Texture2D" uid="uid://cpdhim2kn7imy" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Enabled.png" id="4_pm8dd"]
 [ext_resource type="Texture2D" uid="uid://b45c0iogcufh5" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Pressed.png" id="5_3o43c"]
+[ext_resource type="Texture2D" uid="uid://c6qtr8pwdx5om" path="res://Sprites/Multiplayer_Info/Fan/Football Fan 5.png" id="6_3o43c"]
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="6_isi6v"]
+[ext_resource type="Texture2D" uid="uid://c877slould2bf" path="res://Sprites/Multiplayer_Info/Money/money.png" id="8_htfhy"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_isi6v"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -30,33 +33,11 @@ color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
 
 [node name="You_Won_Lost_Label" type="Label" parent="." unique_id=1461445454]
 layout_mode = 0
-offset_right = 1160.0
+offset_right = 1152.0
 offset_bottom = 300.0
 theme_override_font_sizes/font_size = 48
 text = "YOU WON!"
 horizontal_alignment = 1
-
-[node name="Progress_Bar" type="Node2D" parent="." unique_id=678748545]
-position = Vector2(96, -72)
-
-[node name="Texture_Rect_Under" type="TextureRect" parent="Progress_Bar" unique_id=1762944064]
-offset_left = 344.0
-offset_top = 235.0
-offset_right = 624.0
-offset_bottom = 365.0
-texture = ExtResource("2_2yamd")
-expand_mode = 1
-
-[node name="Progress_Bar" type="TextureProgressBar" parent="Progress_Bar" unique_id=676106825]
-offset_left = 349.0
-offset_top = 239.0
-offset_right = 612.0
-offset_bottom = 355.0
-value = 25.0
-rounded = true
-nine_patch_stretch = true
-texture_progress = ExtResource("3_0a4kr")
-tint_progress = Color(0.8039216, 0.09019608, 0.09019608, 1)
 
 [node name="Leave_Button" type="TextureButton" parent="." unique_id=587252490]
 layout_mode = 1
@@ -70,5 +51,85 @@ texture_pressed = ExtResource("5_3o43c")
 texture_hover = SubResource("CompressedTexture2D_isi6v")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="Coins_Bonus" type="Node2D" parent="." unique_id=2025092095]
+
+[node name="Gained_Stats" type="Node2D" parent="." unique_id=682240214]
+position = Vector2(400, 152)
+
+[node name="Background_Stats" type="Sprite2D" parent="Gained_Stats" unique_id=1055939850]
+modulate = Color(0.9682575, 0.9682575, 0.9682575, 1)
+position = Vector2(180.25, 179.87498)
+scale = Vector2(0.29474273, 0.24999997)
+texture = ExtResource("6_isi6v")
+
+[node name="Progress_Bar" type="Node2D" parent="Gained_Stats" unique_id=678748545]
+position = Vector2(56.000004, -166.00002)
+scale = Vector2(0.9, 0.9)
+
+[node name="Texture_Rect_Under" type="TextureRect" parent="Gained_Stats/Progress_Bar" unique_id=1762944064]
+modulate = Color(0.2094287, 0.20942894, 0.20942879, 1)
+offset_top = 235.0
+offset_right = 280.0
+offset_bottom = 365.0
+texture = ExtResource("2_2yamd")
+expand_mode = 1
+
+[node name="Progress_Bar" type="TextureProgressBar" parent="Gained_Stats/Progress_Bar" unique_id=676106825]
+offset_left = 4.0
+offset_top = 239.0
+offset_right = 270.0
+offset_bottom = 355.0
+value = 25.0
+rounded = true
+nine_patch_stretch = true
+texture_progress = ExtResource("3_0a4kr")
+tint_progress = Color(0.8039216, 0.09019608, 0.09019608, 1)
+
+[node name="Percentage_To_New_Level_Label" type="Label" parent="Gained_Stats/Progress_Bar" unique_id=165743904]
+offset_top = 237.7778
+offset_right = 275.5556
+offset_bottom = 362.22226
+text = "50%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Money_Amount_Stats_Node" type="Node2D" parent="Gained_Stats" unique_id=1049240401]
+position = Vector2(56, -64)
+
+[node name="Gained_Money_Label" type="Label" parent="Gained_Stats/Money_Amount_Stats_Node" unique_id=2047488086]
+offset_left = 136.0
+offset_top = 304.0
+offset_right = 183.0
+offset_bottom = 354.30988
+theme_override_colors/font_color = Color(0.8039216, 0.09019608, 0.09019608, 1)
+theme_override_font_sizes/font_size = 32
+text = "+ 5"
+
+[node name="TextureRect" type="TextureRect" parent="Gained_Stats/Money_Amount_Stats_Node" unique_id=1497122211]
+offset_left = 72.0
+offset_top = 297.0
+offset_right = 133.0
+offset_bottom = 361.0
+texture = ExtResource("8_htfhy")
+expand_mode = 1
+
+[node name="Fans_Amount_Stats_Node" type="Node2D" parent="Gained_Stats" unique_id=168955080]
+position = Vector2(40, -120)
+
+[node name="Fan" type="Sprite2D" parent="Gained_Stats/Fans_Amount_Stats_Node" unique_id=608063127]
+modulate = Color(0.10224319, 0.10224321, 0.10224321, 1)
+position = Vector2(120.00001, 320.00003)
+scale = Vector2(0.28623188, 0.2862319)
+texture = ExtResource("6_3o43c")
+
+[node name="Gained_Fans_Label" type="Label" parent="Gained_Stats/Fans_Amount_Stats_Node" unique_id=420149771]
+offset_left = 152.0
+offset_top = 296.0
+offset_right = 199.0
+offset_bottom = 346.30988
+theme_override_colors/font_color = Color(0.8039216, 0.09019608, 0.09019608, 1)
+theme_override_font_sizes/font_size = 32
+text = "+ 5"
 
 [connection signal="pressed" from="Leave_Button" to="." method="_on_leave_button_pressed"]
