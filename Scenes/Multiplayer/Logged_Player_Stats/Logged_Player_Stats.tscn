@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cveckkc4863rk" path="res://Sprites/Progress_Bar/Experience_Under_Bar.png" id="2_0fqaw"]
 [ext_resource type="Texture2D" uid="uid://cmvlg1xaci5sa" path="res://Sprites/Multiplayer_Info/Multiplayer_Logged_Info_Stats.png" id="2_033f5"]
 [ext_resource type="Texture2D" uid="uid://bqwlq6qdx6hiw" path="res://Sprites/Progress_Bar/Experience_Fill_Bar.png" id="3_033f5"]
+[ext_resource type="Texture2D" uid="uid://byjfcdscxp1kd" path="res://Sprites/Buttons/Edit_Button/Edit_Button_Enabled.png" id="5_50l5v"]
+[ext_resource type="Texture2D" uid="uid://bb27qxk7rk00g" path="res://Sprites/Buttons/Edit_Button/Edit_Button_Hovered.png" id="6_xlupu"]
 
 [node name="LoggedPlayerStats" type="Node2D" unique_id=363541360 groups=["logged_player_stats"]]
 script = ExtResource("1_033f5")
@@ -96,3 +98,15 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "TEAM:"
 vertical_alignment = 1
 text_overrun_behavior = 5
+
+[node name="Edit_Team_Name_Button" type="TextureButton" parent="." unique_id=1529846994]
+offset_left = 276.0
+offset_top = 274.0
+offset_right = 314.4
+offset_bottom = 298.0
+texture_normal = ExtResource("5_50l5v")
+texture_hover = ExtResource("6_xlupu")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="pressed" from="Edit_Team_Name_Button" to="." method="_on_edit_team_name_button_pressed"]

@@ -5,6 +5,9 @@ class_name LoggedPlayerStats extends Node2D
 @onready var money_amount_label: Label = $Money_Amount_Label
 @onready var current_level_label: Label = $Current_Level_Label
 @onready var team_name_label: Label = $Team_Name_Label
+@onready var edit_team_name_button: TextureButton = $Edit_Team_Name_Button
+
+signal edit_team_name_button_pressed()
 
 func _ready() -> void:
 	set_player_stats()
@@ -35,4 +38,16 @@ func set_player_team_name(team_name: String) -> void:
 	var new_display_name: String = str("TEAM: ", team_name)
 	team_name_label.text = new_display_name
 	FusionSdk.my_team_name = team_name
+	### ODUZETI OVDE NOVAC
+	check_has_money_for_team_name_change()
 	#PlayGamaSDK.set_team_name()
+
+func check_has_money_for_team_name_change() -> void:
+	if 20 > 14:
+		edit_team_name_button.visible = true
+	else:
+		edit_team_name_button.visible = false
+
+
+func _on_edit_team_name_button_pressed() -> void:
+	edit_team_name_button_pressed.emit()

@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="9_vjdmb"]
 [ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="10_p62xj"]
 [ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="11_1qbg4"]
+[ext_resource type="Texture2D" uid="uid://uxjxkjwxwivp" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Enabled.png" id="13_vh7gt"]
+[ext_resource type="Texture2D" uid="uid://deuhosc5t2q3u" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Hovered.png" id="14_jis2f"]
 
 [sub_resource type="Environment" id="Environment_vh7gt"]
 background_mode = 3
@@ -349,7 +351,7 @@ offset_top = 24.0
 offset_right = 1044.0
 offset_bottom = 152.0
 theme_override_font_sizes/font_size = 32
-text = "Welcome! Write your 3 letter team name. You can change it anytime but it will cost you in-game currency."
+text = "Welcome! Write 3 (three) characters for the team name. You can change it anytime but it will cost you in-game currency."
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -363,4 +365,15 @@ texture_hover = ExtResource("11_1qbg4")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="Cancel_Button" type="TextureButton" parent="HUD/Team_Name_Initial_Input_Node" unique_id=409857007]
+offset_left = 385.0
+offset_top = 206.0
+offset_right = 449.0
+offset_bottom = 246.0
+texture_normal = ExtResource("13_vh7gt")
+texture_hover = ExtResource("14_jis2f")
+ignore_texture_size = true
+stretch_mode = 0
+
 [connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Confirm_Button" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Cancel_Button" to="." method="_on_cancel_button_pressed"]
