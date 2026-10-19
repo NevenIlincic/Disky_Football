@@ -292,6 +292,25 @@ text = "AKL"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="Host_Name_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=1604917786]
+layout_mode = 0
+offset_left = -408.0
+offset_right = -200.0
+offset_bottom = 48.0
+text = "MeXa"
+horizontal_alignment = 2
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Guest_Name_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=2136146719]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 408.0
+offset_bottom = 48.0
+text = "MeXa"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
 [node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=1299776774]
 visible = false
 layout_mode = 1

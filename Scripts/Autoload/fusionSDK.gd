@@ -6,7 +6,7 @@ var id: String
 var room_id: int
 var match_scene: PackedScene
 var my_name: String = str("MeXa", "_", randi())   
-var my_team_name: String
+var my_team_name: String = ""
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
 
@@ -16,7 +16,7 @@ func _ready():
 	Fusion.register_broadcast_receiver(self)
 
 	id = str(Time.get_ticks_usec(),"_", randi())
-	my_team_name = get_random_3_letter_string()
+	#my_team_name = get_random_3_letter_string()
 	connect_to_signals()
 
 func connect_to_signals():

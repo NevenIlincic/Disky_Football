@@ -41,11 +41,11 @@ func _on_match_found():
 		host_name_label.text = get_my_name()
 		guest_name_label.text = str("COACH: ", opponents_name)
 		host_team_name_label.text = get_my_team_name()
-		guest_team_name_label.text = opponents_team_name
+		guest_team_name_label.text = str("TEAM: ", opponents_team_name)
 	else:
 		host_name_label.text = str("COACH: ", opponents_name)
 		guest_name_label.text = get_my_name()
-		host_team_name_label.text = opponents_team_name
+		host_team_name_label.text = str("TEAM: ", opponents_team_name)
 		guest_team_name_label.text = get_my_team_name()
 		
 	await get_tree().create_timer(3.0).timeout

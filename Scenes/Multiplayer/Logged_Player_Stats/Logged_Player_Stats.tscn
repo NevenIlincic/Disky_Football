@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dj2f1f5t7a06g"]
 
 [ext_resource type="Script" uid="uid://dwtjnppbsax4l" path="res://Scenes/Multiplayer/Logged_Player_Stats/logged_player_stats.gd" id="1_033f5"]
-[ext_resource type="Texture2D" uid="uid://cmtmhfmwcjjya" path="res://Sprites/Multiplayer_Info/Multiplayer_Logged_Info_Stats.png" id="1_gv67f"]
 [ext_resource type="Texture2D" uid="uid://cveckkc4863rk" path="res://Sprites/Progress_Bar/Experience_Under_Bar.png" id="2_0fqaw"]
+[ext_resource type="Texture2D" uid="uid://cmvlg1xaci5sa" path="res://Sprites/Multiplayer_Info/Multiplayer_Logged_Info_Stats.png" id="2_033f5"]
 [ext_resource type="Texture2D" uid="uid://bqwlq6qdx6hiw" path="res://Sprites/Progress_Bar/Experience_Fill_Bar.png" id="3_033f5"]
 
 [node name="LoggedPlayerStats" type="Node2D" unique_id=363541360 groups=["logged_player_stats"]]
@@ -10,8 +10,8 @@ script = ExtResource("1_033f5")
 
 [node name="Background" type="TextureRect" parent="." unique_id=2057664952]
 offset_right = 328.0
-offset_bottom = 272.0
-texture = ExtResource("1_gv67f")
+offset_bottom = 312.0
+texture = ExtResource("2_033f5")
 expand_mode = 1
 
 [node name="Progress_Bar" type="Node2D" parent="." unique_id=194352458]
@@ -51,8 +51,7 @@ offset_left = 8.0
 offset_right = 312.0
 offset_bottom = 48.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "PLAYER NAME"
-horizontal_alignment = 1
+text = "COACH: PLAYER NAME"
 vertical_alignment = 1
 text_overrun_behavior = 5
 
@@ -69,9 +68,9 @@ text_overrun_behavior = 5
 
 [node name="Money_Amount_Label" type="Label" parent="." unique_id=824834097]
 offset_left = 88.0
-offset_top = 205.0
+offset_top = 201.0
 offset_right = 312.0
-offset_bottom = 255.0
+offset_bottom = 251.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 32
 text = "20"
@@ -87,3 +86,13 @@ theme_override_colors/font_color = Color(0.8039216, 0.09019608, 0.09019608, 1)
 text = "99"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Team_Name_Label" type="Label" parent="." unique_id=1779509343]
+offset_left = 8.0
+offset_top = 264.0
+offset_right = 312.0
+offset_bottom = 312.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "TEAM:"
+vertical_alignment = 1
+text_overrun_behavior = 5

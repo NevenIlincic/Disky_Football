@@ -89,6 +89,8 @@ var enemy_score: int = 0
 @onready var synchronizing_label: Label = $HUD/Control/Synchronizing_Label
 @onready var host_team_name: Label = $HUD/Control/Scoreboard/Host_Team_Name
 @onready var guest_team_name: Label = $HUD/Control/Scoreboard/Guest_Team_Name
+@onready var host_name_label: Label = $HUD/Control/Scoreboard/Host_Name_Label
+@onready var guest_name_label: Label = $HUD/Control/Scoreboard/Guest_Name_Label
 
 @onready var my_goal: Goal = $Field/My_Goal
 @onready var enemy_goal: Goal = $Field/Enemy_Goal
@@ -234,9 +236,15 @@ func set_team_name_labels() -> void:
 	if Fusion.is_master_client():
 		host_team_name.text = FusionSdk.my_team_name
 		guest_team_name.text = FusionSdk.get_opponents_team_name()
+		
+		host_name_label.text = FusionSdk.my_name
+		guest_name_label.text = FusionSdk.get_opponents_name()
 	else:
 		host_team_name.text = FusionSdk.get_opponents_team_name()
 		guest_team_name.text = FusionSdk.my_team_name
+		
+		host_name_label.text = FusionSdk.get_opponents_name()
+		guest_name_label.text = FusionSdk.my_name
 		
 func _ready() -> void:
 	#Fusion.room_left.connect(_on_match_finished)

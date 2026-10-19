@@ -4,6 +4,7 @@ class_name LoggedPlayerStats extends Node2D
 @onready var fans_amount_label: Label = $Fans_Amount_Label
 @onready var money_amount_label: Label = $Money_Amount_Label
 @onready var current_level_label: Label = $Current_Level_Label
+@onready var team_name_label: Label = $Team_Name_Label
 
 func _ready() -> void:
 	set_player_stats()
@@ -17,12 +18,21 @@ func set_player_stats():
 	get_fans_amount()
 	get_money_amount()
 	get_current_level()
+	get_player_team_name()
 
 func get_player_name() -> void:
-	player_name_label.text = "MeXa"
+	player_name_label.text = str("COACH: ", FusionSdk.my_name)
 func get_fans_amount() -> void:
 	fans_amount_label.text = str(100)
 func get_money_amount() -> void:
 	money_amount_label.text = str(50)
 func get_current_level() -> void:
 	current_level_label.text = str(14)
+func get_player_team_name() -> void:
+	team_name_label.text = str("TEAM: ", FusionSdk.my_team_name)
+
+func set_player_team_name(team_name: String) -> void:
+	var new_display_name: String = str("TEAM: ", team_name)
+	team_name_label.text = new_display_name
+	FusionSdk.my_team_name = team_name
+	#PlayGamaSDK.set_team_name()

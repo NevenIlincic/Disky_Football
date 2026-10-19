@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c21sfpm8ls508"]
 
 [ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="1_aofhr"]
+[ext_resource type="Script" uid="uid://c3tosh6hure10" path="res://Scenes/Menus/multiplayer_menu_scene.gd" id="1_vjdmb"]
 [ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="2_pl276"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="3_vjdmb"]
 [ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="4_lpe02"]
@@ -8,6 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="6_1qbg4"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="7_equfj"]
 [ext_resource type="PackedScene" uid="uid://dj2f1f5t7a06g" path="res://Scenes/Multiplayer/Logged_Player_Stats/Logged_Player_Stats.tscn" id="8_pl276"]
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="9_vjdmb"]
+[ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="10_p62xj"]
+[ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="11_1qbg4"]
 
 [sub_resource type="Environment" id="Environment_vh7gt"]
 background_mode = 3
@@ -109,7 +113,14 @@ albedo_texture = ExtResource("4_lpe02")
 material = SubResource("StandardMaterial3D_jjc5n")
 orientation = 1
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vjdmb"]
+texture = ExtResource("9_vjdmb")
+expand_margin_left = 15.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1qbg4"]
+
 [node name="MultiplayerMenuScene" type="Node3D" unique_id=1991357341]
+script = ExtResource("1_vjdmb")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1269440910]
 transform = Transform3D(1, 0, 0, 0, 0.5029197, 0.8643332, 0, -0.8643332, 0.5029197, -0.5304804, 21.78799, 21.533604)
@@ -311,4 +322,45 @@ grow_vertical = 0
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("7_equfj")]
 layout_mode = 0
 
-[node name="LoggedPlayerStats" parent="HUD" unique_id=363541360 instance=ExtResource("8_pl276")]
+[node name="LoggedPlayerStats" parent="HUD/Main_Menu_Nodes" unique_id=363541360 instance=ExtResource("8_pl276")]
+
+[node name="Team_Name_Initial_Input_Node" type="Node2D" parent="HUD" unique_id=1341601234]
+
+[node name="Team_Name_Input" type="LineEdit" parent="HUD/Team_Name_Initial_Input_Node" unique_id=930605684]
+offset_left = 480.0
+offset_top = 192.0
+offset_right = 688.0
+offset_bottom = 256.0
+focus_mode = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_uneditable_color = Color(0.8745098, 0.8745098, 0.8745098, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_colors/font_placeholder_color = Color(0.45374805, 0.453749, 0.4537483, 0.6)
+theme_override_colors/caret_color = Color(0.36810172, 0.36810192, 0.3681028, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_vjdmb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1qbg4")
+placeholder_text = "Team name:"
+max_length = 3
+
+[node name="Label_Text" type="Label" parent="HUD/Team_Name_Initial_Input_Node" unique_id=1274582723]
+custom_maximum_size = Vector2(900, -1)
+offset_left = 144.0
+offset_top = 24.0
+offset_right = 1044.0
+offset_bottom = 152.0
+theme_override_font_sizes/font_size = 32
+text = "Welcome! Write your 3 letter team name. You can change it anytime but it will cost you in-game currency."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Confirm_Button" type="TextureButton" parent="HUD/Team_Name_Initial_Input_Node" unique_id=1388389197]
+offset_left = 704.0
+offset_top = 205.0
+offset_right = 768.0
+offset_bottom = 245.0
+texture_normal = ExtResource("10_p62xj")
+texture_hover = ExtResource("11_1qbg4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Confirm_Button" to="." method="_on_confirm_button_pressed"]
