@@ -91,6 +91,7 @@ var enemy_score: int = 0
 @onready var guest_team_name: Label = $HUD/Control/Scoreboard/Guest_Team_Name
 @onready var host_name_label: Label = $HUD/Control/Scoreboard/Host_Name_Label
 @onready var guest_name_label: Label = $HUD/Control/Scoreboard/Guest_Name_Label
+@onready var multiplayer_pause_menu: MultiplayerPauseMenu = $HUD/Control/MultiplayerPauseMenu
 
 @onready var my_goal: Goal = $Field/My_Goal
 @onready var enemy_goal: Goal = $Field/Enemy_Goal
@@ -130,7 +131,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		if Input.is_action_just_released("drag"):
 			is_dragging = false
 			do_action()
-
+	if Input.is_action_pressed("pause_menu") and not post_match_screen.visible:
+		multiplayer_pause_menu.visible = true
+	if Input.is_action_just_released("pause_menu"):
+		multiplayer_pause_menu.visible = false
 
 func reset_entities_position():
 	match match_state:

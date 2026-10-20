@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bqta7micod8yo" path="res://Sprites/Goal_Scored/Football Fan.png" id="15_wtevs"]
 [ext_resource type="Texture2D" uid="uid://cfk1hasv2i3ym" path="res://Sprites/Goal_Scored/Football Fan 2.png" id="16_ifrsi"]
 [ext_resource type="Texture2D" uid="uid://djrfpc7gogide" path="res://Sprites/Goal_Scored/Football Fan 3.png" id="17_yvxgm"]
+[ext_resource type="PackedScene" uid="uid://csp8eakdpce3" path="res://Scenes/Menus/Multiplayer_Pause_Menu.tscn" id="20_1jnck"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="20_bi8w5"]
 [ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="21_ujlgx"]
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="23_k3iuy"]
@@ -376,6 +377,9 @@ text = "Synchronizing positions and time..."
 [node name="PostMatchScreen" parent="HUD/Control" unique_id=162344343 instance=ExtResource("3_jrvm5")]
 visible = false
 layout_mode = 0
+
+[node name="MultiplayerPauseMenu" parent="HUD/Control" unique_id=829326047 instance=ExtResource("20_1jnck")]
+visible = false
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)

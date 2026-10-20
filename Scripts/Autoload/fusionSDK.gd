@@ -6,13 +6,14 @@ var id: String
 var room_id: int
 var match_scene: PackedScene
 var my_name: String = str("MeXa", "_", randi())   
-var my_team_name: String = ""
+var my_team_name: String = "AAA"
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
 
 signal match_found()
 
 func _ready():
+	randomize()
 	Fusion.register_broadcast_receiver(self)
 
 	id = str(Time.get_ticks_usec(),"_", randi())
@@ -38,7 +39,9 @@ func create_room():
 	room_options.custom_properties = {
 		"fusion_map_data": "deafult_map"
 	}
-	Fusion.join_or_create_room("1", room_options)
+	
+	var room_name: String = "Room_" + str(randi_range(100000, 999999))
+	Fusion.join_or_create_room("", room_options)
 
 
 func _notification(what: int) -> void:

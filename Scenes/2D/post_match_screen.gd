@@ -56,4 +56,6 @@ func set_won_lost_label_text():
 			you_won_lost_label.text = str("YOU WON!\nOpponent has disconnected!")
 
 func _on_leave_button_pressed() -> void:
+	if Fusion.is_in_room():
+		FusionSdk.leave_room()
 	get_tree().change_scene_to_file("res://Scenes/Menus/Multiplayer_Menu_Scene.tscn")
