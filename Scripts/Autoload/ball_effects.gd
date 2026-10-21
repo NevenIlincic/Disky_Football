@@ -4,7 +4,6 @@ var selected_effect: int = 0
 
 var purchased_effects_id: Array[int] = [0,2,3]
 
-
 const BALL_EFFECT_BLUE = preload("uid://bdei36v5vo73t")
 const BALL_EFFECT_GREEN = preload("uid://bg5ytrclb4to4")
 const BALL_EFFECT_ORANGE = preload("uid://cl7fbi115tehh")

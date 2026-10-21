@@ -329,7 +329,7 @@ layout_mode = 0
 scale = Vector2(0.8, 0.8)
 
 [node name="ShopMenu" parent="HUD/Main_Menu_Nodes" unique_id=365126050 instance=ExtResource("10_jis2f")]
-position = Vector2(64, 312)
+position = Vector2(56, 272)
 
 [node name="Team_Name_Initial_Input_Node" type="Node2D" parent="HUD" unique_id=1341601234]
 
@@ -356,7 +356,7 @@ offset_top = 24.0
 offset_right = 1044.0
 offset_bottom = 152.0
 theme_override_font_sizes/font_size = 32
-text = "Welcome! Write 3 (three) characters for the team name. You can change it anytime but it will cost you in-game currency."
+text = "Welcome! Write 3 (three) characters for the team name. You can change it anytime but it will cost you 5 cash currency."
 horizontal_alignment = 1
 autowrap_mode = 2
 

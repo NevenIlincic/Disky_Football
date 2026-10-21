@@ -12,8 +12,11 @@ var room_id: int
 var match_scene: PackedScene
 var my_name: String = str("MeXa", "_", randi())   
 var my_team_name: String = "AAA"
+
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
+var formations: Dictionary = {}
+var ball_effects: Dictionary = {}
 
 #PLAYER STATS
 var current_level: int
@@ -81,6 +84,8 @@ func leave_room() -> void:
 	ready_players.clear()
 	names.clear()
 	teams.clear()
+	ball_effects.clear()
+	formations.clear()
 	Fusion.leave_room()
 
 func join_room() -> void:
@@ -110,17 +115,21 @@ func start_match():
 func _on_room_joined():
 	names[id] = my_name
 	teams[id] = my_team_name
+	formations[id] = FormationsManager.selected_formation
+	ball_effects[id] = BallEffects.selected_effect
 	
-	Fusion.rpc(introduce, id, my_name, my_team_name)
+	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect)
 	Fusion.rpc(player_ready, id)
 
 @rpc("any_peer", "call_remote")
-func introduce(player_id: String, player_name: String, player_team_name: String):
+func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int):
 	var is_new = not names.has(player_id)
 	names[player_id] = player_name
 	teams[player_id] = player_team_name
+	formations[player_id] = player_formation_id
+	ball_effects[player_id] = player_ball_effect_id
 	if is_new:
-		Fusion.rpc(introduce, player_id, names[player_id], teams[player_id])
+		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id)
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -151,6 +160,10 @@ func get_random_3_letter_string() -> String:
 		result += alphabet[random_index]
 		
 	return result
+
+func handle_team_name_change(new_team_name: String):
+	my_team_name = new_team_name
+	handle_money_spend(5)
 
 func handle_money_spend(amount: int):
 	money_amount -= amount

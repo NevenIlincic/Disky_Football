@@ -20,6 +20,7 @@ var experience_amount_flat: String
 
 func _ready() -> void:
 	set_player_stats()
+	check_has_money_for_team_name_change()
 	connect_to_signals()
 
 func _exit_tree() -> void:
@@ -80,13 +81,12 @@ func show_experience_amount_percentage() -> void:
 func set_player_team_name(team_name: String) -> void:
 	var new_display_name: String = str("TEAM: ", team_name)
 	team_name_label.text = new_display_name
-	FusionSdk.my_team_name = team_name
-	### ODUZETI OVDE NOVAC
+	FusionSdk.handle_team_name_change(team_name)
 	check_has_money_for_team_name_change()
 	#PlayGamaSDK.set_team_name()
 
 func check_has_money_for_team_name_change() -> void:
-	if FusionSdk.money_amount > NAME_CHANGE_COST:
+	if FusionSdk.money_amount >= NAME_CHANGE_COST:
 		edit_team_name_button.visible = true
 	else:
 		edit_team_name_button.visible = false

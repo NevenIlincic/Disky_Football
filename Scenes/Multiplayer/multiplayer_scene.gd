@@ -297,6 +297,8 @@ func _on_move_continued():
 		is_action = true
 		
 func _on_move_finished():
+	if match_state != MatchState.PLAYING:
+		return
 	elements_in_action -= 1
 
 	if elements_in_action <= 0 and is_action:
@@ -549,16 +551,13 @@ func _physics_process(delta: float) -> void:
 	synchronizing_label.visible = true
 	if is_my_turn:
 		snapshot_tick += 1
-		if snapshot_tick % 3 == 0 and is_action:
+
+		if match_state == MatchState.PLAYING and snapshot_tick % 3 == 0 and is_action:
 			var s := build_snapshot()
 			Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot, false)
 	else:
 		apply_targets()
 		
-	if time_passed < MATCH_DURATION:
-		if Fusion.is_master_client():
-			print(time_passed)
-	
 	if time_passed > MATCH_DURATION and match_state == MatchState.PLAYING:
 		for player: MultiplayerPlayer in multiplayer_players:
 			freeze_entities(player)
