@@ -1,6 +1,9 @@
 extends Node
 
-var selected_effect: int = 4
+var selected_effect: int = 0
+
+var purchased_effects_id: Array[int] = [0,2,3]
+
 
 const BALL_EFFECT_BLUE = preload("uid://bdei36v5vo73t")
 const BALL_EFFECT_GREEN = preload("uid://bg5ytrclb4to4")
@@ -16,6 +19,20 @@ var effects: Dictionary = {
 	4: BALL_EFFECT_YELLOW_BLUE
 }
 
+var effects_fans_price: Dictionary = {
+	0: 0,
+	1: 60,
+	2: 60,
+	3: 70,
+	4: 50
+}
+var effects_money_price: Dictionary = {
+	0: 0,
+	1: 25,
+	2: 30,
+	3: 25,
+	4: 10
+}
 
 func get_ball_effect() -> ShootEffect:
 	var ball_effect: ShootEffect = effects[selected_effect].instantiate()

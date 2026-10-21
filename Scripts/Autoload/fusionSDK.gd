@@ -1,5 +1,10 @@
 extends Node2D
 
+signal match_found()
+signal money_spent(amount: int)
+signal fans_spent(amount: int)
+signal leveled_up()
+
 var ready_players: Dictionary = {}
 
 var id: String
@@ -10,7 +15,24 @@ var my_team_name: String = "AAA"
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
 
-signal match_found()
+#PLAYER STATS
+var current_level: int
+var money_amount: int
+var fans_amount: int
+var experience_amount: int
+
+var level_experience_map: Dictionary = {
+	1: 10,
+	2: 20,
+	3: 30,
+	4: 40,
+	5: 50,
+	6: 60,
+	7: 70,
+	8: 80,
+	9: 90
+}
+
 
 func _ready():
 	randomize()
@@ -30,7 +52,12 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	pass
+	#ZAMENITI SA PLAYGAMA SDK
+	money_amount = 100
+	fans_amount = 100
+	current_level = 2
+	experience_amount = 13
+
 
 func create_room():
 #
@@ -124,3 +151,13 @@ func get_random_3_letter_string() -> String:
 		result += alphabet[random_index]
 		
 	return result
+
+func handle_money_spend(amount: int):
+	money_amount -= amount
+	#SACUVATI U PLAYGAMA SDK
+	money_spent.emit(amount)
+
+func handle_fans_spend(amount: int):
+	fans_amount -= amount
+	#SACUVATI U PLAYGAMA SDK
+	fans_spent.emit(amount)
