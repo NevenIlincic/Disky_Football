@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bdmv4rkukckma"]
+
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="1_dtv7l"]
+[ext_resource type="Script" uid="uid://cdkenosg3vsly" path="res://Scenes/Menus/shop_menu.gd" id="1_s8a8d"]
+[ext_resource type="Texture2D" uid="uid://c75emyht7hrev" path="res://Sprites/Shop/Disk_Tab/Disk_Tab_Button_Enabled.png" id="3_7ahou"]
+[ext_resource type="Texture2D" uid="uid://ckfjvj7ar3b0j" path="res://Sprites/Shop/Disk_Tab/Disk_Tab_Button_Active.png" id="4_s8a8d"]
+
+[node name="ShopMenu" type="Node2D" unique_id=365126050]
+script = ExtResource("1_s8a8d")
+
+[node name="Background" type="TextureRect" parent="." unique_id=600743539]
+modulate = Color(0.641934, 0.641934, 0.641934, 1)
+offset_right = 672.0
+offset_bottom = 328.0
+texture = ExtResource("1_dtv7l")
+expand_mode = 1
+
+[node name="Disk_Tab_Button" type="TextureButton" parent="." unique_id=615589987]
+offset_left = 32.0
+offset_top = 8.0
+offset_right = 155.2
+offset_bottom = 64.0
+texture_normal = ExtResource("3_7ahou")
+texture_pressed = ExtResource("4_s8a8d")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Cards_Scroll_Container" type="ScrollContainer" parent="." unique_id=2123916154]
+offset_left = 24.0
+offset_top = 64.0
+offset_right = 640.0
+offset_bottom = 328.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Cards_Scroll_Container" unique_id=1151723507]
+layout_mode = 2
+theme_override_constants/separation = 200

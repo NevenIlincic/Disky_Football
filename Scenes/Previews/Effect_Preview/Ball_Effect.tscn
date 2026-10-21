@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://cusgbl46gt0p2"]
+
+[node name="BallEffect" type="GPUParticles3D" unique_id=1977548526]

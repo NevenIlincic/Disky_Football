@@ -81,6 +81,7 @@ emitting = false
 amount = 30
 lifetime = 0.4
 speed_scale = 1.5
+fixed_fps = 0
 process_material = SubResource("ParticleProcessMaterial_jjc5n")
 draw_pass_1 = SubResource("SphereMesh_agqku")
 script = ExtResource("1_agqku")

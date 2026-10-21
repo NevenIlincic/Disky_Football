@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://l5md3xs0xbh3" path="res://Scenes/Ball/multiplayer_ball.gd" id="1_lu428"]
 [ext_resource type="Texture2D" uid="uid://lg7tta6ljwgo" path="res://Sprites/Group 14 (3).png" id="2_se4j6"]
-[ext_resource type="PackedScene" uid="uid://cl7fbi115tehh" path="res://Scenes/Effects/Ball_Effect.tscn" id="3_8hsay"]
 [ext_resource type="PackedScene" uid="uid://dx044doqmp68c" path="res://Models/football.glb" id="4_ke7jr"]
 [ext_resource type="AudioStream" uid="uid://dvgr72tdkreqj" path="res://Audio/kick_sound.mp3" id="5_dn0fa"]
 
@@ -32,9 +31,6 @@ mesh = SubResource("SphereMesh_argnq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=950076990]
 shape = SubResource("SphereShape3D_g8do5")
-
-[node name="Fire_Effect" parent="." unique_id=307419005 instance=ExtResource("3_8hsay")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="Sketchfab_Scene" parent="." unique_id=1199789368 instance=ExtResource("4_ke7jr")]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)

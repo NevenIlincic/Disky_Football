@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://duc7fboo8raui"]
 
 [ext_resource type="Script" uid="uid://bchhvqewomdj1" path="res://Scenes/tennis_ball.gd" id="1_dvc57"]
-[ext_resource type="PackedScene" uid="uid://cl7fbi115tehh" path="res://Scenes/Effects/Ball_Effect.tscn" id="1_xo6r3"]
+[ext_resource type="PackedScene" uid="uid://cl7fbi115tehh" path="res://Scenes/Effects/Ball_Effect_Orange.tscn" id="1_xo6r3"]
 [ext_resource type="Texture2D" uid="uid://lg7tta6ljwgo" path="res://Sprites/Group 14 (3).png" id="2_75gsl"]
 [ext_resource type="PackedScene" uid="uid://dx044doqmp68c" path="res://Models/football.glb" id="2_dvc57"]
 [ext_resource type="AudioStream" uid="uid://dvgr72tdkreqj" path="res://Audio/kick_sound.mp3" id="5_g8do5"]

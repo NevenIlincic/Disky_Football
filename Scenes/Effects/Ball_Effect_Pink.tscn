@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dqeiu6hdd78uk"]
+
+[ext_resource type="PackedScene" uid="uid://cl7fbi115tehh" path="res://Scenes/Effects/Ball_Effect_Orange.tscn" id="1_ogutl"]
+
+[sub_resource type="Curve" id="Curve_ogutl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aimbh"]
+curve = SubResource("Curve_ogutl")
+
+[sub_resource type="Gradient" id="Gradient_fgdl3"]
+colors = PackedColorArray(0.8994735, 0.00016884267, 0.7607792, 1, 0.9386603, 0.959763, 0.99611586, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l52mf"]
+gradient = SubResource("Gradient_fgdl3")
+
+[sub_resource type="Curve" id="Curve_58pc6"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0.010752678, 2.6428576), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s2jtw"]
+curve = SubResource("Curve_58pc6")
+
+[sub_resource type="Curve" id="Curve_155vg"]
+_data = [Vector2(0, 0.29464293), 0.0, 0.0, 0, 0, Vector2(0.96774197, 0.053571463), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ve30r"]
+curve = SubResource("Curve_155vg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_82qcs"]
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 1, 0)
+scale_curve = SubResource("CurveTexture_ve30r")
+color_ramp = SubResource("GradientTexture1D_l52mf")
+alpha_curve = SubResource("CurveTexture_aimbh")
+emission_curve = SubResource("CurveTexture_s2jtw")
+
+[node name="Fire_Effect" unique_id=307419005 instance=ExtResource("1_ogutl")]
+process_material = SubResource("ParticleProcessMaterial_82qcs")

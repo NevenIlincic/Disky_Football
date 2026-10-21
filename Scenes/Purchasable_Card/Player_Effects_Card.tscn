@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://duy1m0sfo276v"]
+
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="1_jycwu"]
+[ext_resource type="Script" uid="uid://c7tjfa6i3a826" path="res://Scenes/Purchasable_Card/player_effects_card.gd" id="1_wmxiy"]
+[ext_resource type="Texture2D" uid="uid://c877slould2bf" path="res://Sprites/Multiplayer_Info/Money/money.png" id="2_hso8w"]
+[ext_resource type="Texture2D" uid="uid://dixi6cukr30ne" path="res://Sprites/Buttons/Buy_Button/Buy_Button_Enabled.png" id="3_8ovu7"]
+[ext_resource type="Texture2D" uid="uid://bdopp41g2xj1i" path="res://Sprites/Buttons/Buy_Button/Buy_Button_Clicked.png" id="4_deasd"]
+[ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="6_crwob"]
+[ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="7_k78d8"]
+[ext_resource type="Texture2D" uid="uid://c6qtr8pwdx5om" path="res://Sprites/Multiplayer_Info/Fan/Football Fan 5.png" id="8_k78d8"]
+[ext_resource type="Texture2D" uid="uid://b8w6s84obbfeb" path="res://Sprites/Buttons/Preview_Effect_Button/Effect_Preview_Button_Enabled.png" id="9_6h3g4"]
+[ext_resource type="Texture2D" uid="uid://l45qh8w2wt7n" path="res://Sprites/Buttons/Preview_Effect_Button/Effect_Preview_Button_Hovered.png" id="10_ok4ij"]
+
+[sub_resource type="World3D" id="World3D_wmxiy"]
+
+[sub_resource type="Environment" id="Environment_wmxiy"]
+background_mode = 3
+glow_enabled = true
+
+[node name="PlayerEffectsCard" type="Control" unique_id=868614811]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_wmxiy")
+
+[node name="Wrapper" type="Node2D" parent="." unique_id=776813722]
+scale = Vector2(0.8, 0.8)
+
+[node name="Card_Background" type="Sprite2D" parent="Wrapper" unique_id=609672575]
+position = Vector2(124.25, 155.29782)
+scale = Vector2(0.27684563, 0.27684563)
+texture = ExtResource("1_jycwu")
+
+[node name="Buy_Button" type="TextureButton" parent="Wrapper" unique_id=173891725]
+offset_left = 136.0
+offset_top = 240.0
+offset_right = 231.4
+offset_bottom = 293.0
+texture_normal = ExtResource("3_8ovu7")
+texture_pressed = ExtResource("4_deasd")
+texture_hover = ExtResource("4_deasd")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Select_Card_Button" type="TextureButton" parent="Wrapper" unique_id=667105038]
+offset_left = 16.0
+offset_top = 240.0
+offset_right = 88.578316
+offset_bottom = 288.0
+texture_normal = ExtResource("6_crwob")
+texture_hover = ExtResource("7_k78d8")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Money_Cost_Node" type="Node2D" parent="Wrapper" unique_id=1491774529]
+position = Vector2(0, 8)
+
+[node name="Money_Texture" type="TextureRect" parent="Wrapper/Money_Cost_Node" unique_id=1789525322]
+offset_left = 8.0
+offset_top = 160.0
+offset_right = 56.0
+offset_bottom = 210.36066
+texture = ExtResource("2_hso8w")
+expand_mode = 1
+
+[node name="Money_Price_Label" type="Label" parent="Wrapper/Money_Cost_Node" unique_id=1921629337]
+offset_left = 64.0
+offset_top = 167.0
+offset_right = 95.0
+offset_bottom = 205.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "20"
+
+[node name="Fan_Cost_Node" type="Node2D" parent="Wrapper" unique_id=262731658]
+
+[node name="Fan_Texture" type="TextureRect" parent="Wrapper/Fan_Cost_Node" unique_id=1137589000]
+modulate = Color(0, 0, 0, 1)
+offset_left = 17.0
+offset_top = 135.0
+offset_right = 49.0
+offset_bottom = 167.0
+texture = ExtResource("8_k78d8")
+expand_mode = 1
+
+[node name="Fans_Price_Label" type="Label" parent="Wrapper/Fan_Cost_Node" unique_id=1203774578]
+offset_left = 63.0
+offset_top = 133.0
+offset_right = 103.0
+offset_bottom = 171.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "20"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Wrapper" unique_id=785312593]
+offset_left = 11.0
+offset_top = 8.0
+offset_right = 235.0
+offset_bottom = 120.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SubViewport" type="SubViewport" parent="Wrapper/SubViewportContainer" unique_id=608340380]
+own_world_3d = true
+world_3d = SubResource("World3D_wmxiy")
+handle_input_locally = false
+size = Vector2i(224, 112)
+render_target_update_mode = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=1042442035]
+environment = SubResource("Environment_wmxiy")
+
+[node name="Camera3D" type="Camera3D" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=81795358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34034777, 0.040824533, 1.2326725)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=563888284]
+transform = Transform3D(1, 0, 0, 0, 0.36029094, 0.93284, 0, -0.93284, 0.36029094, -4.3613186, 12.102816, 7.406451)
+sky_mode = 1
+
+[node name="Effect_Preview_Button" type="TextureButton" parent="Wrapper" unique_id=1926772366]
+offset_left = 170.0
+offset_top = 130.0
+offset_right = 229.99998
+offset_bottom = 160.0
+toggle_mode = true
+texture_normal = ExtResource("9_6h3g4")
+texture_pressed = ExtResource("10_ok4ij")
+texture_hover = ExtResource("10_ok4ij")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="toggled" from="Wrapper/Effect_Preview_Button" to="." method="_on_effect_preview_button_toggled"]

@@ -18,13 +18,21 @@ var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
 @onready var kick_sound: AudioStreamPlayer = $Kick_Sound
 
-@onready var fire_effect: ShootEffect = $Fire_Effect
+@onready var fire_effect: ShootEffect
 @onready var wave_effect: GPUParticles3D = $"../Wave_Effect"
 
 var has_finished_move: bool = false
 var went_over: bool = false
 
 var spawn_position: Vector3 = Vector3.ZERO
+
+func _ready() -> void:
+	set_ball_effect()
+
+func set_ball_effect() -> void:
+	fire_effect = BallEffects.get_ball_effect()
+	add_child(fire_effect)
+	fire_effect.scale = Vector3(2.0, 2.0, 2.0)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	check_should_play_hit_sound(state)

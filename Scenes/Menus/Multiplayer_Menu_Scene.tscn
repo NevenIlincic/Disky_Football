@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="7_equfj"]
 [ext_resource type="PackedScene" uid="uid://dj2f1f5t7a06g" path="res://Scenes/Multiplayer/Logged_Player_Stats/Logged_Player_Stats.tscn" id="8_pl276"]
 [ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="9_vjdmb"]
+[ext_resource type="PackedScene" uid="uid://bdmv4rkukckma" path="res://Scenes/Menus/Shop_Menu.tscn" id="10_jis2f"]
 [ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="10_p62xj"]
 [ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="11_1qbg4"]
 [ext_resource type="Texture2D" uid="uid://uxjxkjwxwivp" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Enabled.png" id="13_vh7gt"]
@@ -325,6 +326,10 @@ grow_vertical = 0
 layout_mode = 0
 
 [node name="LoggedPlayerStats" parent="HUD/Main_Menu_Nodes" unique_id=363541360 instance=ExtResource("8_pl276")]
+scale = Vector2(0.8, 0.8)
+
+[node name="ShopMenu" parent="HUD/Main_Menu_Nodes" unique_id=365126050 instance=ExtResource("10_jis2f")]
+position = Vector2(64, 312)
 
 [node name="Team_Name_Initial_Input_Node" type="Node2D" parent="HUD" unique_id=1341601234]
 
