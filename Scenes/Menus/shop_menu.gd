@@ -9,10 +9,13 @@ const PLAYER_FORMATION_CARD = preload("uid://bqt1r1yn31w8f")
 @onready var h_box_container: HBoxContainer = $Cards_Scroll_Container/HBoxContainer
 
 func _ready() -> void:
+	FusionSdk.match_searching_started.connect(_on_match_searching_started)
 	show_disks_tab()
 	add_tab_buttons_to_group()
 	
-	
+func _on_match_searching_started():
+	visible = false
+
 func add_tab_buttons_to_group():
 	var button_group: ButtonGroup = ButtonGroup.new()
 	for button in get_tree().get_nodes_in_group("tab_button"):

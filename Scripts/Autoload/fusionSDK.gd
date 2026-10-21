@@ -1,5 +1,6 @@
 extends Node2D
 
+signal match_searching_started()
 signal match_found()
 signal money_spent(amount: int)
 signal fans_spent(amount: int)
@@ -63,7 +64,7 @@ func _on_connected():
 
 
 func create_room():
-#
+	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
 	room_options.custom_properties = {
@@ -146,6 +147,22 @@ func get_opponents_team_name() -> String:
 			opponents_team_name = teams[player_id]
 			break
 	return opponents_team_name
+
+func get_opponents_formation_id() -> int:
+	var opponents_formation_id: int
+	for player_id: String in formations:
+		if player_id != id:
+			opponents_formation_id = formations[player_id]
+			break
+	return opponents_formation_id
+	
+func get_opponents_ball_effect_id() -> int:
+	var opponents_ball_effect_id: int
+	for player_id: String in ball_effects:
+		if player_id != id:
+			opponents_ball_effect_id = ball_effects[player_id]
+			break
+	return opponents_ball_effect_id
 
 func get_team_name() -> String:
 	#ZAMENITI SA PLAYGAMA SDK

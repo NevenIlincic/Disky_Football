@@ -6,7 +6,6 @@ const FORMATION_3_3_FRONT_WIDE = preload("uid://bx2j72g7bmg0l")
 const FORMATION_4_2_SPLIT = preload("uid://ddnt76csk8gvq")
 const FORMATION_5_1 = preload("uid://bkas74x6dtkke")
 
-
 var selected_formation: int = 0
 
 var purchased_formations_id: Array[int] = [0]
