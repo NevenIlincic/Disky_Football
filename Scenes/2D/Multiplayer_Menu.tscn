@@ -141,6 +141,7 @@ stretch_mode = 0
 libraries/ = SubResource("AnimationLibrary_skhyc")
 
 [node name="Match_Found_Node" type="Control" parent="." unique_id=1866039169]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

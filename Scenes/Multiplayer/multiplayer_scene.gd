@@ -13,6 +13,25 @@ enum MatchFinishState {
 	FINISHED_NORMAL,
 	FINISHED_BY_DISCONNECTION
 }
+###############################
+#FORMATIONS
+var formation_spawn_positions_host: Dictionary
+#HOST
+@onready var _3_3_standard_host: Node3D = $"Host_Formations/3-3_Standard_Host"
+@onready var _3_3_front_wide_host: Node3D = $"Host_Formations/3-3_Front_Wide_Host"
+@onready var _5_1_standard_host: Node3D = $"Host_Formations/5-1_Standard_Host"
+@onready var _2_4_standard_host: Node3D = $"Host_Formations/2_4_Standard_Host"
+@onready var _4_2_split_host: Node3D = $"Host_Formations/4_2_Split_Host"
+
+#GUEST
+var formation_spawn_positions_guest: Dictionary
+@onready var _3_3_standard_guest: Node3D = $"Guest_Formations/3-3_Standard_Guest"
+@onready var _3_3_front_wide_guest: Node3D = $"Guest_Formations/3-3_Front_Wide_Guest"
+@onready var _5_1_standard_guest: Node3D = $"Guest_Formations/5-1_Standard_Guest"
+@onready var _2_4_standard_guest: Node3D = $"Guest_Formations/2_4_Standard_Guest"
+@onready var _4_2_split_guest: Node3D = $"Guest_Formations/4_2_Split_Guest"
+
+#############################
 
 const MATCH_DURATION: float = 2700
 const GOALS_TO_WIN: int = 1
@@ -115,6 +134,8 @@ var has_snapshot: bool = false
 
 var is_synchronization_done: bool = false
 
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
@@ -175,10 +196,19 @@ func _on_player_left(player_id: int, is_inactive: bool):
 	_on_match_finished()
 
 func spawn_players():
-	for host_spawn_point in get_tree().get_nodes_in_group("host_spawn_point"):
-		host_spawn_points.append(host_spawn_point)
-	for guest_spawn_point in get_tree().get_nodes_in_group("guest_spawn_point"):
-		guest_spawn_points.append(guest_spawn_point)
+	var host_formation_node: Node3D
+	var guest_formation_node: Node3D
+	if Fusion.is_master_client():
+		host_formation_node = formation_spawn_positions_host[FormationsManager.selected_formation]
+		guest_formation_node = formation_spawn_positions_guest[FusionSdk.get_opponents_formation_id()]
+	else:
+		host_formation_node = formation_spawn_positions_host[FusionSdk.get_opponents_formation_id()]
+		guest_formation_node = formation_spawn_positions_guest[FormationsManager.selected_formation]
+		
+	for host_player_position: Marker3D in host_formation_node.get_children():
+		host_spawn_points.append(host_player_position)
+	for guest_player_position: Marker3D in guest_formation_node.get_children():
+		guest_spawn_points.append(guest_player_position)
 		
 	for i in range(0, 12):
 		var player: MultiplayerPlayer = PLAYER_SCENE.instantiate()
@@ -261,6 +291,7 @@ func _ready() -> void:
 	enemy_goal.goal_scored.connect(_on_goal_scored)
 	
 	var my_id = FusionSdk.id
+	initialize_formation_dictionaries()
 	spawn_field()
 	#Fusion.rpc(game_started)
 	#has_game_started = true
@@ -270,6 +301,25 @@ func _ready() -> void:
 	else:
 		Fusion.rpc_to(Fusion.TARGET_MASTER, peer_scene_ready, my_id)
 	
+
+func initialize_formation_dictionaries() -> void:
+	formation_spawn_positions_host = {
+		0: _3_3_standard_host,
+		1: _2_4_standard_host,
+		2: _3_3_front_wide_host,
+		3: _4_2_split_host,
+		4: _5_1_standard_host
+	}
+	
+	formation_spawn_positions_guest = {
+		0: _3_3_standard_guest,
+		1: _2_4_standard_guest,
+		2: _3_3_front_wide_guest,
+		3: _4_2_split_guest,
+		4: _5_1_standard_guest
+	}
+
+
 @rpc("any_peer", "call_local")
 func peer_scene_ready(pid: String) -> void:
 	if not Fusion.is_master_client() or field_spawned:
