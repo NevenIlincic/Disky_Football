@@ -5,6 +5,7 @@ signal money_spent()
 
 const PLAYER_EFFECTS_CARD = preload("uid://duy1m0sfo276v")
 const PLAYER_FORMATION_CARD = preload("uid://bqt1r1yn31w8f")
+const PLAYER_SKIN_CARD = preload("uid://spp2rnvppf0f")
 
 @onready var h_box_container: HBoxContainer = $Cards_Scroll_Container/HBoxContainer
 
@@ -44,16 +45,21 @@ func _on_formation_selected(card_id: int):
 		var card: FormationsPurchasableCard = child as FormationsPurchasableCard
 		card.update_card_display()
 
+func _on_disk_skin_selected(card_id: int):
+	for child in h_box_container.get_children():
+		if child is not SkinsPurchasableCard:
+			continue
+		var card: SkinsPurchasableCard = child as SkinsPurchasableCard
+		card.update_card_display()
 
 func show_disks_tab() -> void:
 	for child in h_box_container.get_children():
 		child.queue_free()
-	for i in range(2):
-		var effects_card: EffectsPurchasableCard = PLAYER_EFFECTS_CARD.instantiate()
-		effects_card.fast_review_enabled.connect(_on_fast_preview_enabled)
-		effects_card.card_selected.connect(_on_effect_selected)
-		h_box_container.add_child(effects_card)
-		effects_card.set_card_id(i)
+	for i in range(SkinsManager.skins.size()):
+		var skin_card: SkinsPurchasableCard = PLAYER_SKIN_CARD.instantiate()
+		skin_card.card_selected.connect(_on_disk_skin_selected)
+		h_box_container.add_child(skin_card)
+		skin_card.set_card_id(i)
 	
 	var control_dummy_node: Control = Control.new()
 	h_box_container.add_child(control_dummy_node)

@@ -1,0 +1,154 @@
+[gd_scene format=3 uid="uid://spp2rnvppf0f"]
+
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="1_6uuf8"]
+[ext_resource type="Script" uid="uid://41glrne3c55e" path="res://Scenes/Purchasable_Card/player_skin_card.gd" id="1_wmxiy"]
+[ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="4_bu0tb"]
+[ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="5_v6fnk"]
+[ext_resource type="Texture2D" uid="uid://dixi6cukr30ne" path="res://Sprites/Buttons/Buy_Button/Buy_Button_Enabled.png" id="6_dr60r"]
+[ext_resource type="Texture2D" uid="uid://bdopp41g2xj1i" path="res://Sprites/Buttons/Buy_Button/Buy_Button_Clicked.png" id="7_8a2el"]
+[ext_resource type="Texture2D" uid="uid://c877slould2bf" path="res://Sprites/Multiplayer_Info/Money/money.png" id="8_eehqk"]
+[ext_resource type="Texture2D" uid="uid://c6qtr8pwdx5om" path="res://Sprites/Multiplayer_Info/Fan/Football Fan 5.png" id="9_epwuw"]
+
+[sub_resource type="World3D" id="World3D_vqwyx"]
+
+[sub_resource type="Environment" id="Environment_o646t"]
+background_mode = 3
+ambient_light_color = Color(0.45995867, 0.45995867, 0.4599586, 1)
+
+[node name="PlayerSkinCard" type="Control" unique_id=1907447414]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_wmxiy")
+
+[node name="Wrapper" type="Node2D" parent="." unique_id=1382040086]
+scale = Vector2(0.8, 0.8)
+
+[node name="Card_Background" type="Sprite2D" parent="Wrapper" unique_id=1427474810]
+position = Vector2(124.25, 155.29782)
+scale = Vector2(0.27684563, 0.27684563)
+texture = ExtResource("1_6uuf8")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Wrapper" unique_id=1340759778]
+offset_left = 11.0
+offset_top = 8.0
+offset_right = 235.0
+offset_bottom = 120.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="SubViewport" type="SubViewport" parent="Wrapper/SubViewportContainer" unique_id=1390427767]
+own_world_3d = true
+world_3d = SubResource("World3D_vqwyx")
+handle_input_locally = false
+size = Vector2i(224, 112)
+render_target_update_mode = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=1200352052]
+environment = SubResource("Environment_o646t")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=1777756600]
+transform = Transform3D(1, 0, 0, 0, 0.7365172, 0.676419, 0, -0.676419, 0.7365172, -4.3613186, 12.102816, -0.095452785)
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="Wrapper/SubViewportContainer/SubViewport" unique_id=2108860080]
+transform = Transform3D(1, 0, 0, 0, 0.032557495, 0.9994699, 0, -0.9994699, 0.032557495, 0, 1.928, 0)
+current = true
+
+[node name="Purchase_Node" type="Node2D" parent="Wrapper" unique_id=1402702205]
+
+[node name="Select_Card_Button" type="TextureButton" parent="Wrapper/Purchase_Node" unique_id=1942232662]
+offset_left = 15.999999
+offset_top = 239.99997
+offset_right = 88.578316
+offset_bottom = 287.99997
+texture_normal = ExtResource("4_bu0tb")
+texture_hover = ExtResource("5_v6fnk")
+ignore_texture_size = true
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Not_Purchased_Node" type="Node2D" parent="Wrapper/Purchase_Node" unique_id=1705267352]
+
+[node name="Buy_Button" type="TextureButton" parent="Wrapper/Purchase_Node/Not_Purchased_Node" unique_id=1371353179]
+offset_left = 135.99997
+offset_top = 239.99995
+offset_right = 231.39996
+offset_bottom = 292.99994
+texture_normal = ExtResource("6_dr60r")
+texture_pressed = ExtResource("7_8a2el")
+texture_hover = ExtResource("7_8a2el")
+ignore_texture_size = true
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Money_Cost_Node" type="Node2D" parent="Wrapper/Purchase_Node/Not_Purchased_Node" unique_id=718051973]
+position = Vector2(0, 7.9999986)
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="Money_Texture" type="TextureRect" parent="Wrapper/Purchase_Node/Not_Purchased_Node/Money_Cost_Node" unique_id=1845709262]
+offset_left = 8.0
+offset_top = 160.0
+offset_right = 56.0
+offset_bottom = 210.36066
+texture = ExtResource("8_eehqk")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Money_Price_Label" type="Label" parent="Wrapper/Purchase_Node/Not_Purchased_Node/Money_Cost_Node" unique_id=37103065]
+offset_left = 64.0
+offset_top = 167.0
+offset_right = 95.0
+offset_bottom = 205.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "20"
+metadata/_edit_use_anchors_ = true
+
+[node name="Fan_Cost_Node" type="Node2D" parent="Wrapper/Purchase_Node/Not_Purchased_Node" unique_id=1253974712]
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="Fan_Texture" type="TextureRect" parent="Wrapper/Purchase_Node/Not_Purchased_Node/Fan_Cost_Node" unique_id=729105580]
+modulate = Color(0, 0, 0, 1)
+offset_left = 17.0
+offset_top = 135.0
+offset_right = 49.0
+offset_bottom = 167.0
+texture = ExtResource("9_epwuw")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Fans_Price_Label" type="Label" parent="Wrapper/Purchase_Node/Not_Purchased_Node/Fan_Cost_Node" unique_id=2142231361]
+offset_left = 63.0
+offset_top = 133.0
+offset_right = 103.0
+offset_bottom = 171.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "20"
+metadata/_edit_use_anchors_ = true
+
+[node name="Selected_Label" type="Label" parent="Wrapper" unique_id=1564741145]
+visible = false
+offset_left = 70.0
+offset_top = 260.0
+offset_right = 181.0
+offset_bottom = 298.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "SELECTED"
+
+[node name="Cant_Buy_Node" type="Node2D" parent="Wrapper" unique_id=436389358]
+visible = false
+
+[node name="Color_Rect" type="ColorRect" parent="Wrapper/Cant_Buy_Node" unique_id=1684860650]
+offset_right = 244.99997
+offset_bottom = 309.99997
+color = Color(0.3764706, 0.3764706, 0.3764706, 0.6509804)
+
+[node name="Label" type="Label" parent="Wrapper/Cant_Buy_Node" unique_id=215037553]
+offset_left = 30.000004
+offset_top = 212.49994
+offset_right = 217.0
+offset_bottom = 238.49994
+text = "NOT ENOUGH CURRENCY"

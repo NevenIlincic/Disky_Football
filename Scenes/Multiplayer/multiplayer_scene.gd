@@ -43,6 +43,7 @@ const PLAYER_SCENE = preload("uid://bop3seu5ydqe1")
 const BALL_SCENE = preload("res://Scenes/Ball/MultiplayerBall.tscn")
 @onready var fusion_spawner: FusionSpawner = $FusionSpawner
 @onready var post_match_screen: PostMatchScreen = $HUD/Control/PostMatchScreen
+@onready var wave_effect: GPUParticles3D = $Field/Wave_Effect
 
 
 
@@ -771,6 +772,9 @@ func handle_match_finished_on_time():
 func set_hard_ball_fire_effect(ball_effect_id: int):
 	ball.set_ball_effect(ball_effect_id)
 	ball.fire_effect.emit_effects()
+	wave_effect.global_position = ball.global_position
+	wave_effect.emitting = true
+	
 
 @rpc("any_peer", "call_remote")
 func set_reduced_ball_fire_effect(ball_effect_id: int):

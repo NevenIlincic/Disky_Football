@@ -28,6 +28,7 @@ config/icon="res://icon.svg"
 FusionSdk="*uid://dirxpm6bjesk6"
 BallEffects="*uid://d0aufkeb8twm5"
 FormationsManager="*uid://yf0bkcqfv0fb"
+SkinsManager="*uid://cis5rlfubeu4j"
 
 [display]
 

@@ -6,6 +6,7 @@ signal fire_effect_started(ball_effect_id: int)
 signal fire_effect_amount_reduced(ball_effect_id: int)
 signal fire_effect_stopped(ball_effect_id: int)
 
+
 enum MoveState { IDLE, MOVING }
 
 const MIN_FORCE: float = 10.0

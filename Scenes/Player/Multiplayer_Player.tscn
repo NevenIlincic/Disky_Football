@@ -15,8 +15,8 @@ radius = 1.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_55xwr"]
 material = ExtResource("1_c2dbo")
-top_radius = 1.0
-bottom_radius = 1.0
+top_radius = 0.9980469
+bottom_radius = 0.9980469
 height = 0.001
 cap_bottom = false
 
@@ -57,7 +57,7 @@ script = ExtResource("1_3lluj")
 shape = SubResource("CylinderShape3D_8vnr6")
 
 [node name="Top_Part" type="MeshInstance3D" parent="." unique_id=1325111260]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25011238, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00059460104, 0.25366732, 0.0012293421)
 mesh = SubResource("CylinderMesh_55xwr")
 
 [node name="Shooting_Area" type="Area3D" parent="." unique_id=648245798]
