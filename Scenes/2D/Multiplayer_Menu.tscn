@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dvydwj55suwv8" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/5-1_Formation_Display.png" id="16_esf8j"]
 [ext_resource type="Texture2D" uid="uid://c5iau1bap3uqa" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/4-2_Split_Formation_Display.png" id="17_wlmef"]
 [ext_resource type="Texture2D" uid="uid://duojkcc5tp5ws" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/2-4_Formation_Display.png" id="18_82ieo"]
+[ext_resource type="Texture2D" uid="uid://da8veegguuk7k" path="res://Sprites/Ball/Ball.png" id="19_s3u1o"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_skhyc"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -141,7 +142,6 @@ stretch_mode = 0
 libraries/ = SubResource("AnimationLibrary_skhyc")
 
 [node name="Match_Found_Node" type="Control" parent="." unique_id=1866039169]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -325,6 +325,48 @@ offset_bottom = 501.1057
 texture = ExtResource("18_82ieo")
 expand_mode = 1
 flip_h = true
+
+[node name="Host_Level" type="Node2D" parent="Match_Found_Node" unique_id=1072966430]
+position = Vector2(0, 4)
+
+[node name="Host_Level_Ball_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Level" unique_id=429632207]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+texture = ExtResource("19_s3u1o")
+expand_mode = 1
+
+[node name="Host_Level_Label" type="Label" parent="Match_Found_Node/Host_Level" unique_id=2056064575]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Guest_Level" type="Node2D" parent="Match_Found_Node" unique_id=1108011886]
+position = Vector2(668, -252)
+
+[node name="Guest_Level_Ball_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Guest_Level" unique_id=1935840019]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+texture = ExtResource("19_s3u1o")
+expand_mode = 1
+
+[node name="Guest_Level_Label" type="Label" parent="Match_Found_Node/Guest_Level" unique_id=105187212]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_pressed"]

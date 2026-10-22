@@ -2,6 +2,7 @@ extends Node2D
 
 signal match_searching_started()
 signal match_found()
+signal pre_match_info_showed()
 signal money_spent(amount: int)
 signal fans_spent(amount: int)
 signal leveled_up()
@@ -18,6 +19,7 @@ var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
 var formations: Dictionary = {}
 var ball_effects: Dictionary = {}
+var levels: Dictionary = {}
 
 #PLAYER STATS
 var current_level: int
@@ -37,7 +39,9 @@ var level_experience_map: Dictionary = {
 	9: 90
 }
 
-
+func get_needed_experience_amount_to_level_up() -> int:
+	return level_experience_map[current_level]
+	
 func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
@@ -60,7 +64,7 @@ func _on_connected():
 	money_amount = 100
 	fans_amount = 100
 	current_level = 2
-	experience_amount = 13
+	experience_amount = 19
 
 
 func create_room():
@@ -87,6 +91,7 @@ func leave_room() -> void:
 	teams.clear()
 	ball_effects.clear()
 	formations.clear()
+	levels.clear()
 	Fusion.leave_room()
 
 func join_room() -> void:
@@ -118,19 +123,21 @@ func _on_room_joined():
 	teams[id] = my_team_name
 	formations[id] = FormationsManager.selected_formation
 	ball_effects[id] = BallEffects.selected_effect
+	levels[id] = current_level
 	
-	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect)
+	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect, current_level)
 	Fusion.rpc(player_ready, id)
 
 @rpc("any_peer", "call_remote")
-func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int):
+func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int):
 	var is_new = not names.has(player_id)
 	names[player_id] = player_name
 	teams[player_id] = player_team_name
 	formations[player_id] = player_formation_id
 	ball_effects[player_id] = player_ball_effect_id
+	levels[player_id] = player_level
 	if is_new:
-		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id)
+		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level)
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -164,6 +171,15 @@ func get_opponents_ball_effect_id() -> int:
 			break
 	return opponents_ball_effect_id
 
+func get_opponents_level() -> int:
+	var opponents_level: int
+	for player_id: String in levels:
+		if player_id != id:
+			opponents_level = levels[player_id]
+			break
+	return opponents_level
+
+
 func get_team_name() -> String:
 	#ZAMENITI SA PLAYGAMA SDK
 	return get_random_3_letter_string()
@@ -191,3 +207,10 @@ func handle_fans_spend(amount: int):
 	fans_amount -= amount
 	#SACUVATI U PLAYGAMA SDK
 	fans_spent.emit(amount)
+
+func handle_money_gained(amount: int):
+	money_amount += amount
+	#SACUVATI U PLAYGAMA SDK
+func handle_fans_gained(amount: int):
+	fans_amount += amount
+	#SACUVATI U PLAYGAMA SDK

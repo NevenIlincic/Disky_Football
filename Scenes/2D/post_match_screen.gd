@@ -3,42 +3,63 @@ class_name PostMatchScreen extends Control
 @onready var you_won_lost_label: Label = $You_Won_Lost_Label
 var has_done: bool = false
 var scene: MultiplayerScene
+var has_leveled_up: bool = false
+@onready var level_up_sound: AudioStreamPlayer = $Level_Up_Sound
 
 #PROGRESS BAR
 @onready var progress_bar: TextureProgressBar = $Gained_Stats/Progress_Bar/Progress_Bar
 @onready var percentage_to_new_level_label: Label = $Gained_Stats/Progress_Bar/Percentage_To_New_Level_Label
 
+#TEXTURE_RECTS
+@onready var fan_texture_rect: TextureRect = $Gained_Stats/Fans_Amount_Stats_Node/Fan_Texture_Rect
+@onready var money_texture_rect: TextureRect = $Gained_Stats/Money_Amount_Stats_Node/Money_Texture_Rect
+
+#LABELS
+@onready var gained_money_label: Label = $Gained_Stats/Money_Amount_Stats_Node/Gained_Money_Label
+@onready var gained_fans_label: Label = $Gained_Stats/Fans_Amount_Stats_Node/Gained_Fans_Label
+@onready var fans_bonus_amount_label: Label = $Level_Up_Bonus_Node/Fans_Bonus_Amount_Label
+@onready var money_bonus_amount_label: Label = $Level_Up_Bonus_Node/Money_Bonus_Amount_Label
+@onready var level_up_label: Label = $Level_Up_Bonus_Node/Level_Up_Label
+
+#BUTTONS
+@onready var leave_button: TextureButton = $Leave_Button
+
+#NODES
+@onready var level_up_bonus_node: Node2D = $Level_Up_Bonus_Node
+
+var gained_experience_map: Dictionary
+var match_state: MultiplayerScene.MatchState
+
+var total_money_gained: int = 0
+var total_fans_gained: int = 0
+
 func _ready() -> void:
+	leave_button.visible = false
 	scene = get_tree().get_first_node_in_group("multiplayer_scene")
+	progress_bar.value = FusionSdk.experience_amount
+	progress_bar.max_value = FusionSdk.get_needed_experience_amount_to_level_up()
 	var percentage = int((progress_bar.value / progress_bar.max_value) * 100)
 	percentage_to_new_level_label.text = str(percentage) + "%"
 	
 #UZMI EXPERIENCE I LEVEL IGRACA PREKO SDK-a
 func do_after_match():
 	if has_done: return
+	match_state = scene.match_state
 	has_done = true
 	set_won_lost_label_text()
 	await get_tree().create_timer(1.0).timeout
 	
-	var current_value: float = progress_bar.value
-	var max_value: float = progress_bar.max_value
-
-	var total_duration: float = 3.0 
-
-	var remaining_distance: float = max_value - current_value
-	var duration: float = (remaining_distance / max_value) * total_duration
-
-	var tween: Tween = create_tween()
-	tween.tween_method(
-		func(val: float):
-			progress_bar.value = val
-			var percentage = int((val / progress_bar.max_value) * 100)
-			percentage_to_new_level_label.text = str(percentage) + "%",
-		progress_bar.value,
-		progress_bar.max_value,
-		duration
-	)
-
+	handle_gaining_experience()
+	var currency_gained: Array[int] = handle_currency_gained()
+	var fans_gained: int = currency_gained[0]
+	var money_gained: int = currency_gained[1]
+	await handle_animations(fans_gained, money_gained)
+			
+	FusionSdk.handle_money_gained(total_money_gained)
+	FusionSdk.handle_fans_gained(total_fans_gained)
+	leave_button.visible = true
+	
+	
 
 func set_won_lost_label_text():
 	match scene.match_state:
@@ -59,3 +80,155 @@ func _on_leave_button_pressed() -> void:
 	if Fusion.is_in_room():
 		FusionSdk.leave_room()
 	get_tree().change_scene_to_file("res://Scenes/Menus/Multiplayer_Menu_Scene.tscn")
+
+func handle_gaining_experience() -> void:
+	var experience_gained: int = get_gained_experience()
+	
+	var experience_left_after_level_up: int = 0
+	var current_level_max_value: int = FusionSdk.get_needed_experience_amount_to_level_up()
+	
+	var current_value: int = FusionSdk.experience_amount
+	progress_bar.value = current_value
+	
+	var new_experience_amount: int = current_value + experience_gained
+	
+	var finish_destination: int
+	
+	if new_experience_amount >= current_level_max_value:
+		experience_left_after_level_up = new_experience_amount - current_level_max_value
+		FusionSdk.current_level += 1
+		has_leveled_up = true
+		finish_destination = current_level_max_value
+		FusionSdk.experience_amount = experience_left_after_level_up
+	else:
+		finish_destination = new_experience_amount
+		FusionSdk.experience_amount = new_experience_amount
+		
+	var total_duration: float = 3.0 
+	
+	var remaining_distance_first: float = finish_destination - current_value
+	var duration: float = (remaining_distance_first / current_level_max_value) * total_duration
+
+	var tween: Tween = create_tween()
+	tween.tween_method(
+		func(val: float):
+			progress_bar.value = val
+			var percentage = int((val / progress_bar.max_value) * 100)
+			percentage_to_new_level_label.text = str(percentage) + "%",
+		progress_bar.value,
+		finish_destination,
+		duration
+	)
+	await tween.finished
+	
+	if has_leveled_up:
+		var remaining_distance_second: float = experience_left_after_level_up
+		var new_current_level_max_value = FusionSdk.get_needed_experience_amount_to_level_up()
+		var duration_two: float = (remaining_distance_second / new_current_level_max_value) * total_duration
+
+		tween = create_tween()
+		progress_bar.value = 0
+		progress_bar.max_value = new_current_level_max_value
+		tween.tween_method(
+			func(val: float):
+				progress_bar.value = val
+				var percentage = int((val / progress_bar.max_value) * 100)
+				percentage_to_new_level_label.text = str(percentage) + "%",
+			progress_bar.value,
+			experience_left_after_level_up,
+			duration
+		)
+
+func get_gained_experience() -> int:
+	var experience_gained: int = 3
+	match match_state:
+		MultiplayerScene.MatchState.DRAW:
+			experience_gained = 1
+		MultiplayerScene.MatchState.LOST_ON_TIME:
+			experience_gained = 0
+		MultiplayerScene.MatchState.LOST_BY_GOALS:
+			experience_gained = 0
+		
+	return experience_gained
+
+func handle_currency_gained() -> Array[int]:
+	match match_state:
+		MultiplayerScene.MatchState.DRAW:
+			total_fans_gained += 3
+		MultiplayerScene.MatchState.LOST_ON_TIME:
+			total_fans_gained += 2
+		MultiplayerScene.MatchState.LOST_BY_GOALS:
+			total_fans_gained += 1
+		MultiplayerScene.MatchState.WON_BY_GOALS:
+			total_fans_gained += 2 * abs(scene.my_score - scene.enemy_score) + 3
+			total_money_gained += 2
+		MultiplayerScene.MatchState.WON_ON_TIME:
+			total_fans_gained += 5
+			total_money_gained += 1
+		MultiplayerScene.MatchState.WON_BY_OPPONENT_DISCONNECTION:
+			total_fans_gained += abs(scene.my_score - scene.enemy_score) + 3
+			total_money_gained += 1
+			
+	var fans_gained_base: int = total_fans_gained
+	var money_gained_base: int = total_money_gained
+	
+	gained_fans_label.text = str("+", fans_gained_base)
+	gained_money_label.text = str("+", money_gained_base)
+	
+	return [fans_gained_base, money_gained_base]
+	
+func handle_level_up_bonus() -> void:
+	FusionSdk.handle_money_gained(3 * FusionSdk.current_level)
+	FusionSdk.handle_fans_gained(5 * FusionSdk.current_level)
+
+func handle_animations(fans_gained: int, money_gained: int) -> void:
+	var tween: Tween = create_tween()
+	fan_texture_rect.visible = true
+	fan_texture_rect.scale = Vector2.ZERO
+	tween.tween_property(fan_texture_rect, "scale", Vector2(1.3, 1.3), 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(fan_texture_rect, "scale", Vector2(1.0, 1.0), 0.5)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	
+	tween = create_tween()
+	gained_fans_label.visible = true
+	gained_fans_label.modulate.a = 0.0
+	tween.tween_property(gained_fans_label, "modulate:a", 1.0, 1.0)
+	await tween.finished
+	
+	tween = create_tween()
+	money_texture_rect.visible = true
+	money_texture_rect.scale = Vector2.ZERO
+	tween.tween_property(money_texture_rect, "scale", Vector2(1.3, 1.3), 1.0)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(money_texture_rect, "scale", Vector2(1.0, 1.0), 0.5)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	
+	tween = create_tween()
+	gained_money_label.visible = true
+	gained_money_label.modulate.a = 0.0
+	tween.tween_property(gained_money_label, "modulate:a", 1.0, 1.0)
+	
+	if has_leveled_up:
+		level_up_sound.play()
+		total_money_gained += 3 * (FusionSdk.current_level - 1)
+		total_fans_gained += 5 * (FusionSdk.current_level - 1)
+		fans_bonus_amount_label.text = str("+", 5 * (FusionSdk.current_level - 1))
+		money_bonus_amount_label.text = str("+", 3 * (FusionSdk.current_level - 1))
+		
+		level_up_bonus_node.visible = true		
+		tween = create_tween()
+		level_up_label.visible = true
+		level_up_label.modulate.a = 0.0
+		tween.tween_property(level_up_label, "modulate:a", 1.0, 1.0)
+		await tween.finished
+		tween = create_tween().parallel()
+		fans_bonus_amount_label.visible = true
+		fans_bonus_amount_label.modulate.a = 0.0
+		money_bonus_amount_label.visible = true
+		money_bonus_amount_label.modulate.a = 0.0
+		tween.tween_property(fans_bonus_amount_label, "modulate:a", 1.0, 1.0)
+		tween.tween_property(money_bonus_amount_label, "modulate:a", 1.0, 1.0)
+		await tween.finished

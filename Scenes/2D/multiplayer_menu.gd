@@ -1,6 +1,7 @@
 class_name MultiplayerMenu extends Control
 
 signal disconnected_from_multiplayer()
+signal search_canceled()
 
 var logged_in_player_stats: LoggedPlayerStats
 
@@ -15,6 +16,8 @@ var logged_in_player_stats: LoggedPlayerStats
 @onready var guest_name_label: Label = $Match_Found_Node/Guest_Name_Label
 @onready var host_team_name_label: Label = $Match_Found_Node/Host_Team_Name_Label
 @onready var guest_team_name_label: Label = $Match_Found_Node/Guest_Team_Name_Label
+@onready var host_level_label: Label = $Match_Found_Node/Host_Level/Host_Level_Label
+@onready var guest_level_label: Label = $Match_Found_Node/Guest_Level/Guest_Level_Label
 
 #FORMATIONS TEXTURE RECTS
 #HOST
@@ -65,6 +68,7 @@ func _exit_tree() -> void:
 		FusionSdk.match_found.disconnect(prepare_match_info)
 @rpc("any_peer","call_local")
 func _on_match_found():
+	FusionSdk.pre_match_info_showed.emit()
 	logged_in_player_stats.hide_stats()
 	not_searching_node.visible = false
 	while_searching_node.visible = false
@@ -72,11 +76,14 @@ func _on_match_found():
 	var opponents_name: String = FusionSdk.get_opponents_name()
 	var opponents_team_name: String = FusionSdk.get_opponents_team_name()
 	var opponents_foramtion_id: int = FusionSdk.get_opponents_formation_id()
+	var opponents_level: int = FusionSdk.get_opponents_level()
 	if Fusion.is_master_client():
 		host_name_label.text = get_my_name()
 		guest_name_label.text = str("COACH: ", opponents_name)
 		host_team_name_label.text = get_my_team_name()
 		guest_team_name_label.text = str("TEAM: ", opponents_team_name)
+		host_level_label.text = str(FusionSdk.current_level)
+		guest_level_label.text = str(opponents_level)
 		
 		var formation_id: int = FormationsManager.selected_formation
 		var texture_dict_host: TextureRect = formation_texture_dicts_host[formation_id]
@@ -88,6 +95,8 @@ func _on_match_found():
 		guest_name_label.text = get_my_name()
 		host_team_name_label.text = str("TEAM: ", opponents_team_name)
 		guest_team_name_label.text = get_my_team_name()
+		host_level_label.text = str(opponents_level)
+		guest_level_label.text = str(FusionSdk.current_level)
 		
 		var formation_id: int = FormationsManager.selected_formation
 		var texture_dict_host: TextureRect = formation_texture_dicts_host[opponents_foramtion_id]
@@ -117,7 +126,7 @@ func _on_back_button_pressed() -> void:
 func _on_cancel_searching_button_pressed() -> void:
 	if Fusion.is_in_room():
 		FusionSdk.leave_room()
-	
+	search_canceled.emit()
 func _on_search_canceled():
 	show_not_searching_node()
 	

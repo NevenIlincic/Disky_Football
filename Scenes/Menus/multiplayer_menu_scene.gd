@@ -6,6 +6,8 @@ extends Node3D
 @onready var team_name_input: LineEdit = $HUD/Team_Name_Initial_Input_Node/Team_Name_Input
 @onready var label_text: Label = $HUD/Team_Name_Initial_Input_Node/Label_Text
 @onready var cancel_button: TextureButton = $HUD/Team_Name_Initial_Input_Node/Cancel_Button
+@onready var multiplayer_menu: MultiplayerMenu = $HUD/Main_Menu_Nodes/Multiplayer_Control/MultiplayerMenu
+@onready var shop_menu: ShopMenu = $HUD/Main_Menu_Nodes/ShopMenu
 
 var forbidden_names: Dictionary = {
 	"XXX": true,
@@ -15,7 +17,6 @@ var forbidden_names: Dictionary = {
 func _ready() -> void:
 	check_has_team_name()
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
-	
 func check_has_team_name() -> void:
 	if FusionSdk.my_team_name.is_empty():
 		team_name_initial_input_node.visible = true
