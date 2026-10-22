@@ -119,6 +119,7 @@ func _on_join_button_pressed() -> void:
 
 
 func _on_back_button_pressed() -> void:
+	FusionSdk.has_disconnected_intentionally = true
 	Fusion.disconnect_from_photon()
 	get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 	

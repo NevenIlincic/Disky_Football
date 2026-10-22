@@ -75,7 +75,9 @@ func set_won_lost_label_text():
 			you_won_lost_label.text = str("YOU WON!\n", scene.my_score, "-", scene.enemy_score)
 		scene.MatchState.WON_BY_OPPONENT_DISCONNECTION:
 			you_won_lost_label.text = str("YOU WON!\nOpponent has disconnected!")
-
+		scene.MatState.GAME_SUSPENDED:
+			you_won_lost_label.text = str("GAME SUSPENDED!")
+		
 func _on_leave_button_pressed() -> void:
 	if Fusion.is_in_room():
 		FusionSdk.leave_room()
@@ -148,6 +150,8 @@ func get_gained_experience() -> int:
 			experience_gained = 0
 		MultiplayerScene.MatchState.LOST_BY_GOALS:
 			experience_gained = 0
+		MultiplayerScene.MatchState.GAME_SUSPENDED:
+			experience_gained = 0
 		
 	return experience_gained
 
@@ -168,6 +172,9 @@ func handle_currency_gained() -> Array[int]:
 		MultiplayerScene.MatchState.WON_BY_OPPONENT_DISCONNECTION:
 			total_fans_gained += abs(scene.my_score - scene.enemy_score) + 3
 			total_money_gained += 1
+		MultiplayerScene.MatchState.GAME_SUSPENDED:
+			total_fans_gained = 0
+			total_money_gained = 0
 			
 	var fans_gained_base: int = total_fans_gained
 	var money_gained_base: int = total_money_gained

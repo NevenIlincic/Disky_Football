@@ -14,6 +14,12 @@ var forbidden_names: Dictionary = {
 	"SEX": true
 }
 
+func _exit_tree() -> void:
+	if logged_player_stats.edit_team_name_button_pressed.is_connected(_on_edit_team_name_button_pressed):
+		logged_player_stats.edit_team_name_button_pressed.disconnect(_on_edit_team_name_button_pressed)
+
+
+
 func _ready() -> void:
 	check_has_team_name()
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)

@@ -10,9 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://dueul4vgtbl3e" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Pressed.png" id="9_eekhh"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="10_1e1ep"]
 [ext_resource type="Texture2D" uid="uid://cmlvsr1jln0p2" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Hovered.png" id="10_wq2yq"]
-[ext_resource type="Texture2D" uid="uid://dve6yuggeuxb2" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Enabled.png" id="11_bvym8"]
-[ext_resource type="Texture2D" uid="uid://dn8k2u4g6y16a" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Pressed.png" id="12_56gmq"]
-[ext_resource type="Texture2D" uid="uid://bndr5vrayev4h" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Hovered.png" id="13_bsyyq"]
 [ext_resource type="Texture2D" uid="uid://b2si4um31xchh" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Shared/3-3_Standard_Formation_Display.png" id="14_56gmq"]
 [ext_resource type="Texture2D" uid="uid://wlctnt188tq" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/3-3_Wide_Formation_Display (1).png" id="15_bsyyq"]
 [ext_resource type="Texture2D" uid="uid://dvydwj55suwv8" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/5-1_Formation_Display.png" id="16_esf8j"]
@@ -75,9 +72,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 offset_left = 880.0
-offset_top = 251.0
+offset_top = 359.0
 offset_right = 1160.0
-offset_bottom = 355.0
+offset_bottom = 463.0
 texture_normal = ExtResource("2_1e1ep")
 texture_pressed = ExtResource("3_eekhh")
 texture_hover = ExtResource("4_wq2yq")
@@ -94,18 +91,6 @@ offset_bottom = 578.0
 texture_normal = ExtResource("5_1e1ep")
 texture_pressed = ExtResource("6_eekhh")
 texture_hover = SubResource("CompressedTexture2D_skhyc")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Shop_Button" type="TextureButton" parent="Not_Searching_Node" unique_id=322351263]
-layout_mode = 0
-offset_left = 880.0
-offset_top = 362.0
-offset_right = 1160.0
-offset_bottom = 466.0
-texture_normal = ExtResource("11_bvym8")
-texture_pressed = ExtResource("12_56gmq")
-texture_hover = ExtResource("13_bsyyq")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -142,6 +127,7 @@ stretch_mode = 0
 libraries/ = SubResource("AnimationLibrary_skhyc")
 
 [node name="Match_Found_Node" type="Control" parent="." unique_id=1866039169]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

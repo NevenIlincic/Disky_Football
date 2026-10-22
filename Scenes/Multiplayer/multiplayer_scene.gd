@@ -7,7 +7,8 @@ enum MatchState{
 	WON_BY_OPPONENT_DISCONNECTION,
 	LOST_ON_TIME,
 	LOST_BY_GOALS,
-	DRAW
+	DRAW,
+	GAME_SUSPENDED
 }
 enum MatchFinishState {
 	FINISHED_NORMAL,
@@ -569,8 +570,6 @@ func on_enemy_scored() -> void:
 		else:
 			match_state = MatchState.WON_BY_GOALS
 
-func handle_match_lost():
-	print("POBEDIO!")
 
 func on_scored() -> void:
 	my_score += 1
@@ -696,6 +695,12 @@ func action_ended() -> void:
 func turn_changed() -> void:
 	is_my_turn = !is_my_turn
 	synchronizing_label.visible = false
+	
+	if match_state == MatchState.PLAYING and Fusion.is_in_room():
+		if Fusion.get_room().player_count < 2:
+			match_state = MatchState.GAME_SUSPENDED
+			_on_match_finished()
+			
 	
 @rpc("any_peer", "call_local")
 func game_started() -> void:

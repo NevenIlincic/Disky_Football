@@ -39,9 +39,20 @@ var level_experience_map: Dictionary = {
 	9: 90
 }
 
+var has_connection_lost: bool = false
+var has_disconnected_intentionally: bool = false
+
 func get_needed_experience_amount_to_level_up() -> int:
 	return level_experience_map[current_level]
-	
+
+func _enter_tree() -> void:
+	if Fusion.connected_to_photon.is_connected(_on_connected):
+		Fusion.connected_to_photon.disconnect(_on_connected)
+	if Fusion.room_joined.is_connected(_on_room_joined):
+		Fusion.room_joined.disconnect(_on_room_joined)
+	if Fusion.player_joined.is_connected(_on_player_joined):
+		Fusion.player_joined.disconnect(_on_player_joined)
+
 func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
@@ -54,6 +65,13 @@ func connect_to_signals():
 	Fusion.connected_to_photon.connect(_on_connected)
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.player_joined.connect(_on_player_joined)
+	Fusion.connection_status_changed.connect(_on_connection_status_changed)
+
+func _on_connection_status_changed(status):
+	match status:
+		Fusion.ConnectionStatus.STATUS_DISCONNECTED:
+			has_connection_lost = true
+			get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 
 
 func connect_to_server():
