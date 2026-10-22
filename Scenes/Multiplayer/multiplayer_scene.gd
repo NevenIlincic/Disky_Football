@@ -136,7 +136,6 @@ var has_snapshot: bool = false
 var is_synchronization_done: bool = false
 
 
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
@@ -252,6 +251,10 @@ func spawn_ball():
 	add_child(ball)
 	ball.global_position = ball_spawn_position.global_position
 	ball.spawn_position = ball.global_position
+	if ball:
+		ball.fire_effect_started.connect(_on_ball_kicked_hard)
+		ball.fire_effect_amount_reduced.connect(_on_ball_slowed_down)
+		ball.fire_effect_stopped.connect(_on_ball_stopped)
 
 func _enter_tree() -> void:
 	Fusion.register_broadcast_receiver(self)
@@ -682,6 +685,14 @@ func set_body_authority(body: RigidBody3D) -> void:
 func freeze_entities(body: RigidBody3D) -> void:
 	body.freeze = true
 
+func _on_ball_kicked_hard(ball_effect_id: int):
+	Fusion.rpc(set_hard_ball_fire_effect, ball_effect_id)
+
+func _on_ball_slowed_down(ball_effect_id: int):
+	Fusion.rpc(set_reduced_ball_fire_effect, ball_effect_id)
+func _on_ball_stopped(ball_effect_id: int):
+	Fusion.rpc(stop_ball_fire_effect, ball_effect_id)
+
 #RPC
 @rpc("any_peer", "call_remote")
 func action_started() -> void:
@@ -754,3 +765,22 @@ func handle_match_finished_on_time():
 		else:
 			match_state = MatchState.LOST_ON_TIME
 	_on_match_finished()
+
+
+@rpc("any_peer", "call_remote")
+func set_hard_ball_fire_effect(ball_effect_id: int):
+	ball.set_ball_effect(ball_effect_id)
+	ball.fire_effect.emit_effects()
+
+@rpc("any_peer", "call_remote")
+func set_reduced_ball_fire_effect(ball_effect_id: int):
+	ball.set_ball_effect(ball_effect_id)
+	if not ball.fire_effect.emitting:
+		ball.fire_effect.emit_effects()
+	ball.fire_effect.reduce_amount()
+
+
+@rpc("any_peer", "call_remote")
+func stop_ball_fire_effect(ball_effect_id: int):
+	ball.set_ball_effect(ball_effect_id)
+	ball.fire_effect.stop_effects()		
