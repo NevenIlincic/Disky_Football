@@ -20,6 +20,7 @@ var teams: Dictionary = {} #player_id -> naziv_tima
 var formations: Dictionary = {}
 var ball_effects: Dictionary = {}
 var levels: Dictionary = {}
+var skins: Dictionary = {}
 
 #PLAYER STATS
 var current_level: int
@@ -45,13 +46,16 @@ var has_disconnected_intentionally: bool = false
 func get_needed_experience_amount_to_level_up() -> int:
 	return level_experience_map[current_level]
 
-func _enter_tree() -> void:
+func _exit_tree() -> void:
 	if Fusion.connected_to_photon.is_connected(_on_connected):
 		Fusion.connected_to_photon.disconnect(_on_connected)
 	if Fusion.room_joined.is_connected(_on_room_joined):
 		Fusion.room_joined.disconnect(_on_room_joined)
 	if Fusion.player_joined.is_connected(_on_player_joined):
 		Fusion.player_joined.disconnect(_on_player_joined)
+	if Fusion.connection_status_changed.is_connected(_on_connection_status_changed):
+		Fusion.connection_status_changed.disconnect(_on_connection_status_changed)
+
 
 func _ready():
 	randomize()
@@ -110,6 +114,7 @@ func leave_room() -> void:
 	ball_effects.clear()
 	formations.clear()
 	levels.clear()
+	skins.clear()
 	Fusion.leave_room()
 
 func join_room() -> void:
@@ -142,20 +147,22 @@ func _on_room_joined():
 	formations[id] = FormationsManager.selected_formation
 	ball_effects[id] = BallEffects.selected_effect
 	levels[id] = current_level
+	skins[id] = SkinsManager.selected_skin
 	
-	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect, current_level)
+	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect, current_level, SkinsManager.selected_skin)
 	Fusion.rpc(player_ready, id)
 
 @rpc("any_peer", "call_remote")
-func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int):
+func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int, player_skin_id: int):
 	var is_new = not names.has(player_id)
 	names[player_id] = player_name
 	teams[player_id] = player_team_name
 	formations[player_id] = player_formation_id
 	ball_effects[player_id] = player_ball_effect_id
 	levels[player_id] = player_level
+	skins[player_id] = player_skin_id
 	if is_new:
-		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level)
+		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level, player_skin_id)
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -196,6 +203,14 @@ func get_opponents_level() -> int:
 			opponents_level = levels[player_id]
 			break
 	return opponents_level
+
+func get_opponents_skin_id() -> int:
+	var opponents_skin_id: int
+	for player_id: String in skins:
+		if player_id != id:
+			opponents_skin_id = skins[player_id]
+			break
+	return opponents_skin_id
 
 
 func get_team_name() -> String:

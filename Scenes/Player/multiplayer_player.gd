@@ -20,6 +20,7 @@ var is_shooting: bool = false
 
 var is_ball_in_range: bool = false
 @onready var shooting_area_indicator: Sprite3D = $Shooting_Area_Indicator
+@onready var top_part: MeshInstance3D = $Top_Part
 
 var has_finished_move: bool = false
 var went_over: bool = false
@@ -133,3 +134,23 @@ func _on_body_entered(body: Node) -> void:
 			play_collide_sound()
 	else:
 		play_collide_sound()
+
+func set_skin(skin_id: int, is_host: bool):
+	var skin_texture: CompressedTexture2D = SkinsManager.get_skin_texture_from_id(skin_id)
+	var material = top_part.get_surface_override_material(0) as StandardMaterial3D
+	
+	if not material:
+		var active_mat = top_part.get_active_material(0) as StandardMaterial3D
+		if active_mat:
+			material = active_mat.duplicate() as StandardMaterial3D
+			top_part.set_surface_override_material(0, material)
+		else:
+			material = StandardMaterial3D.new()
+			top_part.set_surface_override_material(0, material)
+	
+	if material:
+		material.albedo_texture = skin_texture
+		if is_host:
+			material.albedo_color = Color("2048ff")
+		else:
+			material.albedo_color = Color("ff0000")

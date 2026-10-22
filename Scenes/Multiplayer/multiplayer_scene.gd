@@ -35,7 +35,7 @@ var formation_spawn_positions_guest: Dictionary
 #############################
 
 const MATCH_DURATION: float = 2700
-const GOALS_TO_WIN: int = 1
+const GOALS_TO_WIN: int = 5
 var match_state: MatchState = MatchState.PLAYING
 var match_finish_state: MatchFinishState = MatchFinishState.FINISHED_NORMAL
 
@@ -221,15 +221,25 @@ func register_player(player: MultiplayerPlayer) -> void:
 	player.player_id = next_player_id
 	
 	var player_spawn_position: Vector3
+	var player_skin_id: int
+
 	if next_player_id <= 5:
 		if Fusion.is_master_client():
 			player.is_owner = true
+			player_skin_id = SkinsManager.selected_skin
+		else:
+			player_skin_id = FusionSdk.get_opponents_skin_id()
 		player_spawn_position = host_spawn_points[next_player_id].global_position
+		player.set_skin(player_skin_id, true)
 	else:
 		if not Fusion.is_master_client():
 			player.is_owner = true
+			player_skin_id = SkinsManager.selected_skin
+		else:
+			player_skin_id = FusionSdk.get_opponents_skin_id()
 		player_spawn_position = guest_spawn_points[next_player_id - 6].global_position
-	
+		player.set_skin(player_skin_id, false)
+		
 	player.global_position = player_spawn_position
 	player.spawn_position = player_spawn_position
 		

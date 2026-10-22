@@ -16,8 +16,12 @@ radius = 1.0
 height = 1.0
 radius = 3.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_02vxf"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_jmcll"]
-material = ExtResource("2_3l8kd")
+material = SubResource("StandardMaterial3D_02vxf")
 top_radius = 1.0
 height = 0.001
 

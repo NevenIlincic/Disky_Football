@@ -152,3 +152,6 @@ offset_top = 212.49994
 offset_right = 217.0
 offset_bottom = 238.49994
 text = "NOT ENOUGH CURRENCY"
+
+[connection signal="pressed" from="Wrapper/Purchase_Node/Select_Card_Button" to="." method="_on_select_card_button_pressed"]
+[connection signal="pressed" from="Wrapper/Purchase_Node/Not_Purchased_Node/Buy_Button" to="." method="_on_buy_button_pressed"]

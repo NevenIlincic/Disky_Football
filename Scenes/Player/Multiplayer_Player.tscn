@@ -13,8 +13,19 @@ bounce = 0.3
 height = 0.5
 radius = 1.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3lluj"]
+load_path = "res://.godot/imported/Player_Skin_5.png-91193308c72dbd532d693ac273850418.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e42fg"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.1254902, 0.28235295, 1, 1)
+albedo_texture = SubResource("CompressedTexture2D_3lluj")
+uv1_scale = Vector3(2, 2, 2)
+texture_filter = 0
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_55xwr"]
-material = ExtResource("1_c2dbo")
+material = SubResource("StandardMaterial3D_e42fg")
 top_radius = 0.9980469
 bottom_radius = 0.9980469
 height = 0.001
