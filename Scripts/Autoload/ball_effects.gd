@@ -1,8 +1,8 @@
 extends Node
 
+#U WEBSDK SE INICIJALIZUJE
 var selected_effect: int = 0
-
-var purchased_effects_id: Array[int] = [0,2,3]
+var purchased_effects_id: Array[int] = [0]
 
 const BALL_EFFECT_BLUE = preload("uid://bdei36v5vo73t")
 const BALL_EFFECT_GREEN = preload("uid://bg5ytrclb4to4")
@@ -40,3 +40,9 @@ func get_ball_effect() -> ShootEffect:
 func get_ball_effect_from_id(id: int) -> ShootEffect:
 	var ball_effect: ShootEffect = effects[id].instantiate()
 	return ball_effect
+
+func get_purchased_ball_effects_ids() -> Array[int]:
+	return purchased_effects_id
+
+func get_selected_ball_effect_id() -> int:
+	return selected_effect

@@ -40,22 +40,22 @@ func _on_effect_preview_button_toggled(toggled_on: bool) -> void:
 
 func get_purchased_cards_id() -> Array[int]:
 	#ZAMENITI SA PLAYGAMA SDK
-	return BallEffects.purchased_effects_id
+	return BallEffects.get_purchased_ball_effects_ids()
 
 func get_current_selected_card_id() -> int:
-	return BallEffects.selected_effect
+	return BallEffects.get_selected_ball_effect_id()
 
 
-func _on_select_card_button_pressed() -> void:
+func _on_select_card_button_pressed(to_save: bool = true) -> void:
 	BallEffects.selected_effect = card_id
 	card_selected.emit(card_id)
+	if to_save:
+		WebSdk.SDK.save_multiplayer_data()
 
-
-func _on_buy_button_pressed() -> void:
-	super._on_buy_button_pressed()
-	#OVO STAVITI U PLAYGAMA SDK DA CUVA
+func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
 	BallEffects.purchased_effects_id.append(card_id)
-	_on_select_card_button_pressed()
+	_on_select_card_button_pressed(false)
+	FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
 
 func get_fans_price() -> int:
 	return BallEffects.effects_fans_price[card_id]

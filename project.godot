@@ -29,6 +29,8 @@ FusionSdk="*uid://dirxpm6bjesk6"
 BallEffects="*uid://d0aufkeb8twm5"
 FormationsManager="*uid://yf0bkcqfv0fb"
 SkinsManager="*uid://cis5rlfubeu4j"
+Bridge="*uid://cx4klxojbw6ck"
+WebSdk="*uid://dwporwn7tse8u"
 
 [display]
 
@@ -38,7 +40,7 @@ window/mode=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg")
+enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", "res://addons/playgama_bridge/plugin.cfg")
 
 [fusion]
 

@@ -81,8 +81,11 @@ func get_money_price() -> int
 func _on_buy_button_pressed() -> void:
 	var fans_cost: int = get_fans_price()
 	var money_cost: int = get_money_price()
-	FusionSdk.handle_money_spend(money_cost)
-	FusionSdk.handle_fans_spend(fans_cost)
+	_handle_card_bought(fans_cost, money_cost)
+
+@abstract
+func _handle_card_bought(fans_cost: int, money_cost: int) -> void;
+	
 
 @abstract
 func get_purchased_cards_id() -> Array[int]
@@ -91,4 +94,4 @@ func get_purchased_cards_id() -> Array[int]
 func get_current_selected_card_id() -> int
 
 @abstract
-func _on_select_card_button_pressed() -> void
+func _on_select_card_button_pressed(to_save: bool = true) -> void

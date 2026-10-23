@@ -31,17 +31,16 @@ func get_current_selected_card_id() -> int:
 	return SkinsManager.get_selected_skin_id()
 
 
-func _on_select_card_button_pressed() -> void:
+func _on_select_card_button_pressed(to_save: bool = true) -> void:
 	SkinsManager.selected_skin = card_id
 	card_selected.emit(card_id)
+	if to_save:
+		WebSdk.SDK.save_multiplayer_data()
 
-
-func _on_buy_button_pressed() -> void:
-	super._on_buy_button_pressed()
-	#OVO STAVITI U PLAYGAMA SDK DA CUVA
+func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
 	SkinsManager.purchased_skins_ids.append(card_id)
-	_on_select_card_button_pressed()
-
+	_on_select_card_button_pressed(false)
+	FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
 func get_fans_price() -> int:
 	return SkinsManager.fans_price[card_id]
 func get_money_price() -> int:

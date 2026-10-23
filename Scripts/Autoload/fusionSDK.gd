@@ -13,7 +13,7 @@ var id: String
 var room_id: int
 var match_scene: PackedScene
 var my_name: String = str("MeXa", "_", randi())   
-var my_team_name: String = "AAA"
+var my_team_name: String
 
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
@@ -46,6 +46,19 @@ var has_disconnected_intentionally: bool = false
 func get_needed_experience_amount_to_level_up() -> int:
 	return level_experience_map[current_level]
 
+func reset_multiplayer_data() -> void:
+	current_level = 1
+	money_amount = 0
+	fans_amount = 0
+	experience_amount = 0
+	my_team_name = ""
+	SkinsManager.selected_skin = 0
+	SkinsManager.purchased_skins_ids = [0]
+	BallEffects.selected_effect = 0
+	BallEffects.purchased_effects_id = [0]
+	FormationsManager.selected_formation = 0
+	FormationsManager.purchased_formations_id = [0]
+
 func _exit_tree() -> void:
 	if Fusion.connected_to_photon.is_connected(_on_connected):
 		Fusion.connected_to_photon.disconnect(_on_connected)
@@ -55,8 +68,8 @@ func _exit_tree() -> void:
 		Fusion.player_joined.disconnect(_on_player_joined)
 	if Fusion.connection_status_changed.is_connected(_on_connection_status_changed):
 		Fusion.connection_status_changed.disconnect(_on_connection_status_changed)
-
-
+	
+	
 func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
@@ -70,7 +83,6 @@ func connect_to_signals():
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.player_joined.connect(_on_player_joined)
 	Fusion.connection_status_changed.connect(_on_connection_status_changed)
-
 func _on_connection_status_changed(status):
 	match status:
 		Fusion.ConnectionStatus.STATUS_DISCONNECTED:
@@ -82,11 +94,12 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	#ZAMENITI SA PLAYGAMA SDK
-	money_amount = 100
-	fans_amount = 100
-	current_level = 2
-	experience_amount = 19
+	WebSdk.SDK.load_multiplayer_data()
+	#WebSDK.load_multiplayer_data()
+	#money_amount = 100
+	#fans_amount = 100
+	#current_level = 2
+	#experience_amount = 19
 
 
 func create_room():
@@ -168,18 +181,6 @@ func _on_room_joined():
 	buffer.put_utf8_string(id)
 	
 	Fusion.rpc(player_ready, buffer.data_array)
-
-#@rpc("any_peer", "call_remote")
-#func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int, player_skin_id: int):
-	#var is_new = not names.has(player_id)
-	#names[player_id] = player_name
-	#teams[player_id] = player_team_name
-	#formations[player_id] = player_formation_id
-	#ball_effects[player_id] = player_ball_effect_id
-	#levels[player_id] = player_level
-	#skins[player_id] = player_skin_id
-	#if is_new:
-		#Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level, player_skin_id)
 
 @rpc("any_peer", "call_remote")
 func introduce(received_data_array: PackedByteArray):
@@ -271,19 +272,37 @@ func handle_team_name_change(new_team_name: String):
 	my_team_name = new_team_name
 	handle_money_spend(5)
 
+func handle_initial_team_name_change(new_team_name: String):
+	my_team_name = new_team_name
+	WebSdk.SDK.save_multiplayer_data()
+
 func handle_money_spend(amount: int):
 	money_amount -= amount
 	#SACUVATI U PLAYGAMA SDK
+	WebSdk.SDK.save_multiplayer_data()
 	money_spent.emit(amount)
 
 func handle_fans_spend(amount: int):
 	fans_amount -= amount
 	#SACUVATI U PLAYGAMA SDK
+	WebSdk.SDK.save_multiplayer_data()
 	fans_spent.emit(amount)
 
 func handle_money_gained(amount: int):
 	money_amount += amount
+	WebSdk.SDK.save_multiplayer_data()
 	#SACUVATI U PLAYGAMA SDK
 func handle_fans_gained(amount: int):
 	fans_amount += amount
+	WebSdk.SDK.save_multiplayer_data()
 	#SACUVATI U PLAYGAMA SDK
+
+func handle_fans_and_money_spent(fan_cost: int, money_cost: int) -> void:
+	fans_amount -= fan_cost
+	money_amount -= money_cost
+	WebSdk.SDK.save_multiplayer_data()
+
+func handle_rewarded_ad_watched(new_fans_amount: int, new_money_amount: int):
+	fans_amount += new_fans_amount
+	money_amount += new_money_amount
+	WebSdk.SDK.save_multiplayer_data()

@@ -9,11 +9,41 @@ const PLAYER_SKIN_CARD = preload("uid://spp2rnvppf0f")
 
 @onready var h_box_container: HBoxContainer = $Cards_Scroll_Container/HBoxContainer
 
+enum CurrentTab {
+	DISKS,
+	BALL_EFFECTS,
+	FORMATIONS
+}
+
+var current_tab: CurrentTab = CurrentTab.DISKS
+
+func _exit_tree() -> void:
+	if FusionSdk.pre_match_info_showed.is_connected(_on_match_found):
+		FusionSdk.pre_match_info_showed.disconnect(_on_match_found)
+	if 	WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
+		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
+	if WebSdk.SDK.rewarded_ad_watched.is_connected(_on_rewarded_ad_watched):
+		WebSdk.SDK.rewarded_ad_watched.disconnect(_on_rewarded_ad_watched)
+
 func _ready() -> void:
 	FusionSdk.pre_match_info_showed.connect(_on_match_found)
-	show_disks_tab()
+	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
+	WebSdk.SDK.rewarded_ad_watched.connect(_on_rewarded_ad_watched)
 	add_tab_buttons_to_group()
-	
+	#show_disks_tab()
+
+func _on_data_loaded() -> void:
+	show_disks_tab()
+
+func _on_rewarded_ad_watched() -> void:
+	match current_tab:
+		CurrentTab.DISKS:
+			show_disks_tab()
+		CurrentTab.BALL_EFFECTS:
+			show_ball_effects_tab()
+		CurrentTab.FORMATIONS:
+			show_formations_tab()
+
 func _on_match_found() -> void:
 	visible = false
 
@@ -53,6 +83,7 @@ func _on_disk_skin_selected(card_id: int):
 		card.update_card_display()
 
 func show_disks_tab() -> void:
+	current_tab = CurrentTab.DISKS
 	for child in h_box_container.get_children():
 		child.queue_free()
 	for i in range(SkinsManager.skins.size()):
@@ -65,6 +96,7 @@ func show_disks_tab() -> void:
 	h_box_container.add_child(control_dummy_node)
 
 func show_ball_effects_tab() -> void:
+	current_tab = CurrentTab.BALL_EFFECTS
 	for child in h_box_container.get_children():
 		child.queue_free()
 	for i in range(BallEffects.effects.size()):
@@ -78,6 +110,7 @@ func show_ball_effects_tab() -> void:
 	h_box_container.add_child(control_dummy_node)
 
 func show_formations_tab() -> void:
+	current_tab = CurrentTab.FORMATIONS
 	for child in h_box_container.get_children():
 		child.queue_free()
 	for i in range(FormationsManager.formations.size()):

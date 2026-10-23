@@ -23,12 +23,17 @@ func _exit_tree() -> void:
 		multiplayer_menu.search_started.disconnect(_on_match_search_started)
 	if multiplayer_menu.search_canceled.is_connected(_on_match_search_canceled):
 		multiplayer_menu.search_canceled.disconnect(_on_match_search_canceled)
+	if WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
+		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
 
 func _ready() -> void:
-	check_has_team_name()
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
+	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
+
+func _on_data_loaded() -> void:
+	check_has_team_name()
 
 func check_has_team_name() -> void:
 	if FusionSdk.my_team_name.is_empty():
@@ -76,8 +81,8 @@ func _on_ad_button_pressed() -> void:
 
 func _on_ad_confirm_button_pressed() -> void:
 	#PUSTITI REWARDED VIDEO
-	FusionSdk.handle_fans_gained(10)
-	FusionSdk.handle_money_gained(5)
+	FusionSdk.handle_rewarded_ad_watched(10, 5)
+	WebSdk.SDK.rewarded_ad_watched.emit()
 	logged_player_stats.set_player_stats()
 
 

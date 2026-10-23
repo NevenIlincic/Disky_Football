@@ -19,8 +19,6 @@ var experience_percentage_amount: int
 var experience_amount_flat: String
 
 func _ready() -> void:
-	set_player_stats()
-	check_has_money_for_team_name_change()
 	connect_to_signals()
 
 func _exit_tree() -> void:
@@ -32,6 +30,7 @@ func _exit_tree() -> void:
 func connect_to_signals():
 	FusionSdk.money_spent.connect(_on_money_spent)
 	FusionSdk.fans_spent.connect(_on_fans_spent)
+	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
 
 func _on_money_spent(amount: int):
 	money_amount_label.text = str(FusionSdk.money_amount)
@@ -41,7 +40,9 @@ func _on_fans_spent(amount: int):
 	
 func hide_stats():
 	visible = false
-	
+
+func _on_data_loaded() -> void:
+	set_player_stats()
 #DOBAVITI IZ PLAYGAMA SDK
 func set_player_stats():
 	get_player_name()
@@ -50,6 +51,7 @@ func set_player_stats():
 	get_current_level()
 	get_player_team_name()
 	get_experience_amount_percentage()
+	check_has_money_for_team_name_change()
 
 func get_player_name() -> void:
 	player_name_label.text = str("COACH: ", FusionSdk.my_name)
@@ -81,7 +83,7 @@ func show_experience_amount_percentage() -> void:
 func set_player_team_name(team_name: String) -> void:
 	var new_display_name: String = str("TEAM: ", team_name)
 	team_name_label.text = new_display_name
-	FusionSdk.handle_team_name_change(team_name)
+	FusionSdk.handle_initial_team_name_change(team_name)
 	check_has_money_for_team_name_change()
 	#PlayGamaSDK.set_team_name()
 
