@@ -641,25 +641,34 @@ func _physics_process(delta: float) -> void:
 			freeze_entities(player)
 		freeze_entities(ball)
 		Fusion.rpc(handle_match_finished_on_time)
+		
 func build_snapshot() -> PackedByteArray:
-	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
-	buffer.put_u8(multiplayer_players.size())
+	var moving_players: Array[MultiplayerPlayer] = []
 	for p: MultiplayerPlayer in multiplayer_players:
+		if p.move_state == MultiplayerPlayer.MoveState.MOVING:
+			moving_players.append(p)
+			
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(moving_players.size())
+	#PLAYERS
+	for p: MultiplayerPlayer in moving_players:
 		buffer.put_u8(p.player_id)
 		buffer.put_float(p.global_position.x)
 		buffer.put_float(p.global_position.y)
 		buffer.put_float(p.global_position.z)
-		
-	### BALL POSITION
-	buffer.put_float(ball.global_position.x)
-	buffer.put_float(ball.global_position.y)
-	buffer.put_float(ball.global_position.z)
-	# BALL ROTATION
-	var ball_rotation: Quaternion = ball.global_basis.get_rotation_quaternion()
-	buffer.put_float(ball_rotation.x)
-	buffer.put_float(ball_rotation.y)
-	buffer.put_float(ball_rotation.z)
-	buffer.put_float(ball_rotation.w)
+	
+	if ball.move_state == ball.MoveState.MOVING:
+		### BALL POSITION
+		buffer.put_float(ball.global_position.x)
+		buffer.put_float(ball.global_position.y)
+		buffer.put_float(ball.global_position.z)
+		# BALL ROTATION
+		var ball_rotation: Quaternion = ball.global_basis.get_rotation_quaternion()
+		buffer.put_float(ball_rotation.x)
+		buffer.put_float(ball_rotation.y)
+		buffer.put_float(ball_rotation.z)
+		buffer.put_float(ball_rotation.w)
+	
 	return buffer.data_array
 	#var ids: Array = []
 	#var positions: Array = []
@@ -703,19 +712,23 @@ func receive_snapshot(data_array_snapshot: PackedByteArray) -> void:
 		)
 		target_positions[player_id] = player_position
 	
-	var ball_position: Vector3 = Vector3(
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float()
-	)
-	var ball_rotation: Quaternion = Quaternion(
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float()
-	)
-	ball_target_pos = ball_position
-	ball_target_rot = ball_rotation
+	var buffer_position: int = buffer.get_position()
+	var buffer_total_size: int = buffer.get_size()
+	if buffer_position < buffer_total_size:
+		var ball_position: Vector3 = Vector3(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+		var ball_rotation: Quaternion = Quaternion(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+
+		ball_target_pos = ball_position
+		ball_target_rot = ball_rotation
 	has_snapshot = true
 	
 	#if is_synchronizing:
@@ -746,22 +759,27 @@ func apply_end_turn_targets_synchronization(received_data_array: PackedByteArray
 			buffer.get_float()
 		)
 		target_positions[player_id] = player_position
-		
-	#BALL POSITION
-	var ball_position: Vector3 = Vector3(
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float()
-	)
-	#BALL ROTATION
-	var ball_rotation: Quaternion = Quaternion(
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float(),
-		buffer.get_float()
-	)
-	ball.global_position = ball_position
-	ball.global_basis = ball_rotation
+	
+
+	var buffer_position: int = buffer.get_position()
+	var buffer_total_size: int = buffer.get_size()
+	if buffer_position < buffer_total_size:
+		#BALL POSITION
+		var ball_position: Vector3 = Vector3(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+		#BALL ROTATION
+		var ball_rotation: Quaternion = Quaternion(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+
+		ball.global_position = ball_position
+		ball.global_basis = ball_rotation
 	#var ids: Array = snapshot["ids"]
 	#var positions: Array = snapshot["positions"]
 	#var ball_position = snapshot["ball_pos"]
@@ -807,10 +825,16 @@ func _on_ball_stopped(ball_effect_id: int):
 	buffer.put_u8(ball_effect_id)
 	Fusion.rpc(stop_ball_fire_effect, buffer.data_array)
 
+func reset_ball_target() -> void:
+	has_snapshot = false
+	if ball:
+		ball_target_pos = ball.global_position
+		ball_target_rot = ball.global_basis.get_rotation_quaternion()
 #RPC
 @rpc("any_peer", "call_remote")
 func action_started() -> void:
 	is_action = true
+	reset_ball_target()
 
 @rpc("any_peer", "call_local")
 func action_ended() -> void:
@@ -838,6 +862,7 @@ func game_paused() -> void:
 @rpc("any_peer", "call_local")
 func reset_target_positions():
 	target_positions.clear()
+	reset_ball_target()
 
 @rpc("any_peer", "call_remote")
 func handle_end_turn_synhronization(received_data_array: PackedByteArray):

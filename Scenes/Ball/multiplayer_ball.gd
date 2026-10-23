@@ -48,6 +48,7 @@ func set_ball_effect(id: int) -> void:
 	fire_effect.scale = Vector3(2.0, 2.0, 2.0)
 
 
+var is_really_moving: bool = false
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	check_should_play_hit_sound(state)
 	if not scene.is_my_turn: return
@@ -88,10 +89,11 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 				settle_timer += state.step
 				if settle_timer >= SETTLE_TIME:
 					move_state = MoveState.IDLE
+					state.linear_velocity = Vector3.ZERO
+					state.angular_velocity = Vector3.ZERO
 					finished_move.emit(self)
 			else:
 				settle_timer = 0.0
-
 var last_velocity: Vector3 = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:

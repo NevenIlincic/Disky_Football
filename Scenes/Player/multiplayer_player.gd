@@ -65,6 +65,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 				settle_timer += state.step
 				if settle_timer >= SETTLE_TIME:
 					move_state = MoveState.IDLE
+					state.linear_velocity = Vector3.ZERO
+					state.angular_velocity = Vector3.ZERO
 					finished_move.emit(self)
 			else:
 				settle_timer = 0.0
