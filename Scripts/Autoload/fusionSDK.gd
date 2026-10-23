@@ -61,7 +61,7 @@ func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
 
-	id = str(Time.get_ticks_usec(),"_", randi())
+	id = str(randi(), my_name)
 	#my_team_name = get_random_3_letter_string()
 	connect_to_signals()
 
@@ -129,9 +129,12 @@ func _on_player_joined(player_id: int, user_id: String):
 		room_id = player_id
 
 @rpc("any_peer", "call_local")
-func player_ready(player_id: String):
+func player_ready(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
 	if not Fusion.is_master_client():
 		return
+	var player_id: String = buffer.get_utf8_string()
 	ready_players[player_id] = true
 	if ready_players.size() == 2:
 		match_found.emit()
@@ -149,12 +152,48 @@ func _on_room_joined():
 	levels[id] = current_level
 	skins[id] = SkinsManager.selected_skin
 	
-	Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect, current_level, SkinsManager.selected_skin)
-	Fusion.rpc(player_ready, id)
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_utf8_string(id)
+	buffer.put_utf8_string(my_name)
+	buffer.put_utf8_string(my_team_name)
+	buffer.put_u8(FormationsManager.selected_formation)
+	buffer.put_u8(BallEffects.selected_effect)
+	buffer.put_u8(current_level)
+	buffer.put_u8(SkinsManager.selected_skin)
+	
+	#Fusion.rpc(introduce, id, my_name, my_team_name, FormationsManager.selected_formation, BallEffects.selected_effect, current_level, SkinsManager.selected_skin)
+	Fusion.rpc(introduce, buffer.data_array)
+	
+	buffer.clear()
+	buffer.put_utf8_string(id)
+	
+	Fusion.rpc(player_ready, buffer.data_array)
+
+#@rpc("any_peer", "call_remote")
+#func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int, player_skin_id: int):
+	#var is_new = not names.has(player_id)
+	#names[player_id] = player_name
+	#teams[player_id] = player_team_name
+	#formations[player_id] = player_formation_id
+	#ball_effects[player_id] = player_ball_effect_id
+	#levels[player_id] = player_level
+	#skins[player_id] = player_skin_id
+	#if is_new:
+		#Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level, player_skin_id)
 
 @rpc("any_peer", "call_remote")
-func introduce(player_id: String, player_name: String, player_team_name: String, player_formation_id: int, player_ball_effect_id: int, player_level: int, player_skin_id: int):
+func introduce(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var player_id: String = buffer.get_utf8_string()
 	var is_new = not names.has(player_id)
+	var player_name: String = buffer.get_utf8_string()
+	var player_team_name: String = buffer.get_utf8_string()
+	var player_formation_id: int = buffer.get_u8()
+	var player_ball_effect_id: int = buffer.get_u8()
+	var player_level: int = buffer.get_u8()
+	var player_skin_id: int = buffer.get_u8()
+	
 	names[player_id] = player_name
 	teams[player_id] = player_team_name
 	formations[player_id] = player_formation_id
@@ -162,7 +201,8 @@ func introduce(player_id: String, player_name: String, player_team_name: String,
 	levels[player_id] = player_level
 	skins[player_id] = player_skin_id
 	if is_new:
-		Fusion.rpc(introduce, player_id, player_name, player_team_name, player_formation_id, player_ball_effect_id, player_level, player_skin_id)
+		Fusion.rpc(introduce, received_data_array)
+
 
 func get_opponents_name() -> String:
 	var opponents_name: String

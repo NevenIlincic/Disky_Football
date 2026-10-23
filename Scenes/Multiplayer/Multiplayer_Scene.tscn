@@ -390,7 +390,7 @@ light_energy = 0.2
 
 [node name="Field" type="Node3D" parent="." unique_id=1525963902]
 
-[node name="Floor" type="StaticBody3D" parent="Field" unique_id=510854489]
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=510854489 groups=["floor"]]
 input_ray_pickable = false
 physics_material_override = SubResource("PhysicsMaterial_ub488")
 

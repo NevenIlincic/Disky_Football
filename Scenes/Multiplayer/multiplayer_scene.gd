@@ -311,10 +311,13 @@ func _ready() -> void:
 	#Fusion.rpc(game_started)
 	#has_game_started = true
 	referee_whistle_sound.play()
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
 	if Fusion.is_master_client():
-		peer_scene_ready(my_id)
+		buffer.put_utf8_string(my_id)
+		peer_scene_ready(buffer.data_array)
 	else:
-		Fusion.rpc_to(Fusion.TARGET_MASTER, peer_scene_ready, my_id)
+		buffer.put_utf8_string(my_id)
+		Fusion.rpc_to(Fusion.TARGET_MASTER, peer_scene_ready, buffer.data_array)
 	
 
 func initialize_formation_dictionaries() -> void:
@@ -336,7 +339,10 @@ func initialize_formation_dictionaries() -> void:
 
 
 @rpc("any_peer", "call_local")
-func peer_scene_ready(pid: String) -> void:
+func peer_scene_ready(received_data_array: PackedByteArray) -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var pid: String = buffer.get_utf8_string()
 	if not Fusion.is_master_client() or field_spawned:
 		return
 	loaded_peers[pid] = true
@@ -641,7 +647,8 @@ func _physics_process(delta: float) -> void:
 			freeze_entities(player)
 		freeze_entities(ball)
 		Fusion.rpc(handle_match_finished_on_time)
-		
+
+
 func build_snapshot() -> PackedByteArray:
 	var moving_players: Array[MultiplayerPlayer] = []
 	for p: MultiplayerPlayer in multiplayer_players:

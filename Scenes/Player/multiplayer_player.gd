@@ -27,7 +27,7 @@ var went_over: bool = false
 
 const SPEED_TO_START_MOVE: float = 0.5
 const SPEED_TO_FINISH_MOVE: float = 0.2  
-const SETTLE_TIME: float = 0.15          
+const SETTLE_TIME: float = 0.5        
 
 var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
@@ -67,6 +67,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 					move_state = MoveState.IDLE
 					state.linear_velocity = Vector3.ZERO
 					state.angular_velocity = Vector3.ZERO
+					#sleeping = true
 					finished_move.emit(self)
 			else:
 				settle_timer = 0.0

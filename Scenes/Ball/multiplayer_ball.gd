@@ -16,7 +16,7 @@ const MAX_SPEED: float = 75.0
 
 const SPEED_TO_START_MOVE: float = 3.0
 const SPEED_TO_FINISH_MOVE: float = 2.0  # niži prag za kraj (histerezis)
-const SETTLE_TIME: float = 0.15          # koliko dugo mora biti sporo
+const SETTLE_TIME: float = 1.0       # koliko dugo mora biti sporo
 
 var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
@@ -34,6 +34,8 @@ var is_fire_effect_stopped_active: bool = false
 
 var spawn_position: Vector3 = Vector3.ZERO
 var scene: MultiplayerScene
+
+
 func _ready() -> void:
 	wave_effect = get_tree().get_first_node_in_group("wave_effect")
 	scene = get_tree().get_first_node_in_group("multiplayer_scene")
@@ -130,6 +132,7 @@ func _on_body_entered(body: Node) -> void:
 	kick_sound.volume_db = linear_to_db(clampf(impact / 15.0, 0.05, 1.0))
 	kick_sound.pitch_scale = randf_range(0.9, 1.1)
 	kick_sound.play()
+	
 
 const MIN_IMPACT_SPEED: float = 10.0  # minimalna brzina "udara" u normalu
 const COOLDOWN: float = 0.3 
