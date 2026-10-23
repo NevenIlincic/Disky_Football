@@ -369,8 +369,13 @@ func _on_move_finished():
 	if elements_in_action <= 0 and is_action:
 		synchronizing_label.visible = true
 		Fusion.rpc(action_ended)
-		var s := build_snapshot()
-		Fusion.rpc(handle_end_turn_synhronization, s, time_passed)
+		
+		var snapshot_data_array: PackedByteArray = build_snapshot()
+		var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+		buffer.put_float(time_passed)
+		var final_bytes: PackedByteArray = buffer.data_array + snapshot_data_array
+		
+		Fusion.rpc(handle_end_turn_synhronization, final_bytes)
 		_reset_elements_in_action()
 		#if not is_my_turn:
 			#await get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
@@ -392,13 +397,13 @@ func _on_player_finished_move(player: MultiplayerPlayer):
 	_on_move_finished()
 
 func _process(delta: float) -> void:
-	if is_action and has_game_started:
-		time_passed += delta * 10
-	
-		var minutes: int = int(time_passed) / 60
-		var seconds: int = int(time_passed) % 60
-		
-		time_label.text = "%02d:%02d" % [minutes, seconds]
+	#if is_action and has_game_started:
+		#time_passed += delta * 10
+	#
+		#var minutes: int = int(time_passed) / 60
+		#var seconds: int = int(time_passed) % 60
+		#
+		#time_label.text = "%02d:%02d" % [minutes, seconds]
 	if is_dragging:
 		calculate_drag_direction()
 		draw_indicator()
@@ -527,7 +532,9 @@ func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
 	#is_action = false
 	Fusion.rpc(game_paused)
 	#has_game_started = false
-	Fusion.rpc(handle_goal_scored, goal_owner)
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(goal_owner)
+	Fusion.rpc(handle_goal_scored, buffer.data_array)
 	#goal_scored_node.visible = true
 	#play_goal_effect()
 	#play_cheer_effect()
@@ -608,6 +615,13 @@ func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 	return found_player
 
 func _physics_process(delta: float) -> void:
+	if is_action and has_game_started:
+		time_passed += delta * 10
+	
+		var minutes: int = int(time_passed) / 60
+		var seconds: int = int(time_passed) % 60
+		
+		time_label.text = "%02d:%02d" % [minutes, seconds]
 	if not is_action or not ball and match_state == MatchState.PLAYING:
 		synchronizing_label.visible = false
 		return
@@ -616,8 +630,9 @@ func _physics_process(delta: float) -> void:
 		snapshot_tick += 1
 
 		if match_state == MatchState.PLAYING and snapshot_tick % 3 == 0 and is_action:
-			var s := build_snapshot()
-			Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot, false)
+			var data_array_snapshot: PackedByteArray = build_snapshot()
+			#Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot, false)
+			Fusion.rpc(receive_snapshot, data_array_snapshot)
 	else:
 		apply_targets()
 		
@@ -626,27 +641,81 @@ func _physics_process(delta: float) -> void:
 			freeze_entities(player)
 		freeze_entities(ball)
 		Fusion.rpc(handle_match_finished_on_time)
-func build_snapshot() -> Dictionary:
-	var ids: Array = []
-	var positions: Array = []
+func build_snapshot() -> PackedByteArray:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(multiplayer_players.size())
 	for p: MultiplayerPlayer in multiplayer_players:
-		ids.append(p.player_id)
-		positions.append(p.global_position)
-	return {
-		"ids": ids,
-		"positions": positions,
-		"ball_pos": ball.global_position,
-		"ball_rot": ball.global_basis.get_rotation_quaternion(),
-	}
+		buffer.put_u8(p.player_id)
+		buffer.put_float(p.global_position.x)
+		buffer.put_float(p.global_position.y)
+		buffer.put_float(p.global_position.z)
+		
+	### BALL POSITION
+	buffer.put_float(ball.global_position.x)
+	buffer.put_float(ball.global_position.y)
+	buffer.put_float(ball.global_position.z)
+	# BALL ROTATION
+	var ball_rotation: Quaternion = ball.global_basis.get_rotation_quaternion()
+	buffer.put_float(ball_rotation.x)
+	buffer.put_float(ball_rotation.y)
+	buffer.put_float(ball_rotation.z)
+	buffer.put_float(ball_rotation.w)
+	return buffer.data_array
+	#var ids: Array = []
+	#var positions: Array = []
+	#for p: MultiplayerPlayer in multiplayer_players:
+		#ids.append(p.player_id)
+		#positions.append(p.global_position)
+	#return {
+		#"ids": ids,
+		#"positions": positions,
+		#"ball_pos": ball.global_position,
+		#"ball_rot": ball.global_basis.get_rotation_quaternion(),
+	#}
 
+#@rpc("any_peer", "call_remote")
+#func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot: Quaternion, is_synchronizing: bool) -> void:
+	#if is_my_turn:
+		#return
+	#for i in ids.size():
+		#target_positions[ids[i]] = positions[i]
+	#ball_target_pos = ball_pos
+	#ball_target_rot = ball_rot
+	#has_snapshot = true
+	#
+	##if is_synchronizing:
+		##apply_targets()
+		
 @rpc("any_peer", "call_remote")
-func receive_snapshot(ids: Array, positions: Array, ball_pos: Vector3, ball_rot: Quaternion, is_synchronizing: bool) -> void:
+func receive_snapshot(data_array_snapshot: PackedByteArray) -> void:
 	if is_my_turn:
 		return
-	for i in ids.size():
-		target_positions[ids[i]] = positions[i]
-	ball_target_pos = ball_pos
-	ball_target_rot = ball_rot
+		
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = data_array_snapshot
+	var players_count: int = buffer.get_u8()
+	for i in range(players_count):
+		var player_id: int = buffer.get_u8()
+		var player_position: Vector3 = Vector3(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+		target_positions[player_id] = player_position
+	
+	var ball_position: Vector3 = Vector3(
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float()
+	)
+	var ball_rotation: Quaternion = Quaternion(
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float()
+	)
+	ball_target_pos = ball_position
+	ball_target_rot = ball_rotation
 	has_snapshot = true
 	
 	#if is_synchronizing:
@@ -664,19 +733,47 @@ func apply_targets() -> void:
 	ball.global_basis = Basis(cur.slerp(ball_target_rot, 0.3))
 
 #@rpc("any_peer", "call_remote")
-func apply_end_turn_targets_synchronization(snapshot: Dictionary) -> void:
-	var ids: Array = snapshot["ids"]
-	var positions: Array = snapshot["positions"]
-	var ball_position = snapshot["ball_pos"]
-	for i in ids.size():
-		target_positions[ids[i]] = positions[i]
-	for id in ids:
-		var p := get_selected_player(id)
-		if p:
-			p.global_position = target_positions[id]
-	ball.global_position = ball_target_pos
-	#ball.global_basis = ball_target_rot
-	target_positions.clear()
+func apply_end_turn_targets_synchronization(received_data_array: PackedByteArray) -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	
+	var player_count: int = buffer.get_u8()
+	for i in range(player_count):
+		var player_id: int = buffer.get_u8()
+		var player_position: Vector3 = Vector3(
+			buffer.get_float(),
+			buffer.get_float(),
+			buffer.get_float()
+		)
+		target_positions[player_id] = player_position
+		
+	#BALL POSITION
+	var ball_position: Vector3 = Vector3(
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float()
+	)
+	#BALL ROTATION
+	var ball_rotation: Quaternion = Quaternion(
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float(),
+		buffer.get_float()
+	)
+	ball.global_position = ball_position
+	ball.global_basis = ball_rotation
+	#var ids: Array = snapshot["ids"]
+	#var positions: Array = snapshot["positions"]
+	#var ball_position = snapshot["ball_pos"]
+	#for i in ids.size():
+		#target_positions[ids[i]] = positions[i]
+	#for id in ids:
+		#var p := get_selected_player(id)
+		#if p:
+			#p.global_position = target_positions[id]
+	#ball.global_position = ball_target_pos
+	##ball.global_basis = ball_target_rot
+	#target_positions.clear()
 	
 	on_synchronization_done()
 
@@ -697,12 +794,18 @@ func freeze_entities(body: RigidBody3D) -> void:
 	body.freeze = true
 
 func _on_ball_kicked_hard(ball_effect_id: int):
-	Fusion.rpc(set_hard_ball_fire_effect, ball_effect_id)
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(ball_effect_id)
+	Fusion.rpc(set_hard_ball_fire_effect, buffer.data_array)
 
 func _on_ball_slowed_down(ball_effect_id: int):
-	Fusion.rpc(set_reduced_ball_fire_effect, ball_effect_id)
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(ball_effect_id)
+	Fusion.rpc(set_reduced_ball_fire_effect, buffer.data_array)
 func _on_ball_stopped(ball_effect_id: int):
-	Fusion.rpc(stop_ball_fire_effect, ball_effect_id)
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_u8(ball_effect_id)
+	Fusion.rpc(stop_ball_fire_effect, buffer.data_array)
 
 #RPC
 @rpc("any_peer", "call_remote")
@@ -737,19 +840,27 @@ func reset_target_positions():
 	target_positions.clear()
 
 @rpc("any_peer", "call_remote")
-func handle_end_turn_synhronization(snapshot: Dictionary, time: float):
+func handle_end_turn_synhronization(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	
+	var time: float = buffer.get_float()
 	time_passed = time
 	var minutes: int = int(time_passed) / 60
 	var seconds: int = int(time_passed) % 60
 	
 	time_label.text = "%02d:%02d" % [minutes, seconds]
 	
-	apply_end_turn_targets_synchronization(snapshot)
+	var remaining_bytes: PackedByteArray = buffer.data_array.slice(buffer.get_position())
+	apply_end_turn_targets_synchronization(remaining_bytes)
 	#var s := build_snapshot()
 	#Fusion.rpc(receive_snapshot, s.ids, s.positions, s.ball_pos, s.ball_rot)
 
 @rpc("any_peer", "call_local")
-func handle_goal_scored(goal_owner: Goal.GoalOwner):
+func handle_goal_scored(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var goal_owner: Goal.GoalOwner = buffer.get_u8() as Goal.GoalOwner
 	goal_scored_node.visible = true
 	play_goal_effect()
 	play_cheer_effect()
@@ -778,16 +889,22 @@ func handle_match_finished_on_time():
 	_on_match_finished()
 
 
+###BALL EFFECT HANDLING
 @rpc("any_peer", "call_remote")
-func set_hard_ball_fire_effect(ball_effect_id: int):
+func set_hard_ball_fire_effect(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
 	ball.fire_effect.emit_effects()
 	wave_effect.global_position = ball.global_position
 	wave_effect.emitting = true
 	
-
 @rpc("any_peer", "call_remote")
-func set_reduced_ball_fire_effect(ball_effect_id: int):
+func set_reduced_ball_fire_effect(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
 	if not ball.fire_effect.emitting:
 		ball.fire_effect.emit_effects()
@@ -795,6 +912,9 @@ func set_reduced_ball_fire_effect(ball_effect_id: int):
 
 
 @rpc("any_peer", "call_remote")
-func stop_ball_fire_effect(ball_effect_id: int):
+func stop_ball_fire_effect(received_data_array: PackedByteArray):
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
 	ball.fire_effect.stop_effects()		
