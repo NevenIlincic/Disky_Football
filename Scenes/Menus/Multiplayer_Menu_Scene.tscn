@@ -13,8 +13,13 @@
 [ext_resource type="PackedScene" uid="uid://bdmv4rkukckma" path="res://Scenes/Menus/Shop_Menu.tscn" id="10_jis2f"]
 [ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="10_p62xj"]
 [ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="11_1qbg4"]
+[ext_resource type="Texture2D" uid="uid://dl5aysredqy27" path="res://Sprites/Buttons/Ad_Button/Ad_Button_Enabled.png" id="11_s52gw"]
+[ext_resource type="Texture2D" uid="uid://cje0qagw6vcia" path="res://Sprites/Buttons/Ad_Button/Ad_Button_Pressed.png" id="12_fr7wc"]
+[ext_resource type="Texture2D" uid="uid://1vspsbaw2vfl" path="res://Sprites/Buttons/Ad_Button/Ad_Button_Hovered.png" id="13_oh6io"]
 [ext_resource type="Texture2D" uid="uid://uxjxkjwxwivp" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Enabled.png" id="13_vh7gt"]
+[ext_resource type="Texture2D" uid="uid://dn8pw7p7x2gca" path="res://Sprites/Buttons/Ad_Button/Ad_Button_Disabled.png" id="14_2c463"]
 [ext_resource type="Texture2D" uid="uid://deuhosc5t2q3u" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Hovered.png" id="14_jis2f"]
+[ext_resource type="Texture2D" uid="uid://cveckkc4863rk" path="res://Sprites/Progress_Bar/Experience_Under_Bar.png" id="15_fr7wc"]
 
 [sub_resource type="Environment" id="Environment_vh7gt"]
 background_mode = 3
@@ -331,7 +336,72 @@ scale = Vector2(0.8, 0.8)
 [node name="ShopMenu" parent="HUD/Main_Menu_Nodes" unique_id=365126050 instance=ExtResource("10_jis2f")]
 position = Vector2(56, 272)
 
+[node name="Ad_Node" type="Node2D" parent="HUD/Main_Menu_Nodes" unique_id=246014993]
+
+[node name="Ad_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Ad_Node" unique_id=939585090]
+offset_left = 267.0
+offset_top = 4.0
+offset_right = 416.59998
+offset_bottom = 72.0
+texture_normal = ExtResource("11_s52gw")
+texture_pressed = ExtResource("12_fr7wc")
+texture_hover = ExtResource("13_oh6io")
+texture_disabled = ExtResource("14_2c463")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Confirmation_Dialog_Node" type="Node2D" parent="HUD/Main_Menu_Nodes/Ad_Node" unique_id=1825776805]
+visible = false
+
+[node name="Background_Color_Rect" type="ColorRect" parent="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node" unique_id=1421488625]
+offset_left = -88.0
+offset_top = -72.0
+offset_right = 1208.0
+offset_bottom = 696.0
+color = Color(1, 1, 1, 0)
+
+[node name="Ad_Confirmation_Dialog_Background" type="TextureRect" parent="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node" unique_id=1384558435]
+offset_left = 398.0
+offset_top = 229.0
+offset_right = 811.09094
+offset_bottom = 453.0
+texture = ExtResource("15_fr7wc")
+expand_mode = 1
+
+[node name="Ad_Confirm_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node" unique_id=739937029]
+offset_left = 720.0
+offset_top = 384.0
+offset_right = 784.0
+offset_bottom = 424.0
+texture_normal = ExtResource("10_p62xj")
+texture_hover = ExtResource("11_1qbg4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Ad_Cancel_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node" unique_id=1092444954]
+offset_left = 416.0
+offset_top = 384.0
+offset_right = 480.0
+offset_bottom = 424.0
+texture_normal = ExtResource("13_vh7gt")
+texture_hover = ExtResource("14_jis2f")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Confirmation_Dialog_Label" type="Label" parent="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node" unique_id=757437042]
+custom_maximum_size = Vector2(350, -1)
+offset_left = 424.0
+offset_top = 248.0
+offset_right = 774.0
+offset_bottom = 327.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "You will have to watch an AD to get the reward!"
+horizontal_alignment = 1
+autowrap_mode = 2
+
 [node name="Team_Name_Initial_Input_Node" type="Node2D" parent="HUD" unique_id=1341601234]
+visible = false
 
 [node name="Team_Name_Input" type="LineEdit" parent="HUD/Team_Name_Initial_Input_Node" unique_id=930605684]
 offset_left = 480.0
@@ -380,5 +450,8 @@ texture_hover = ExtResource("14_jis2f")
 ignore_texture_size = true
 stretch_mode = 0
 
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Ad_Button" to="." method="_on_ad_button_pressed"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Confirm_Button" to="." method="_on_ad_confirm_button_pressed"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Cancel_Button" to="." method="_on_ad_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Confirm_Button" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Cancel_Button" to="." method="_on_cancel_button_pressed"]

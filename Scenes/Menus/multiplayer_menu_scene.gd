@@ -8,6 +8,8 @@ extends Node3D
 @onready var cancel_button: TextureButton = $HUD/Team_Name_Initial_Input_Node/Cancel_Button
 @onready var multiplayer_menu: MultiplayerMenu = $HUD/Main_Menu_Nodes/Multiplayer_Control/MultiplayerMenu
 @onready var shop_menu: ShopMenu = $HUD/Main_Menu_Nodes/ShopMenu
+@onready var confirmation_dialog_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node
+@onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
 
 var forbidden_names: Dictionary = {
 	"XXX": true,
@@ -17,12 +19,17 @@ var forbidden_names: Dictionary = {
 func _exit_tree() -> void:
 	if logged_player_stats.edit_team_name_button_pressed.is_connected(_on_edit_team_name_button_pressed):
 		logged_player_stats.edit_team_name_button_pressed.disconnect(_on_edit_team_name_button_pressed)
-
-
+	if multiplayer_menu.search_started.is_connected(_on_match_search_started):
+		multiplayer_menu.search_started.disconnect(_on_match_search_started)
+	if multiplayer_menu.search_canceled.is_connected(_on_match_search_canceled):
+		multiplayer_menu.search_canceled.disconnect(_on_match_search_canceled)
 
 func _ready() -> void:
 	check_has_team_name()
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
+	multiplayer_menu.search_started.connect(_on_match_search_started)
+	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
+
 func check_has_team_name() -> void:
 	if FusionSdk.my_team_name.is_empty():
 		team_name_initial_input_node.visible = true
@@ -32,6 +39,14 @@ func check_has_team_name() -> void:
 		team_name_initial_input_node.visible = false
 		main_menu_nodes.visible = true
 
+func _on_match_search_started() -> void:
+	shop_menu.visible = false
+	logged_player_stats.visible = false
+	ad_node.visible = false
+func _on_match_search_canceled() -> void:
+	shop_menu.visible = true
+	logged_player_stats.visible = true
+	ad_node.visible = true
 
 func _on_confirm_button_pressed() -> void:
 	var entered_input: String = team_name_input.text
@@ -53,3 +68,18 @@ func _on_edit_team_name_button_pressed() -> void:
 func _on_cancel_button_pressed() -> void:
 	team_name_initial_input_node.visible = false
 	main_menu_nodes.visible = true
+
+
+func _on_ad_button_pressed() -> void:
+	confirmation_dialog_node.visible = true
+
+
+func _on_ad_confirm_button_pressed() -> void:
+	#PUSTITI REWARDED VIDEO
+	FusionSdk.handle_fans_gained(10)
+	FusionSdk.handle_money_gained(5)
+	logged_player_stats.set_player_stats()
+
+
+func _on_ad_cancel_button_pressed() -> void:
+	confirmation_dialog_node.visible = false

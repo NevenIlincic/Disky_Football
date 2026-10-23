@@ -1,6 +1,7 @@
 class_name MultiplayerMenu extends Control
 
 signal disconnected_from_multiplayer()
+signal search_started()
 signal search_canceled()
 
 var logged_in_player_stats: LoggedPlayerStats
@@ -114,6 +115,7 @@ func prepare_match_info():
 	Fusion.rpc(_on_match_found)
 
 func _on_join_button_pressed() -> void:
+	search_started.emit()
 	show_while_searching_node()
 	FusionSdk.create_room()
 
@@ -127,7 +129,10 @@ func _on_back_button_pressed() -> void:
 func _on_cancel_searching_button_pressed() -> void:
 	if Fusion.is_in_room():
 		FusionSdk.leave_room()
-	search_canceled.emit()
+		search_canceled.emit()
+	else:
+		_on_search_canceled()
+		search_canceled.emit()
 func _on_search_canceled():
 	show_not_searching_node()
 	
