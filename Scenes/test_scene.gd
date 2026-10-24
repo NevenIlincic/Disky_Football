@@ -1,5 +1,9 @@
 extends Node3D
 
+const MAX_DRAG_LENGTH: float = 500.0
+const MIN_DRAG_LENGTH: float = 35.0
+const INDICATOR_LENGTH: float = 5.0
+
 var is_my_turn: bool = true
 
 #TIME
@@ -11,30 +15,36 @@ var end_position: Vector2
 
 var is_action: bool = false
 
-#@onready var player: Player = $Player
 @onready var ball: Ball = $Field/Ball
 @onready var ball_spawn_position: Marker3D = $Field/Ball_Spawn_Position
-
 
 var selected_player: Player
 
 var my_spawn_points: Array[Marker3D] = []
 var enemy_spawn_points: Array[Marker3D] = []
 
-#@onready var shooting_indicator: Sprite3D = $Shooting_Indicator
-
-#HUD BUTTONS
-#@onready var buttons: Node2D = $HUD/Buttons
-#@onready var kick_button: Button = $HUD/Buttons/Kick_Button
-#@onready var move_player_button: Button = $HUD/Buttons/Move_Player_Button
-#@onready var power_bar: TextureProgressBar = $HUD/Power_Bar
+#HUD
 @onready var field: Node3D = $Field
 @onready var shooting_indicator: Sprite3D = $HUD/Control/Shooting_Indicator
+
+@onready var indicator_line: Line2D = $HUD/Indicator_Line
 @onready var buttons: Node2D = $HUD/Control/Buttons
 @onready var kick_button: TextureButton = $HUD/Control/Buttons/Kick_Button
 @onready var move_player_button: TextureButton = $HUD/Control/Buttons/Move_Player_Button
 @onready var power_bar: TextureProgressBar = $HUD/Control/Power_Bar
 @onready var time_label: Label = $HUD/Control/Scoreboard/Time_Label
+@onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
+@onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
+@onready var goal_scored_sprite: Sprite2D = $HUD/Control/Goal_Scored_Node/Goal_Scored_Sprite
+@onready var goal_scored_node: Control = $HUD/Control/Goal_Scored_Node
+@onready var football_fans: Node2D = $HUD/Control/Goal_Scored_Node/Football_Fans
+
+@onready var my_goal: Goal = $Field/My_Goal
+@onready var enemy_goal: Goal = $Field/Enemy_Goal
+
+#AUDIO
+@onready var referee_whistle_sound: AudioStreamPlayer = $Referee_Whistle_Sound
+@onready var goal_scored_sound: AudioStreamPlayer = $Goal_Scored_Sound
 
 var drag_direction: Vector3
 
@@ -49,83 +59,19 @@ var has_game_started: bool = false
 
 var my_score: int = 0
 var enemy_score: int = 0
-@onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
-@onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
-@onready var goal_scored_sprite: Sprite2D = $HUD/Control/Goal_Scored_Node/Goal_Scored_Sprite
-
-@onready var my_goal: Goal = $Field/My_Goal
-@onready var enemy_goal: Goal = $Field/Enemy_Goal
 
 var is_initial_kick: bool = true
 
-#AUDIO
-@onready var referee_whistle_sound: AudioStreamPlayer = $Referee_Whistle_Sound
-@onready var goal_scored_sound: AudioStreamPlayer = $Goal_Scored_Sound
 
-func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("drag"):
-		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
-			is_dragging = true
-			start_position = get_viewport().get_mouse_position()
-			shooting_indicator.visible = true
-			
-	if Input.is_action_just_released("drag"):
-		is_dragging = false
-		do_action()
+func _ready() -> void:
+	indicator_line.visible = false
 
-
-func reset_entities_position():
-
-	for player: Player in players:
-		player.respawn_entity()
-		
-	for enemy: Enemy in enemies:
-		enemy.respawn_entity()
-	ball.respawn_entity()
-	my_goal.reset_entity()
-	enemy_goal.reset_entity()
-	goal_scored_node.visible = false
-	await get_tree().physics_frame
-	
-	referee_whistle_sound.play()
-	if not is_my_turn:
-		await get_tree().create_timer(1.0).timeout
-		has_game_started = true
-		handle_enemy_turn()
-	else:
-		has_game_started = true
-		
-		
-func spawn_players():
-	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
-		my_spawn_points.append(my_spawn_point)
-	for enemy_spawn_point in get_tree().get_nodes_in_group("enemy_spawn_point"):
-		enemy_spawn_points.append(enemy_spawn_point)
-	
-	for i in range(0, players.size()):
-		var player_spawn_position: Vector3 = my_spawn_points[i].global_position
-		var enemy_spawn_position: Vector3 = enemy_spawn_points[i].global_position
-		
-		players[i].global_position = player_spawn_position
-		enemies[i].global_position = enemy_spawn_position
-		
-		players[i].spawn_position = player_spawn_position
-		enemies[i].spawn_position = enemy_spawn_position
-
-	var ball_spawn_position: Vector3 = ball_spawn_position.global_position
-	#ball.global_position = ball_spawn_position
-	ball.spawn_position = ball_spawn_position
-	
-	has_game_started = true
-	referee_whistle_sound.play()
-	
-func _ready() -> void:	
 	my_goal.goal_scored.connect(_on_goal_scored)
 	enemy_goal.goal_scored.connect(_on_goal_scored)
-	
+
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
-	
+
 	for player_obj in get_tree().get_nodes_in_group("player"):
 		var player: Player = player_obj
 		players.append(player)
@@ -133,17 +79,90 @@ func _ready() -> void:
 		player.finished_move.connect(_on_player_finished_move)
 		player.continued_move.connect(_on_player_continued_move)
 		num_players += 1
-	
+
 	for enemy_obj in get_tree().get_nodes_in_group("enemy"):
 		var enemy: Enemy = enemy_obj
 		enemies.append(enemy)
 		enemy.finished_move.connect(_on_enemy_finished_move)
 		enemy.continued_move.connect(_on_enemy_continued_move)
 		num_enemies += 1
-		
-	
-	
+
 	spawn_players()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("drag"):
+		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
+			is_dragging = true
+			start_position = get_viewport().get_mouse_position()
+			end_position = start_position # bez zastarele vrednosti
+			drag_direction = Vector3.ZERO
+			#shooting_indicator.visible = true
+
+	if Input.is_action_just_released("drag") and is_dragging:
+		is_dragging = false
+		calculate_drag_direction()
+		#indicator_line.visible = false
+		do_action()
+
+
+func _process(delta: float) -> void:
+	if is_action and has_game_started:
+		time_passed += delta * 10
+
+		var minutes: int = int(time_passed) / 60
+		var seconds: int = int(time_passed) % 60
+
+		time_label.text = "%02d:%02d" % [minutes, seconds]
+	if is_dragging:
+		calculate_drag_direction()
+		draw_indicator()
+
+
+func reset_entities_position():
+	for player: Player in players:
+		player.respawn_entity()
+
+	for enemy: Enemy in enemies:
+		enemy.respawn_entity()
+	ball.respawn_entity()
+	my_goal.reset_entity()
+	enemy_goal.reset_entity()
+	goal_scored_node.visible = false
+	await get_tree().physics_frame
+
+	referee_whistle_sound.play()
+	if not is_my_turn:
+		await get_tree().create_timer(1.0).timeout
+		has_game_started = true
+		handle_enemy_turn()
+	else:
+		has_game_started = true
+
+
+func spawn_players():
+	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
+		my_spawn_points.append(my_spawn_point)
+	for enemy_spawn_point in get_tree().get_nodes_in_group("enemy_spawn_point"):
+		enemy_spawn_points.append(enemy_spawn_point)
+
+	for i in range(0, players.size()):
+		var player_spawn_position: Vector3 = my_spawn_points[i].global_position
+		var enemy_spawn_position: Vector3 = enemy_spawn_points[i].global_position
+
+		players[i].global_position = player_spawn_position
+		enemies[i].global_position = enemy_spawn_position
+
+		players[i].spawn_position = player_spawn_position
+		enemies[i].spawn_position = enemy_spawn_position
+
+	ball.spawn_position = ball_spawn_position.global_position
+
+	has_game_started = true
+	referee_whistle_sound.play()
+
+
+
 func _on_enemy_continued_move(enemy: Enemy):
 	_on_move_continued()
 
@@ -151,14 +170,16 @@ func _on_enemy_finished_move(enemy: Enemy):
 	_on_move_finished()
 
 func _on_player_continued_move(player: Player):
-	_on_move_continued()	
+	_on_move_continued()
+
 func _on_ball_continued_move(ball: Ball):
 	_on_move_continued()
+
 func _on_move_continued():
 	elements_in_action += 1
 	if not is_action:
 		is_action = true
-		
+
 func _on_move_finished():
 	elements_in_action -= 1
 
@@ -166,91 +187,106 @@ func _on_move_finished():
 		is_action = false
 		_reset_elements_in_action()
 		if not is_my_turn:
-			await get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
-	
+			get_tree().create_timer(2.0).timeout.connect(handle_enemy_turn)
+
 func _reset_elements_in_action():
 	elements_in_action = 0
 
-
 func _on_ball_finished_move(ball: Ball):
 	_on_move_finished()
-	#elements_in_action -= 1
-	#if elements_in_action <= 0 and is_action:
-		#is_action = false
-		#_reset_elements_in_action()
 
 func _on_player_finished_move(player: Player):
 	_on_move_finished()
 
-func _process(delta: float) -> void:
-	if is_action and has_game_started:
-		time_passed += delta * 10
-	
-		var minutes: int = int(time_passed) / 60
-		var seconds: int = int(time_passed) % 60
-		
-		time_label.text = "%02d:%02d" % [minutes, seconds]
-	if is_dragging:
-		calculate_drag_direction()
-		draw_indicator()
 
-func draw_indicator():
-	if not selected_player:
-		return
-	var drag_distance: Vector2 = start_position - get_viewport().get_mouse_position()
-	var current_length = max(drag_distance.length() / 50.0, 0.1)
-	var angle = atan2(drag_distance.x, drag_distance.y)
-	var offset_height = Vector3(0, 0, 0)
-	
-	if selected_player.is_moving:
-		shooting_indicator.global_position = selected_player.global_position + offset_height
-	elif selected_player.is_shooting:
-		shooting_indicator.global_position = ball.global_position + offset_height
-
-	shooting_indicator.rotation.y = angle
-	shooting_indicator.rotation.z = 0
-	var drag_distance_length: float = drag_distance.length()
-	if drag_distance_length > 35.0:
-		power_bar.value = drag_distance_length / 3.0
-	else:
-		power_bar.value = 0.0
+##DRAG/INDICATOR
 
 func calculate_drag_direction():
 	end_position = get_viewport().get_mouse_position()
 	drag_direction = Vector3.ZERO
 	drag_direction.x = start_position.x - end_position.x
 	drag_direction.z = start_position.y - end_position.y
+	drag_direction = drag_direction.limit_length(MAX_DRAG_LENGTH)
 
-func do_action():	
-	var drag_distance: Vector2 = start_position - end_position
-	if drag_distance.length() < 35.0:
+
+func draw_indicator():
+	if not selected_player:
+		indicator_line.visible = false
 		return
+
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if camera == null:
+		return
+
+	var origin_3d: Vector3
+	if selected_player.is_moving:
+		origin_3d = selected_player.global_position
+	elif selected_player.is_shooting:
+		origin_3d = ball.global_position
+	else:
+		indicator_line.visible = false
+		return
+
+	var dir_flat: = Vector3(drag_direction.x, 0.0, drag_direction.z)
+	var drag_length: float = dir_flat.length()
+
+	if drag_length < 0.001:
+		indicator_line.visible = false
+		power_bar.value = 0.0
+		return
+
+	var line_length: float = clamp(drag_length / 50.0, 0.1, 10.0)
+	var end_3d: Vector3 = origin_3d + dir_flat.normalized() * INDICATOR_LENGTH
+
+	if camera.is_position_behind(origin_3d) or camera.is_position_behind(end_3d):
+		indicator_line.visible = false
+		return
+
+	indicator_line.visible = true
+	indicator_line.clear_points()
+	indicator_line.add_point(camera.unproject_position(origin_3d))
+	indicator_line.add_point(camera.unproject_position(end_3d))
+	
+	var power_ratio: float = clamp(drag_length / MAX_DRAG_LENGTH, 0.0, 1.0)
+
+	#power_bar.value = drag_length / 3.0 if drag_length > MIN_DRAG_LENGTH else 0.0
+	power_bar.value = power_ratio * power_bar.max_value if drag_length > MIN_DRAG_LENGTH else 0.0
+
+func do_action():
+	var drag_length: float = drag_direction.length()
+
+	if drag_length < MIN_DRAG_LENGTH:
+		shooting_indicator.visible = false
+		power_bar.value = 0.0
+		return
+
 	if is_initial_kick:
 		is_initial_kick = false
 		for player: Player in players:
 			player.can_play_sound = true
 		for enemy: Enemy in enemies:
 			enemy.can_play_sound = true
+
 	ball.has_finished_move = false
 	for player: Player in players:
 		player.has_finished_move = false
-	
-		
+
 	if selected_player:
 		if selected_player.is_moving:
 			selected_player.apply_hit_force(drag_direction)
-			selected_player.on_action_done()
 			on_action_done()
 
 		elif selected_player.is_shooting:
-			drag_direction.y = sqrt(drag_distance.length()) * 3
+			drag_direction.y = sqrt(drag_length) * 3
 			ball.apply_hit_force(drag_direction)
 			on_action_done()
-		
+
+
 func on_action_done():
 	buttons.visible = false
 	power_bar.visible = false
 	shooting_indicator.visible = false
+	indicator_line.visible = false
 	selected_player.on_action_done()
 	kick_button.set_pressed_no_signal(false)
 	move_player_button.set_pressed_no_signal(false)
@@ -258,15 +294,17 @@ func on_action_done():
 	is_action = true
 	selected_player = null
 	is_my_turn = false
-	
+
+
 func _on_player_selected(player: Player):
 	if is_action or not is_my_turn:
 		return
 	if selected_player:
 		selected_player.on_player_deselected()
-		if selected_player.player_id == player.player_id: 
+		if selected_player.player_id == player.player_id:
 			if not selected_player.is_moving and not selected_player.is_shooting:
 				shooting_indicator.visible = false
+				indicator_line.visible = false
 				selected_player = null
 				buttons.visible = false
 				power_bar.visible = false
@@ -274,11 +312,10 @@ func _on_player_selected(player: Player):
 		else:
 			kick_button.set_pressed_no_signal(false)
 			move_player_button.set_pressed_no_signal(false)
-			
+
 			selected_player.set_player_not_shooting()
 			selected_player.set_player_not_moving()
-		
-			
+
 	selected_player = player
 	shooting_indicator.global_position = selected_player.global_position
 	show_selected_player_elements(selected_player)
@@ -293,10 +330,12 @@ func show_selected_player_elements(player: Player):
 	power_bar.visible = true
 	selected_player.shooting_area_indicator.visible = true
 
+
+##ENEMY
+
 func handle_enemy_turn():
 	if not has_game_started:
 		return
-	print("OVDE")
 	var is_ball_in_range: bool = false
 	var closest_enemy_from_ball: Enemy
 	var closest_enemy_distance_from_ball: float = INF
@@ -309,29 +348,32 @@ func handle_enemy_turn():
 			if distance_from_ball < closest_enemy_distance_from_ball:
 				closest_enemy_distance_from_ball = distance_from_ball
 				closest_enemy_from_ball = enemy
-	
-	
+
 	var direction: Vector3 = Vector3.ZERO
 	direction.x = randf_range(-600, 600.0)
 	direction.z = randf_range(-600.0, 600.0)
-	var intensity: float = randf()
-	
+
 	if is_ball_in_range: ### SHOOT BALL
-		drag_direction.y = sqrt(direction.length()) * 3
+		direction.y = sqrt(direction.length()) * 3
 		ball.apply_hit_force(direction)
 	else: ## MOVE ENEMY
 		var intensity_multiplier: int = randi_range(15, 25)
 		direction.x = (ball.global_position.x - closest_enemy_from_ball.global_position.x) * intensity_multiplier
 		direction.z = (ball.global_position.z - closest_enemy_from_ball.global_position.z) * intensity_multiplier
+		direction.y = 0.0
 		closest_enemy_from_ball.apply_hit_force(direction)
 	is_my_turn = true
 
+
+#BUTTONS
 func _on_kick_button_pressed() -> void:
 	if selected_player:
 		selected_player.set_player_shooting()
+
 func _on_move_player_button_pressed() -> void:
 	if selected_player:
 		selected_player.set_player_moving()
+
 func _on_kick_button_toggled(toggled_on: bool) -> void:
 	if selected_player:
 		if toggled_on:
@@ -339,6 +381,7 @@ func _on_kick_button_toggled(toggled_on: bool) -> void:
 			move_player_button.set_pressed_no_signal(false)
 		else:
 			selected_player.set_player_not_shooting()
+
 func _on_move_player_button_toggled(toggled_on: bool) -> void:
 	if selected_player:
 		if toggled_on:
@@ -347,8 +390,8 @@ func _on_move_player_button_toggled(toggled_on: bool) -> void:
 		else:
 			selected_player.set_player_not_moving()
 
-@onready var goal_scored_node: Control = $HUD/Control/Goal_Scored_Node
 
+##GOAL
 func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
 	is_action = false
 	has_game_started = false
@@ -360,13 +403,11 @@ func _on_goal_scored(goal_owner: Goal.GoalOwner) -> void:
 		on_enemy_scored()
 	else:
 		on_scored()
-	
-	await get_tree().create_timer(3.0).timeout.connect(reset_entities_position)
-	#has_game_started = true
-@onready var football_fans: Node2D = $HUD/Control/Goal_Scored_Node/Football_Fans
+
+	get_tree().create_timer(3.0).timeout.connect(reset_entities_position)
+
 
 func play_cheer_effect() -> void:
-		
 	for football_fan in football_fans.get_children():
 		var tween: Tween = create_tween()
 		var start_pos: Vector2 = football_fan.position
@@ -375,19 +416,18 @@ func play_cheer_effect() -> void:
 			tween.tween_property(football_fan, "scale", Vector2(1.2, 0.8), 0.1)\
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-			# 2. Odskoči: uži i viši, istovremeno ide gore
 			tween.set_parallel(true)
 			tween.tween_property(football_fan, "scale", Vector2(0.85, 1.2), 0.15)\
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			tween.tween_property(football_fan, "position:y", start_pos.y - 60, 0.25)\
 				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-			# 3. Vrati se dole
 			tween.set_parallel(false)
 			tween.tween_property(football_fan, "position:y", start_pos.y, 0.25)\
 				.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 			tween.parallel().tween_property(football_fan, "scale", Vector2(1.0, 1.0), 0.25)\
 				.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
 
 func play_goal_effect() -> void:
 	goal_scored_sound.play()
@@ -400,6 +440,7 @@ func play_goal_effect() -> void:
 	tween.tween_property(goal_scored_sprite, "scale", Vector2(1.0, 1.0), 0.5)\
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
+
 func on_enemy_scored() -> void:
 	enemy_score += 1
 	enemy_score_label.text = str(enemy_score)
@@ -409,4 +450,3 @@ func on_scored() -> void:
 	my_score += 1
 	my_score_label.text = str(my_score)
 	is_my_turn = false
-		

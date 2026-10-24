@@ -36,6 +36,12 @@ var formation_spawn_positions_guest: Dictionary
 
 const MATCH_DURATION: float = 2700
 const GOALS_TO_WIN: int = 1
+
+# INDICATOR
+const MAX_DRAG_LENGTH: float = 500.0
+const MIN_DRAG_LENGTH: float = 35.0
+const INDICATOR_LENGTH: float = 5.0
+
 var match_state: MatchState = MatchState.PLAYING
 var match_finish_state: MatchFinishState = MatchFinishState.FINISHED_NORMAL
 
@@ -84,6 +90,7 @@ var selected_player: MultiplayerPlayer
 #@onready var power_bar: TextureProgressBar = $HUD/Power_Bar
 @onready var field: Node3D = $Field
 @onready var shooting_indicator: Sprite3D = $HUD/Control/Shooting_Indicator
+@onready var indicator_line: Line2D = $HUD/Indicator_Line
 @onready var buttons: Node2D = $HUD/Control/Buttons
 @onready var kick_button: TextureButton = $HUD/Control/Buttons/Kick_Button
 @onready var move_player_button: TextureButton = $HUD/Control/Buttons/Move_Player_Button
@@ -148,10 +155,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			if selected_player and (selected_player.is_moving or selected_player.is_shooting):
 				is_dragging = true
 				start_position = get_viewport().get_mouse_position()
-				shooting_indicator.visible = true
+				end_position = start_position # INDICATOR: nema zastarele vrednosti
+				drag_direction = Vector3.ZERO
+				#shooting_indicator.visible = true
 				
 		if Input.is_action_just_released("drag"):
 			is_dragging = false
+			indicator_line.visible = false 
 			do_action()
 	if Input.is_action_pressed("pause_menu") and not post_match_screen.visible:
 		multiplayer_pause_menu.visible = true
@@ -296,6 +306,11 @@ func set_team_name_labels() -> void:
 		guest_name_label.text = FusionSdk.my_name
 		
 func _ready() -> void:
+	# INDICATOR
+	indicator_line.visible = false
+	power_bar.min_value = 0.0
+	power_bar.max_value = 100.0
+
 	#Fusion.room_left.connect(_on_match_finished)
 	Fusion.player_left.connect(_on_player_left)
 	is_my_turn = Fusion.is_master_client()
@@ -414,26 +429,52 @@ func _process(delta: float) -> void:
 		calculate_drag_direction()
 		draw_indicator()
 
+
+##INDICATOR
+
 func draw_indicator():
 	if not selected_player:
+		indicator_line.visible = false
 		return
-	var drag_distance: Vector2 = start_position - get_viewport().get_mouse_position()
-	var current_length = max(drag_distance.length() / 50.0, 0.1)
-	var angle = atan2(drag_distance.x, drag_distance.y)
-	var offset_height = Vector3(0, 0, 0)
-	
-	if selected_player.is_moving:
-		shooting_indicator.global_position = selected_player.global_position + offset_height
-	elif selected_player.is_shooting:
-		shooting_indicator.global_position = ball.global_position + offset_height
 
-	shooting_indicator.rotation.y = angle
-	shooting_indicator.rotation.z = 0
-	var drag_distance_length: float = drag_distance.length()
-	if drag_distance_length > 35.0:
-		power_bar.value = drag_distance_length / 3.0
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if camera == null:
+		return
+
+	var origin_3d: Vector3
+	if selected_player.is_moving:
+		origin_3d = selected_player.global_position
+	elif selected_player.is_shooting:
+		origin_3d = ball.global_position
 	else:
+		indicator_line.visible = false
+		return
+
+	shooting_indicator.global_position = origin_3d
+
+	var dir_flat: Vector3 = Vector3(drag_direction.x, 0.0, drag_direction.z)
+	var drag_length: float = dir_flat.length()
+
+	if drag_length < 0.001:
+		indicator_line.visible = false
 		power_bar.value = 0.0
+		return
+
+	# Fiksna duzina, samo se smer menja
+	var end_3d: Vector3 = origin_3d + dir_flat.normalized() * INDICATOR_LENGTH
+
+	if camera.is_position_behind(origin_3d) or camera.is_position_behind(end_3d):
+		indicator_line.visible = false
+		return
+
+	indicator_line.visible = true
+	indicator_line.clear_points()
+	indicator_line.add_point(camera.unproject_position(origin_3d))
+	indicator_line.add_point(camera.unproject_position(end_3d))
+
+	# Snaga se vidi samo na power baru
+	var power_ratio: float = clamp(drag_length / MAX_DRAG_LENGTH, 0.0, 1.0)
+	power_bar.value = power_ratio * power_bar.max_value if drag_length > MIN_DRAG_LENGTH else 0.0
 
 func calculate_drag_direction():
 	end_position = get_viewport().get_mouse_position()
@@ -442,8 +483,10 @@ func calculate_drag_direction():
 	drag_direction.z = start_position.y - end_position.y
 
 func do_action():	
-	var drag_distance: Vector2 = start_position - end_position
+	var drag_distance: Vector2 = (start_position - end_position).limit_length(500.0)
 	if drag_distance.length() < 35.0:
+		shooting_indicator.visible = false
+		power_bar.value = 0.0
 		return
 	if is_initial_kick:
 		is_initial_kick = false
@@ -472,6 +515,7 @@ func on_action_done():
 	buttons.visible = false
 	power_bar.visible = false
 	shooting_indicator.visible = false
+	indicator_line.visible = false # INDICATOR
 	selected_player.on_action_done()
 	kick_button.set_pressed_no_signal(false)
 	move_player_button.set_pressed_no_signal(false)
@@ -489,6 +533,7 @@ func _on_player_selected(player: MultiplayerPlayer):
 		if selected_player.player_id == player.player_id: 
 			if not selected_player.is_moving and not selected_player.is_shooting:
 				shooting_indicator.visible = false
+				indicator_line.visible = false # INDICATOR
 				selected_player = null
 				buttons.visible = false
 				power_bar.visible = false
@@ -949,4 +994,4 @@ func stop_ball_fire_effect(received_data_array: PackedByteArray):
 	buffer.data_array = received_data_array
 	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
-	ball.fire_effect.stop_effects()		
+	ball.fire_effect.stop_effects()

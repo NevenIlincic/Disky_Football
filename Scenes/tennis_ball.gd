@@ -12,7 +12,7 @@ const MAX_SPEED: float = 75.0
 
 const SPEED_TO_START_MOVE: float = 3.0
 const SPEED_TO_FINISH_MOVE: float = 2.0  # niži prag za kraj (histerezis)
-const SETTLE_TIME: float = 0.15          # koliko dugo mora biti sporo
+const SETTLE_TIME: float = 1.0         # koliko dugo mora biti sporo
 
 var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0

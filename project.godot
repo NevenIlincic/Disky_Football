@@ -34,7 +34,6 @@ WebSdk="*uid://dwporwn7tse8u"
 
 [display]
 
-window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/mode=1

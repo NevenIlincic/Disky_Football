@@ -69,7 +69,10 @@ func get_fans_amount() -> void:
 func get_money_amount() -> void:
 	money_amount_label.text = str(FusionSdk.money_amount)
 func get_current_level() -> void:
-	current_level_label.text = str(FusionSdk.current_level)
+	if FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up():
+		current_level_label.text = str("MAX")
+	else:
+		current_level_label.text = str(FusionSdk.current_level)
 func get_player_team_name() -> void:
 	team_name_label.text = str("TEAM: ", FusionSdk.my_team_name)
 func get_experience_amount_percentage() -> void:

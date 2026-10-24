@@ -61,7 +61,7 @@ func _exit_tree() -> void:
 		multiplayer_menu.disconnected_from_multiplayer.disconnect(_on_disconnected_from_multiplayer)
 	
 	for level_button: LevelSelectionButton in level_buttons:
-		if 	level_button.button_pressed.is_connected(_on_level_button_pressed.bind(level_button.level_number)):
+		if	level_button.button_pressed.is_connected(_on_level_button_pressed.bind(level_button.level_number)):
 			level_button.button_pressed.disconnect(_on_level_button_pressed.bind(level_button.level_number))
 
 

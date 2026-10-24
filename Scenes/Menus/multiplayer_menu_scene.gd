@@ -17,6 +17,8 @@ var forbidden_names: Dictionary = {
 	"SEX": true
 }
 
+var allowed_letters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 func _exit_tree() -> void:
 	if logged_player_stats.edit_team_name_button_pressed.is_connected(_on_edit_team_name_button_pressed):
 		logged_player_stats.edit_team_name_button_pressed.disconnect(_on_edit_team_name_button_pressed)
@@ -28,10 +30,13 @@ func _exit_tree() -> void:
 		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
 
 func _ready() -> void:
+	logged_player_stats.set_player_stats()
+	shop_menu.show_disks_tab()
+	
+	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
-	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
 	check_is_ad_block_enabled()
 	
 func check_is_ad_block_enabled() -> void:
@@ -66,6 +71,10 @@ func _on_confirm_button_pressed() -> void:
 	entered_input = entered_input.to_upper()
 	if forbidden_names.has(entered_input):
 		return
+	for char: String in entered_input:
+		if not allowed_letters.contains(char):
+			return
+	
 	if entered_input.length() == 3 and entered_input != FusionSdk.my_team_name:
 		team_name_initial_input_node.visible = false
 		main_menu_nodes.visible = true

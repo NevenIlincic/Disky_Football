@@ -20,7 +20,7 @@ func initialize_sdk():
 func set_language():
 	Bridge.platform.language
 func show_rewarded_ad():
-	Bridge.advertisement.show_rewarded("test_placement")
+	Bridge.advertisement.show_rewarded()
 func set_game_ready():
 	Bridge.platform.send_message(Bridge.PlatformMessage.GAME_READY)
 func level_started():
@@ -94,7 +94,13 @@ func _on_singleplayer_storage_loaded(success: bool, data):
 		if data != null and data != "":
 			last_unlocked_singleplayer_level = int(data)
 			current_selected_level = last_unlocked_singleplayer_level
-			single_player_data_loaded.emit()
+		else:
+			last_unlocked_singleplayer_level = 1
+			current_selected_level = 0
+			save_singleplayer_data()
+	
+	await get_tree().create_timer(0.1).timeout
+	single_player_data_loaded.emit()
 
 func load_multiplayer_data() -> void:
 	Bridge.storage.get(MULTIPLAYER_STORAGE_KEY, Callable(self, "_on_multiplayer_data_loaded"))
@@ -138,17 +144,17 @@ func _on_multiplayer_data_loaded(success, data):
 				BallEffects.purchased_effects_id.assign(multiplayer_stats["purchased_ball_effects_ids"].map(func(v): return int(v)))
 				FormationsManager.selected_formation = int(multiplayer_stats["selected_formation_id"])
 				FormationsManager.purchased_formations_id.assign(multiplayer_stats["purchased_formations_ids"].map(func(v): return int(v)))
-				data_loaded.emit()
 		else:
 			FusionSdk.reset_multiplayer_data()
 			save_multiplayer_data()
-			data_loaded.emit()
+	await get_tree().create_timer(0.5).timeout
+	data_loaded.emit()
 
 func _on_storage_delete_completed(success: bool):
 	pass
 
 func show_interstitial_ad():
-	Bridge.advertisement.show_interstitial("test_placement")
+	Bridge.advertisement.show_interstitial()
 
 func _on_interstitial_state_changed(state: String):
 	match state:

@@ -322,6 +322,9 @@ texture = ExtResource("18_q2r4x")
 position = Vector2(1072, 536)
 texture = ExtResource("18_q2r4x")
 
+[node name="Indicator_Line" type="Line2D" parent="HUD" unique_id=613183201]
+width = 1.0
+
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1569401414]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
 light_energy = 0.2

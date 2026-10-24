@@ -51,7 +51,8 @@ func _ready() -> void:
 	
 #UZMI EXPERIENCE I LEVEL IGRACA PREKO SDK-a
 func _on_interstitial_ad_watched() -> void:
-	handle_gaining_experience()
+	if not (FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up()):
+		handle_gaining_experience()
 	var currency_gained: Array[int] = handle_currency_gained()
 	var fans_gained: int = currency_gained[0]
 	var money_gained: int = currency_gained[1]
@@ -121,11 +122,15 @@ func handle_gaining_experience() -> void:
 	var finish_destination: int
 	
 	if new_experience_amount >= current_level_max_value:
-		experience_left_after_level_up = new_experience_amount - current_level_max_value
-		FusionSdk.current_level += 1
 		has_leveled_up = true
-		finish_destination = current_level_max_value
-		FusionSdk.experience_amount = experience_left_after_level_up
+		if FusionSdk.check_is_max_level():
+			FusionSdk.experience_amount = FusionSdk.get_needed_experience_amount_to_level_up()
+			finish_destination =  current_level_max_value
+		else:
+			experience_left_after_level_up = new_experience_amount - current_level_max_value
+			FusionSdk.current_level += 1
+			finish_destination = current_level_max_value
+			FusionSdk.experience_amount = experience_left_after_level_up
 	else:
 		finish_destination = new_experience_amount
 		FusionSdk.experience_amount = new_experience_amount
@@ -153,7 +158,11 @@ func handle_gaining_experience() -> void:
 		var duration_two: float = (remaining_distance_second / new_current_level_max_value) * total_duration
 
 		tween = create_tween()
-		progress_bar.value = 0
+		if FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up():
+			progress_bar.value = new_current_level_max_value
+			experience_left_after_level_up = new_current_level_max_value
+		else:
+			progress_bar.value = 0
 		progress_bar.max_value = new_current_level_max_value
 		tween.tween_method(
 			func(val: float):

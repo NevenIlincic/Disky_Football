@@ -37,15 +37,21 @@ var level_experience_map: Dictionary = {
 	6: 60,
 	7: 70,
 	8: 80,
-	9: 90
+	9: 90,
+	10: 100
 }
+const MAX_LEVEL: int = 10
 
 var has_connection_lost: bool = false
 var has_disconnected_intentionally: bool = false
 
 func get_needed_experience_amount_to_level_up() -> int:
-	return 0
-	#return level_experience_map[current_level]
+	return level_experience_map[current_level]
+
+func check_is_max_level() -> bool:
+	return current_level == MAX_LEVEL
+#Returns has reached
+
 
 func reset_multiplayer_data() -> void:
 	current_level = 1
