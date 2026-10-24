@@ -13,6 +13,7 @@ script = ExtResource("1_xakbj")
 offset_right = 48.0
 offset_bottom = 48.0
 toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("1_eq0g1")
 texture_pressed = ExtResource("2_663p4")
 texture_hover = ExtResource("2_n0uc7")

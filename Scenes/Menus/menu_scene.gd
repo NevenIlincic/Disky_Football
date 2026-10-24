@@ -19,6 +19,13 @@ func _ready() -> void:
 	Fusion.connected_to_photon.connect(_on_online_connected)
 	Fusion.connection_failed.connect(_on_connection_failed)
 	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
+	level_buttons = []
+	for button in level_buttons_node.get_children():
+		var level_button: LevelSelectionButton = button as LevelSelectionButton
+		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
+		level_buttons.append(level_button)
+		if FusionSdk.has_connection_lost or FusionSdk.has_disconnected_intentionally:
+			level_button.update_display()
 	
 	if FusionSdk.has_connection_lost and not FusionSdk.has_disconnected_intentionally:
 		connecting_label.visible = true
@@ -26,11 +33,6 @@ func _ready() -> void:
 		await get_tree().create_timer(3.0).timeout
 		connecting_label.visible = false
 	
-	level_buttons = []
-	for button in level_buttons_node.get_children():
-		var level_button: LevelSelectionButton = button as LevelSelectionButton
-		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
-		level_buttons.append(level_button)
 		
 	check_is_login_supported()
 	

@@ -174,8 +174,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="Shooting_Indicator" type="Sprite3D" parent="HUD/Control" unique_id=1913243173]
@@ -374,7 +372,8 @@ text = "Synchronizing positions and time..."
 
 [node name="PostMatchScreen" parent="HUD/Control" unique_id=162344343 instance=ExtResource("3_jrvm5")]
 visible = false
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
 
 [node name="MultiplayerPauseMenu" parent="HUD/Control" unique_id=829326047 instance=ExtResource("20_1jnck")]
 visible = false

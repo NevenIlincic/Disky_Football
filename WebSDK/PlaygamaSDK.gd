@@ -148,10 +148,14 @@ func _on_storage_delete_completed(success: bool):
 	pass
 
 func show_interstitial_ad():
-	Bridge.advertisement.show_interstitial()
+	Bridge.advertisement.show_interstitial("test_placement")
 
 func _on_interstitial_state_changed(state: String):
-	pass
+	match state:
+		"closed":
+			interstitial_ad_watched.emit()
+		"failed":
+			interstitial_ad_watched.emit()
 
 func _on_rewarded_state_changed(state: String):
 	match state:

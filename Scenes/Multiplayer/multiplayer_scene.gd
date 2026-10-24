@@ -35,7 +35,7 @@ var formation_spawn_positions_guest: Dictionary
 #############################
 
 const MATCH_DURATION: float = 2700
-const GOALS_TO_WIN: int = 5
+const GOALS_TO_WIN: int = 1
 var match_state: MatchState = MatchState.PLAYING
 var match_finish_state: MatchFinishState = MatchFinishState.FINISHED_NORMAL
 

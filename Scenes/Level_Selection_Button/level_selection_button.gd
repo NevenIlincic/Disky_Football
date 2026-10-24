@@ -6,6 +6,8 @@ class_name LevelSelectionButton extends Node2D
 
 signal button_pressed()
 
+var is_button_already_toggled: bool = false
+
 func _ready() -> void:
 	WebSdk.SDK.single_player_data_loaded.connect(_on_singleplayer_data_loaded)
 	level_number_label.text = str(level_number)
@@ -24,4 +26,8 @@ func update_display() -> void:
 func _on_level_selection_texture_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		button_pressed.emit()
+		is_button_already_toggled = true
 		WebSdk.SDK.current_selected_level = level_number
+	else:
+		if level_number == WebSdk.SDK.current_selected_level:
+			level_selection_texture_button.set_pressed_no_signal(true)

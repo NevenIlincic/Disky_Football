@@ -17,21 +17,27 @@ var has_leveled_up: bool = false
 #LABELS
 @onready var gained_money_label: Label = $Gained_Stats/Money_Amount_Stats_Node/Gained_Money_Label
 @onready var gained_fans_label: Label = $Gained_Stats/Fans_Amount_Stats_Node/Gained_Fans_Label
-@onready var fans_bonus_amount_label: Label = $Level_Up_Bonus_Node/Fans_Bonus_Amount_Label
-@onready var money_bonus_amount_label: Label = $Level_Up_Bonus_Node/Money_Bonus_Amount_Label
-@onready var level_up_label: Label = $Level_Up_Bonus_Node/Level_Up_Label
+@onready var fans_bonus_amount_label: Label = $Gained_Stats/Level_Up_Bonus_Node/Fans_Bonus_Amount_Label
+@onready var money_bonus_amount_label: Label = $Gained_Stats/Level_Up_Bonus_Node/Money_Bonus_Amount_Label
+@onready var level_up_label: Label = $Gained_Stats/Level_Up_Bonus_Node/Level_Up_Label
 
 #BUTTONS
 @onready var leave_button: TextureButton = $Leave_Button
 
 #NODES
-@onready var level_up_bonus_node: Node2D = $Level_Up_Bonus_Node
+@onready var level_up_bonus_node: Node2D = $Gained_Stats/Level_Up_Bonus_Node
 
 var gained_experience_map: Dictionary
 var match_state: MultiplayerScene.MatchState
 
 var total_money_gained: int = 0
 var total_fans_gained: int = 0
+
+func _exit_tree() -> void:
+	if WebSdk.SDK.interstitial_ad_watched.is_connected(_on_interstitial_ad_watched):
+		WebSdk.SDK.interstitial_ad_watched.disconnect(_on_interstitial_ad_watched)
+
+
 
 func _ready() -> void:
 	leave_button.visible = false
@@ -41,24 +47,42 @@ func _ready() -> void:
 	var percentage = int((progress_bar.value / progress_bar.max_value) * 100)
 	percentage_to_new_level_label.text = str(percentage) + "%"
 	
+	WebSdk.SDK.interstitial_ad_watched.connect(_on_interstitial_ad_watched)
+	
 #UZMI EXPERIENCE I LEVEL IGRACA PREKO SDK-a
+func _on_interstitial_ad_watched() -> void:
+	handle_gaining_experience()
+	var currency_gained: Array[int] = handle_currency_gained()
+	var fans_gained: int = currency_gained[0]
+	var money_gained: int = currency_gained[1]
+	await handle_animations(fans_gained, money_gained)
+	
+	FusionSdk.handle_fans_and_money_gained(total_fans_gained, total_money_gained)
+	
+	#FusionSdk.handle_money_gained(total_money_gained)
+	#FusionSdk.handle_fans_gained(total_fans_gained)
+	
+	leave_button.visible = true
+
 func do_after_match():
 	if has_done: return
 	match_state = scene.match_state
 	has_done = true
 	set_won_lost_label_text()
 	await get_tree().create_timer(1.0).timeout
+	WebSdk.SDK.show_interstitial_ad()
 	
-	handle_gaining_experience()
-	var currency_gained: Array[int] = handle_currency_gained()
-	var fans_gained: int = currency_gained[0]
-	var money_gained: int = currency_gained[1]
-	await handle_animations(fans_gained, money_gained)
-			
-	FusionSdk.handle_money_gained(total_money_gained)
-	FusionSdk.handle_fans_gained(total_fans_gained)
-	leave_button.visible = true
 	
+	#handle_gaining_experience()
+	#var currency_gained: Array[int] = handle_currency_gained()
+	#var fans_gained: int = currency_gained[0]
+	#var money_gained: int = currency_gained[1]
+	#await handle_animations(fans_gained, money_gained)
+			#
+	#FusionSdk.handle_money_gained(total_money_gained)
+	#FusionSdk.handle_fans_gained(total_fans_gained)
+	#leave_button.visible = true
+	#
 	
 
 func set_won_lost_label_text():
@@ -217,6 +241,7 @@ func handle_animations(fans_gained: int, money_gained: int) -> void:
 	gained_money_label.visible = true
 	gained_money_label.modulate.a = 0.0
 	tween.tween_property(gained_money_label, "modulate:a", 1.0, 1.0)
+	await tween.finished
 	
 	if has_leveled_up:
 		level_up_sound.play()

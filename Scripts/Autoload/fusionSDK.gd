@@ -44,7 +44,8 @@ var has_connection_lost: bool = false
 var has_disconnected_intentionally: bool = false
 
 func get_needed_experience_amount_to_level_up() -> int:
-	return level_experience_map[current_level]
+	return 0
+	#return level_experience_map[current_level]
 
 func reset_multiplayer_data() -> void:
 	current_level = 1
@@ -305,4 +306,9 @@ func handle_fans_and_money_spent(fan_cost: int, money_cost: int) -> void:
 func handle_rewarded_ad_watched(new_fans_amount: int, new_money_amount: int):
 	fans_amount += new_fans_amount
 	money_amount += new_money_amount
+	WebSdk.SDK.save_multiplayer_data()
+
+func handle_fans_and_money_gained(fans_gained_amount: int, money_gained_amount: int) -> void:
+	fans_amount += fans_gained_amount
+	money_amount += money_gained_amount
 	WebSdk.SDK.save_multiplayer_data()
