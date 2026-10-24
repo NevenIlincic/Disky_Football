@@ -13,7 +13,9 @@
 [ext_resource type="Texture2D" uid="uid://c172t8165eagf" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Enabled.png" id="11_vu58q"]
 [ext_resource type="Texture2D" uid="uid://d1qeqeen0jyml" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Pressed.png" id="12_l6l0r"]
 [ext_resource type="Texture2D" uid="uid://5xffkq60k8qr" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Hovered.png" id="13_jg06a"]
+[ext_resource type="Texture2D" uid="uid://c6vh46ux6ymqj" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Disabled.png" id="14_8hk6q"]
 [ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="14_yfte3"]
+[ext_resource type="Texture2D" uid="uid://bugt1fjnl44jw" path="res://Sprites/Game_Title/Game_Title.png" id="16_vu58q"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="18_l6l0r"]
 
 [sub_resource type="Environment" id="Environment_yfte3"]
@@ -337,6 +339,7 @@ offset_bottom = -104.0
 texture_normal = ExtResource("11_vu58q")
 texture_pressed = ExtResource("12_l6l0r")
 texture_hover = ExtResource("13_jg06a")
+texture_disabled = ExtResource("14_8hk6q")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -345,7 +348,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TextureRect" type="TextureRect" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1272441691]
+[node name="Field_Texture_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1272441691]
 layout_mode = 0
 offset_left = 48.0
 offset_top = 104.0
@@ -354,8 +357,94 @@ offset_bottom = 528.0
 texture = ExtResource("4_26fja")
 expand_mode = 1
 
-[node name="LevelSelectionButton" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1137878850 instance=ExtResource("14_yfte3")]
-position = Vector2(72, 296)
+[node name="Level_Buttons_Node" type="Node2D" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=855546372]
+
+[node name="LevelSelectionButton" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1137878850 instance=ExtResource("14_yfte3")]
+position = Vector2(72, 288)
+
+[node name="LevelSelectionButton2" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=783150541 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 432)
+level_number = 1
+
+[node name="LevelSelectionButton3" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=377474969 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 344)
+level_number = 2
+
+[node name="LevelSelectionButton4" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1653200308 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 232)
+level_number = 3
+
+[node name="LevelSelectionButton5" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=504645342 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 152)
+level_number = 4
+
+[node name="LevelSelectionButton6" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=709595846 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 192)
+level_number = 5
+
+[node name="LevelSelectionButton7" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=282583954 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 384)
+level_number = 7
+
+[node name="LevelSelectionButton8" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=722454838 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 288)
+level_number = 6
+
+[node name="LevelSelectionButton9" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=386709618 instance=ExtResource("14_yfte3")]
+position = Vector2(328, 168)
+level_number = 9
+
+[node name="LevelSelectionButton10" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=424790288 instance=ExtResource("14_yfte3")]
+position = Vector2(365, 288)
+level_number = 10
+
+[node name="LevelSelectionButton11" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=738411962 instance=ExtResource("14_yfte3")]
+position = Vector2(328, 416)
+level_number = 8
+
+[node name="LevelSelectionButton12" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1180896991 instance=ExtResource("14_yfte3")]
+position = Vector2(472, 352)
+level_number = 11
+
+[node name="LevelSelectionButton13" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=37861019 instance=ExtResource("14_yfte3")]
+position = Vector2(472, 232)
+level_number = 12
+
+[node name="LevelSelectionButton14" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1356546873 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 248)
+level_number = 14
+
+[node name="LevelSelectionButton15" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=383664821 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 168)
+level_number = 13
+
+[node name="LevelSelectionButton16" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1440908541 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 336)
+level_number = 15
+
+[node name="LevelSelectionButton17" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1623768641 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 416)
+level_number = 16
+
+[node name="LevelSelectionButton18" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=333816237 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 248)
+level_number = 19
+
+[node name="LevelSelectionButton19" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=989579218 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 168)
+level_number = 20
+
+[node name="LevelSelectionButton20" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=716358786 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 336)
+level_number = 18
+
+[node name="LevelSelectionButton21" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=946858944 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 416)
+level_number = 17
+
+[node name="LevelSelectionButton22" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1781105020 instance=ExtResource("14_yfte3")]
+position = Vector2(736, 296)
+level_number = 21
 
 [node name="Multiplayer_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=375682100]
 layout_mode = 1
@@ -375,6 +464,19 @@ grow_vertical = 0
 visible = false
 layout_mode = 0
 
+[node name="Game_Title_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes" unique_id=413282156]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -640.0
+offset_top = 24.0
+offset_right = -12.800049
+offset_bottom = 80.0
+grow_horizontal = 0
+texture = ExtResource("16_vu58q")
+expand_mode = 1
+
 [node name="Connecting_Label" type="Label" parent="HUD" unique_id=174976378]
 visible = false
 offset_left = 16.0
@@ -382,6 +484,14 @@ offset_top = 8.0
 offset_right = 107.0
 offset_bottom = 34.0
 text = "Connecting..."
+
+[node name="Must_Be_Logged_In_Label" type="Label" parent="HUD" unique_id=1485679696]
+visible = false
+offset_left = 8.0
+offset_top = 577.0
+offset_right = 243.0
+offset_bottom = 603.0
+text = "Must be logged in to play online!"
 
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Start_Button" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button" to="." method="_on_multiplayer_button_pressed"]

@@ -5,9 +5,13 @@ signal rewarded_ad_watched()
 signal rewarded_ad_closed_early()
 signal interstitial_ad_watched()
 signal data_loaded()
+signal single_player_data_loaded()
 
 var is_initialized: bool = false
 var is_ad_block_enabled: bool = true
+
+var current_selected_level: int = 0
+var last_unlocked_singleplayer_level: int = 1
 
 @abstract
 func initialize_sdk();
@@ -30,9 +34,9 @@ func level_completed();
 @abstract
 func level_failed();
 @abstract
-func save_data();
+func save_singleplayer_data();
 @abstract
-func load_data();
+func load_singleplayer_data();
 @abstract
 func delete_data();
 @abstract
@@ -40,8 +44,12 @@ func save_multiplayer_data();
 @abstract
 func load_multiplayer_data() -> void;
 @abstract
+func check_is_login_supported() -> bool;
+@abstract
 func check_is_player_logged_in() -> bool;
 @abstract
 func get_player_id() -> String;
 @abstract
 func get_player_name() -> String;
+@abstract
+func check_is_ad_block_enabled() -> bool;

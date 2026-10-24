@@ -26,11 +26,20 @@ func _exit_tree() -> void:
 		FusionSdk.money_spent.disconnect(_on_money_spent)
 	if FusionSdk.fans_spent.is_connected(_on_fans_spent):
 		FusionSdk.fans_spent.disconnect(_on_fans_spent)
+	if WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
+		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
+	if WebSdk.SDK.rewarded_ad_watched.is_connected(_on_rewarded_ad_watched):
+		WebSdk.SDK.rewarded_ad_watched.disconnect(_on_rewarded_ad_watched)
+
 
 func connect_to_signals():
 	FusionSdk.money_spent.connect(_on_money_spent)
 	FusionSdk.fans_spent.connect(_on_fans_spent)
 	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
+	WebSdk.SDK.rewarded_ad_watched.connect(_on_rewarded_ad_watched)
+
+func _on_rewarded_ad_watched() -> void:
+	set_player_stats()
 
 func _on_money_spent(amount: int):
 	money_amount_label.text = str(FusionSdk.money_amount)

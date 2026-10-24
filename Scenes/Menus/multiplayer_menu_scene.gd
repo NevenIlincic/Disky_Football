@@ -7,9 +7,10 @@ extends Node3D
 @onready var label_text: Label = $HUD/Team_Name_Initial_Input_Node/Label_Text
 @onready var cancel_button: TextureButton = $HUD/Team_Name_Initial_Input_Node/Cancel_Button
 @onready var multiplayer_menu: MultiplayerMenu = $HUD/Main_Menu_Nodes/Multiplayer_Control/MultiplayerMenu
-@onready var shop_menu: ShopMenu = $HUD/Main_Menu_Nodes/ShopMenu
+@onready var shop_menu: ShopMenu = $HUD/Main_Menu_Nodes/Control/ShopMenu
 @onready var confirmation_dialog_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node
 @onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
+@onready var ad_button: TextureButton = $HUD/Main_Menu_Nodes/Ad_Node/Ad_Button
 
 var forbidden_names: Dictionary = {
 	"XXX": true,
@@ -31,7 +32,14 @@ func _ready() -> void:
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
 	WebSdk.SDK.data_loaded.connect(_on_data_loaded)
-
+	check_is_ad_block_enabled()
+	
+func check_is_ad_block_enabled() -> void:
+	if WebSdk.SDK.check_is_ad_block_enabled():
+		ad_button.disabled = true
+	else:
+		ad_button.disabled = false
+		
 func _on_data_loaded() -> void:
 	check_has_team_name()
 
@@ -81,10 +89,8 @@ func _on_ad_button_pressed() -> void:
 
 func _on_ad_confirm_button_pressed() -> void:
 	#PUSTITI REWARDED VIDEO
-	FusionSdk.handle_rewarded_ad_watched(10, 5)
-	WebSdk.SDK.rewarded_ad_watched.emit()
-	logged_player_stats.set_player_stats()
-
+	confirmation_dialog_node.visible = false
+	WebSdk.SDK.show_rewarded_ad()
 
 func _on_ad_cancel_button_pressed() -> void:
 	confirmation_dialog_node.visible = false

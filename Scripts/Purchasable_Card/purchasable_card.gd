@@ -41,6 +41,7 @@ func update_card_display():
 	else:
 		if FusionSdk.fans_amount < get_fans_price() or FusionSdk.money_amount < get_money_price():
 			show_cant_but_node()
+			hide_select_button()
 		else:
 			show_not_purchased_elements()
 			hide_select_button()

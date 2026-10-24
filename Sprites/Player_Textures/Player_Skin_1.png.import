@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d4c5ye646wjsi"
 path.s3tc="res://.godot/imported/Player_Skin_1.png-b993954cb91a05047b2085dd6122d469.s3tc.ctex"
+path.etc2="res://.godot/imported/Player_Skin_1.png-b993954cb91a05047b2085dd6122d469.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Player_Textures/Player_Skin_1.png"
-dest_files=["res://.godot/imported/Player_Skin_1.png-b993954cb91a05047b2085dd6122d469.s3tc.ctex"]
+dest_files=["res://.godot/imported/Player_Skin_1.png-b993954cb91a05047b2085dd6122d469.s3tc.ctex", "res://.godot/imported/Player_Skin_1.png-b993954cb91a05047b2085dd6122d469.etc2.ctex"]
 
 [params]
 

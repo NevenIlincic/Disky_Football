@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://btfrw2gkhk68s"
 path.s3tc="res://.godot/imported/circle_01.png-4835446c792316c1f60d97bc4763a232.s3tc.ctex"
+path.etc2="res://.godot/imported/circle_01.png-4835446c792316c1f60d97bc4763a232.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Effects/opague/circle_01.png"
-dest_files=["res://.godot/imported/circle_01.png-4835446c792316c1f60d97bc4763a232.s3tc.ctex"]
+dest_files=["res://.godot/imported/circle_01.png-4835446c792316c1f60d97bc4763a232.s3tc.ctex", "res://.godot/imported/circle_01.png-4835446c792316c1f60d97bc4763a232.etc2.ctex"]
 
 [params]
 

@@ -8,6 +8,12 @@ extends Node3D
 
 @onready var buttons_control: Control = $HUD/Main_Menu_Nodes/Buttons_Control
 @onready var level_selection_menu: Control = $HUD/Main_Menu_Nodes/Level_Selection_Menu
+@onready var multiplayer_button: TextureButton = $HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button
+@onready var must_be_logged_in_label: Label = $HUD/Must_Be_Logged_In_Label
+
+@onready var level_buttons_node: Node2D = $HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node
+
+var level_buttons: Array[LevelSelectionButton]
 
 func _ready() -> void:
 	Fusion.connected_to_photon.connect(_on_online_connected)
@@ -19,12 +25,44 @@ func _ready() -> void:
 		connecting_label.text = "Lost connection with the server! Try again!"
 		await get_tree().create_timer(3.0).timeout
 		connecting_label.visible = false
+	
+	level_buttons = []
+	for button in level_buttons_node.get_children():
+		var level_button: LevelSelectionButton = button as LevelSelectionButton
+		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
+		level_buttons.append(level_button)
 		
+	check_is_login_supported()
+	
+
+func _on_level_button_pressed(level_number: int) -> void:
+	for level_button in level_buttons:
+		if level_button.level_number != level_number:
+			level_button.level_selection_texture_button.set_pressed_no_signal(false)
+
+func check_is_login_supported() -> void:
+	pass
+	#if not WebSdk.SDK.check_is_login_supported():
+		#multiplayer_button.visible = false
+	#else:
+	#if not WebSdk.SDK.check_is_player_logged_in():
+		#multiplayer_button.disabled = true
+		#must_be_logged_in_label.visible = true
+			
+
 func _exit_tree() -> void:
 	if Fusion.connected_to_photon.is_connected(_on_online_connected):
 		Fusion.connected_to_photon.disconnect(_on_online_connected)
 	if Fusion.connection_failed.is_connected(_on_connection_failed):
 		Fusion.connection_failed.disconnect(_on_connection_failed)
+	if multiplayer_menu.disconnected_from_multiplayer.is_connected(_on_disconnected_from_multiplayer):
+		multiplayer_menu.disconnected_from_multiplayer.disconnect(_on_disconnected_from_multiplayer)
+	
+	for level_button: LevelSelectionButton in level_buttons:
+		if 	level_button.button_pressed.is_connected(_on_level_button_pressed.bind(level_button.level_number)):
+			level_button.button_pressed.disconnect(_on_level_button_pressed.bind(level_button.level_number))
+
+
 
 func _on_start_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Test_Scene.tscn")

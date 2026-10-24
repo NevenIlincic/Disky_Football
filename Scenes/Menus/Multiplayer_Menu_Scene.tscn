@@ -333,8 +333,17 @@ layout_mode = 0
 [node name="LoggedPlayerStats" parent="HUD/Main_Menu_Nodes" unique_id=363541360 instance=ExtResource("8_pl276")]
 scale = Vector2(0.8, 0.8)
 
-[node name="ShopMenu" parent="HUD/Main_Menu_Nodes" unique_id=365126050 instance=ExtResource("10_jis2f")]
-position = Vector2(56, 272)
+[node name="Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1456483828]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ShopMenu" parent="HUD/Main_Menu_Nodes/Control" unique_id=365126050 instance=ExtResource("10_jis2f")]
+position = Vector2(24, -312)
 
 [node name="Ad_Node" type="Node2D" parent="HUD/Main_Menu_Nodes" unique_id=246014993]
 
