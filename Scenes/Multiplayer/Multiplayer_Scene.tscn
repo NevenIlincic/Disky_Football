@@ -377,6 +377,8 @@ anchors_preset = -1
 
 [node name="MultiplayerPauseMenu" parent="HUD/Control" unique_id=829326047 instance=ExtResource("20_1jnck")]
 visible = false
+layout_mode = 1
+anchors_preset = -1
 
 [node name="Indicator_Line" type="Line2D" parent="HUD" unique_id=1332653344]
 width = 1.0

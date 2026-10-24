@@ -7,10 +7,17 @@
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_761ll"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
 
-[node name="MultiplayerPauseMenu" type="Node2D" unique_id=829326047]
+[node name="MultiplayerPauseMenu" type="Control" unique_id=1826597866]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_35e7r")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1417635465]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,11 +31,16 @@ mouse_filter = 2
 color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
 
 [node name="Leave_Button" type="TextureButton" parent="." unique_id=1012091640]
+layout_mode = 1
 anchors_preset = -1
-offset_left = 880.0
-offset_top = 474.0
-offset_right = 1160.0
-offset_bottom = 578.0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -120.0
+offset_right = 8.0
+offset_bottom = -16.0
 texture_normal = ExtResource("1_dkv6h")
 texture_pressed = ExtResource("2_35e7r")
 texture_hover = SubResource("CompressedTexture2D_761ll")

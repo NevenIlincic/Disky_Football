@@ -1,4 +1,4 @@
-class_name MultiplayerPauseMenu extends Node2D
+class_name MultiplayerPauseMenu extends Control
 
 var scene: MultiplayerScene
 
