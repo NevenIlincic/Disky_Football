@@ -13,6 +13,7 @@ func initialize_sdk():
 	Bridge.advertisement.check_adblock(Callable(self, "_on_check_adblock_completed"))
 	check_is_game_audio_muted()
 	load_singleplayer_data()
+	load_multiplayer_data()
 	#save_singleplayer_data()
 	#delete_data()
 	#load_data()

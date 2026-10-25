@@ -22,7 +22,13 @@ var match_state: MatchState = MatchState.PLAYING
 #GOALS
 const GOALS_TO_WIN: int = 1
 
-var is_my_turn: bool = true
+var is_my_turn: bool = true:
+	set(value):
+		is_my_turn = value
+		if value:
+			turn_label.text = "YOUR TURN"
+		else:
+			turn_label.text = "OPPONENT's TURN"
 
 #TIME
 var time_passed: float = 0
@@ -105,6 +111,9 @@ var enemy_score: int = 0
 
 var is_initial_kick: bool = true
 
+@onready var turn_label: Label = $HUD/Control/Turn_Label
+@onready var host_team_name: Label = $HUD/Control/Scoreboard/Host_Team_Name
+@onready var guest_team_name: Label = $HUD/Control/Scoreboard/Guest_Team_Name
 
 func _ready() -> void:
 	post_match_screen.set_is_singleplayer_match()
@@ -117,24 +126,19 @@ func _ready() -> void:
 
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
+	
+	set_up_team_names()
 
-	#for player_obj in get_tree().get_nodes_in_group("player"):
-		#var player: Player = player_obj
-		#players.append(player)
-		#player.player_selected.connect(_on_player_selected)
-		#player.finished_move.connect(_on_player_finished_move)
-		#player.continued_move.connect(_on_player_continued_move)
-		#num_players += 1
-#
-	#for enemy_obj in get_tree().get_nodes_in_group("enemy"):
-		#var enemy: Enemy = enemy_obj
-		#enemies.append(enemy)
-		#enemy.finished_move.connect(_on_enemy_finished_move)
-		#enemy.continued_move.connect(_on_enemy_continued_move)
-		#num_enemies += 1
 	
 	initialize_formation_dictionaries()
 	spawn_players()
+
+func set_up_team_names() -> void:
+	if FusionSdk.my_team_name.is_empty():
+		host_team_name.text = FusionSdk.get_random_3_letter_string()
+	else:
+		host_team_name.text = FusionSdk.my_team_name
+	guest_team_name.text = FusionSdk.get_random_3_letter_string()
 
 func initialize_formation_dictionaries() -> void:
 	formation_spawn_positions_host = {

@@ -266,7 +266,7 @@ func get_team_name() -> String:
 	return get_random_3_letter_string()
 
 func get_random_3_letter_string() -> String:
-	var alphabet: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" # ili "abcdefghijklmnopqrstuvwxyz" za mala slova
+	var alphabet: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var result: String = ""
 	
 	for i in range(3):

@@ -273,6 +273,25 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Host_Team_Name" type="Label" parent="HUD/Control/Scoreboard" unique_id=277985302]
+layout_mode = 0
+offset_left = -184.0
+offset_right = -112.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "AKL"
+vertical_alignment = 1
+
+[node name="Guest_Team_Name" type="Label" parent="HUD/Control/Scoreboard" unique_id=416511686]
+layout_mode = 0
+offset_left = 110.0
+offset_right = 182.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "AKL"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=199679577]
 visible = false
 layout_mode = 1
@@ -329,6 +348,12 @@ anchors_preset = -1
 visible = false
 layout_mode = 1
 anchors_preset = -1
+
+[node name="Turn_Label" type="Label" parent="HUD/Control" unique_id=2050427695]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 26.0
+text = "YOUR TURN"
 
 [node name="Indicator_Line" type="Line2D" parent="HUD" unique_id=613183201]
 width = 1.0
