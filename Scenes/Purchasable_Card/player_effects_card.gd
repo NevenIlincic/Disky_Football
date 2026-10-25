@@ -52,12 +52,17 @@ func _on_select_card_button_pressed(to_save: bool = true) -> void:
 	if to_save:
 		WebSdk.SDK.save_multiplayer_data()
 
-func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
-	BallEffects.purchased_effects_id.append(card_id)
-	_on_select_card_button_pressed(false)
-	FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
+#func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
+	#BallEffects.purchased_effects_id.append(card_id)
+	#FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
+	#_on_select_card_button_pressed(false)
 
 func get_fans_price() -> int:
 	return BallEffects.effects_fans_price[card_id]
 func get_money_price() -> int:
 	return BallEffects.effects_money_price[card_id]
+
+func set_selected_card(id: int) -> void:
+	BallEffects.selected_effect = id
+func add_to_purchased_ids_list(id: int) -> void:
+	BallEffects.purchased_effects_id.append(id)

@@ -308,6 +308,8 @@ func handle_fans_and_money_spent(fan_cost: int, money_cost: int) -> void:
 	fans_amount -= fan_cost
 	money_amount -= money_cost
 	WebSdk.SDK.save_multiplayer_data()
+	money_spent.emit(money_cost)
+	fans_spent.emit(fan_cost)
 
 func handle_rewarded_ad_watched(new_fans_amount: int, new_money_amount: int):
 	fans_amount += new_fans_amount

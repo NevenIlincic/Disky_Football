@@ -24,7 +24,6 @@ func set_price_tags(id: int) -> void:
 	money_price_label.text = str(SkinsManager.get_money_price_value(id))
 	
 func get_purchased_cards_id() -> Array[int]:
-	#ZAMENITI SA PLAYGAMA SDK
 	return SkinsManager.get_purchased_skins_ids()
 
 func get_current_selected_card_id() -> int:
@@ -37,11 +36,18 @@ func _on_select_card_button_pressed(to_save: bool = true) -> void:
 	if to_save:
 		WebSdk.SDK.save_multiplayer_data()
 
-func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
-	SkinsManager.purchased_skins_ids.append(card_id)
-	_on_select_card_button_pressed(false)
-	FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
+#func _handle_card_bought(fans_cost: int, money_cost: int) -> void:
+	#SkinsManager.purchased_skins_ids.append(card_id)
+	#SkinsManager.selected_skin = card_id
+	#FusionSdk.handle_fans_and_money_spent(fans_cost, money_cost)
+	#card_selected.emit()
+	
 func get_fans_price() -> int:
 	return SkinsManager.fans_price[card_id]
 func get_money_price() -> int:
 	return SkinsManager.money_price[card_id]
+
+func set_selected_card(id: int) -> void:
+	SkinsManager.selected_skin = id
+func add_to_purchased_ids_list(id: int) -> void:
+	SkinsManager.purchased_skins_ids.append(id)

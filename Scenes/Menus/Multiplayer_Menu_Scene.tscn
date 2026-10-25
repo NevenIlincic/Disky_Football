@@ -329,6 +329,11 @@ grow_vertical = 0
 
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("7_equfj")]
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="LoggedPlayerStats" parent="HUD/Main_Menu_Nodes" unique_id=363541360 instance=ExtResource("8_pl276")]
 scale = Vector2(0.8, 0.8)
