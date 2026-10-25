@@ -370,6 +370,15 @@ offset_right = 259.0
 offset_bottom = 634.0
 text = "Synchronizing positions and time..."
 
+[node name="Turn_Time_Left_Label" type="Label" parent="HUD/Control" unique_id=547460577]
+layout_mode = 0
+offset_left = 520.0
+offset_top = 48.0
+offset_right = 632.0
+offset_bottom = 74.0
+text = "20s"
+horizontal_alignment = 1
+
 [node name="PostMatchScreen" parent="HUD/Control" unique_id=162344343 instance=ExtResource("3_jrvm5")]
 visible = false
 layout_mode = 1
@@ -727,5 +736,10 @@ stream = ExtResource("25_xstoj")
 
 [node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1440459462]
 
+[node name="Turn_Time_Left_Timer" type="Timer" parent="." unique_id=1640438102]
+process_callback = 0
+wait_time = 15.0
+
 [connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
 [connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]
+[connection signal="timeout" from="Turn_Time_Left_Timer" to="." method="_on_turn_time_left_timer_timeout"]

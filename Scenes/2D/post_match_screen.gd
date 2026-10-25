@@ -124,7 +124,7 @@ func set_won_lost_label_text():
 			you_won_lost_label.text = str("YOU WON!\n", scene.my_score, "-", scene.enemy_score)
 		scene.MatchState.WON_BY_OPPONENT_DISCONNECTION:
 			you_won_lost_label.text = str("YOU WON!\nOpponent has disconnected!")
-		scene.MatState.GAME_SUSPENDED:
+		scene.MatchState.GAME_SUSPENDED:
 			you_won_lost_label.text = str("GAME SUSPENDED!")
 		
 func _on_leave_button_pressed() -> void:

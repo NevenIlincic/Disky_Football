@@ -53,6 +53,7 @@ const BALL_SCENE = preload("res://Scenes/Ball/MultiplayerBall.tscn")
 
 
 
+@onready var turn_time_left_label: Label = $HUD/Control/Turn_Time_Left_Label
 
 var is_my_turn: bool = true:
 	set(value):
@@ -143,11 +144,14 @@ var has_snapshot: bool = false
 
 var is_synchronization_done: bool = false
 
+@onready var turn_time_left_timer: Timer = $Turn_Time_Left_Timer
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
 
+func start_turn_time_left_timer() -> void:
+	turn_time_left_timer.start(15.0)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_my_turn:
@@ -190,6 +194,8 @@ func reset_entities_position():
 
 
 func _on_match_finished():
+	turn_time_left_timer.stop()
+	turn_time_left_label.visible = false
 	FusionSdk.leave_room()
 	goal_scored_node.visible = false
 	post_match_screen.visible = true
@@ -310,6 +316,7 @@ func _ready() -> void:
 	indicator_line.visible = false
 	power_bar.min_value = 0.0
 	power_bar.max_value = 100.0
+	start_turn_time_left_timer()
 
 	#Fusion.room_left.connect(_on_match_finished)
 	Fusion.player_left.connect(_on_player_left)
@@ -666,6 +673,13 @@ func get_selected_player(selected_player_id: int) -> MultiplayerPlayer:
 	return found_player
 
 func _physics_process(delta: float) -> void:
+	#TURN TIMER
+	if not is_action and match_state == MatchState.PLAYING and turn_time_left_timer.time_left <= 5.0:
+		turn_time_left_label.visible = true
+	else:
+		turn_time_left_label.visible = false
+		
+		
 	if is_action and has_game_started:
 		time_passed += delta * 10
 	
@@ -675,6 +689,7 @@ func _physics_process(delta: float) -> void:
 		time_label.text = "%02d:%02d" % [minutes, seconds]
 	if not is_action or not ball and match_state == MatchState.PLAYING:
 		synchronizing_label.visible = false
+		turn_time_left_label.text = str(int(turn_time_left_timer.time_left), "s")
 		return
 	synchronizing_label.visible = true
 	if is_my_turn:
@@ -883,14 +898,17 @@ func reset_ball_target() -> void:
 		ball_target_pos = ball.global_position
 		ball_target_rot = ball.global_basis.get_rotation_quaternion()
 #RPC
-@rpc("any_peer", "call_remote")
+@rpc("any_peer", "call_local")
 func action_started() -> void:
+	turn_time_left_timer.stop()
 	is_action = true
 	reset_ball_target()
+	turn_time_left_label.visible = false
 
 @rpc("any_peer", "call_local")
 func action_ended() -> void:
 	is_action = false
+	turn_time_left_label.visible = true
 
 @rpc("any_peer", "call_local")
 func turn_changed() -> void:
@@ -902,6 +920,7 @@ func turn_changed() -> void:
 			match_state = MatchState.GAME_SUSPENDED
 			_on_match_finished()
 			
+	start_turn_time_left_timer()
 	
 @rpc("any_peer", "call_local")
 func game_started() -> void:
@@ -995,3 +1014,8 @@ func stop_ball_fire_effect(received_data_array: PackedByteArray):
 	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
 	ball.fire_effect.stop_effects()
+
+
+func _on_turn_time_left_timer_timeout() -> void:
+	if is_my_turn and match_state == MatchState.PLAYING:
+		Fusion.rpc(turn_changed)
