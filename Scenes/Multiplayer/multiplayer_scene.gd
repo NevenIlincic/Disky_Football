@@ -34,7 +34,7 @@ var formation_spawn_positions_guest: Dictionary
 
 #############################
 
-const MATCH_DURATION: float = 2700
+const MATCH_DURATION: float = 1200
 const GOALS_TO_WIN: int = 1
 
 # INDICATOR
@@ -371,10 +371,10 @@ func spawn_field():
 	spawn_players()
 
 
-func _on_player_continued_move(player: MultiplayerPlayer):
+func _on_player_continued_move(_player: MultiplayerPlayer):
 	if not is_my_turn: return
 	_on_move_continued()	
-func _on_ball_continued_move(ball: MultiplayerBall):
+func _on_ball_continued_move(_ball: MultiplayerBall):
 	if not is_my_turn: return
 	_on_move_continued()
 func _on_move_continued():

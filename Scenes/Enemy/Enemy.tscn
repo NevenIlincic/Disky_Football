@@ -17,8 +17,11 @@ height = 1.0
 radius = 3.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_02vxf"]
+transparency = 1
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0, 0, 1)
+uv1_scale = Vector3(2, 2, 2)
+texture_filter = 0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_jmcll"]
 material = SubResource("StandardMaterial3D_02vxf")

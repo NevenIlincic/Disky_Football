@@ -1,13 +1,32 @@
-extends Node3D
+class_name SinglePlayerScene extends Node3D
+
+const ENEMY_SCENE = preload("uid://drhkcd78218ty")
+const PLAYER_SCENE = preload("uid://d1w5ccem33kle")
 
 const MAX_DRAG_LENGTH: float = 500.0
 const MIN_DRAG_LENGTH: float = 35.0
 const INDICATOR_LENGTH: float = 5.0
 
+enum MatchState{
+	PLAYING,
+	WON_ON_TIME,
+	WON_BY_GOALS,
+	WON_BY_OPPONENT_DISCONNECTION,
+	LOST_ON_TIME,
+	LOST_BY_GOALS,
+	DRAW,
+	GAME_SUSPENDED
+}
+var match_state: MatchState = MatchState.PLAYING
+
+#GOALS
+const GOALS_TO_WIN: int = 1
+
 var is_my_turn: bool = true
 
 #TIME
 var time_passed: float = 0
+const MATCH_DURATION: float = 1200
 
 var is_dragging: bool = false
 var start_position: Vector2
@@ -17,6 +36,10 @@ var is_action: bool = false
 
 @onready var ball: Ball = $Field/Ball
 @onready var ball_spawn_position: Marker3D = $Field/Ball_Spawn_Position
+
+#HUD
+@onready var post_match_screen: PostMatchScreen = $HUD/Control/PostMatchScreen
+@onready var multiplayer_pause_menu: MultiplayerPauseMenu = $HUD/Control/MultiplayerPauseMenu
 
 var selected_player: Player
 
@@ -46,6 +69,23 @@ var enemy_spawn_points: Array[Marker3D] = []
 @onready var referee_whistle_sound: AudioStreamPlayer = $Referee_Whistle_Sound
 @onready var goal_scored_sound: AudioStreamPlayer = $Goal_Scored_Sound
 
+var formation_spawn_positions_host: Dictionary
+#HOST
+@onready var _3_3_standard_host: Node3D = $"Host_Formations/3-3_Standard_Host"
+@onready var _3_3_front_wide_host: Node3D = $"Host_Formations/3-3_Front_Wide_Host"
+@onready var _5_1_standard_host: Node3D = $"Host_Formations/5-1_Standard_Host"
+@onready var _2_4_standard_host: Node3D = $"Host_Formations/2_4_Standard_Host"
+@onready var _4_2_split_host: Node3D = $"Host_Formations/4_2_Split_Host"
+
+#GUEST
+var formation_spawn_positions_guest: Dictionary
+@onready var _3_3_standard_guest: Node3D = $"Guest_Formations/3-3_Standard_Guest"
+@onready var _3_3_front_wide_guest: Node3D = $"Guest_Formations/3-3_Front_Wide_Guest"
+@onready var _5_1_standard_guest: Node3D = $"Guest_Formations/5-1_Standard_Guest"
+@onready var _2_4_standard_guest: Node3D = $"Guest_Formations/2_4_Standard_Guest"
+@onready var _4_2_split_guest: Node3D = $"Guest_Formations/4_2_Split_Guest"
+
+
 var drag_direction: Vector3
 
 var elements_in_action: int = 0
@@ -54,6 +94,9 @@ var num_enemies: int = 0
 
 var players: Array[Player]
 var enemies: Array[Enemy]
+
+var host_spawn_points: Array[Marker3D] = []
+var guest_spawn_points: Array[Marker3D] = []
 
 var has_game_started: bool = false
 
@@ -64,31 +107,51 @@ var is_initial_kick: bool = true
 
 
 func _ready() -> void:
+	post_match_screen.set_is_singleplayer_match()
+	multiplayer_pause_menu.set_is_singleplayer()
+	
 	indicator_line.visible = false
-
+	
 	my_goal.goal_scored.connect(_on_goal_scored)
 	enemy_goal.goal_scored.connect(_on_goal_scored)
 
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
 
-	for player_obj in get_tree().get_nodes_in_group("player"):
-		var player: Player = player_obj
-		players.append(player)
-		player.player_selected.connect(_on_player_selected)
-		player.finished_move.connect(_on_player_finished_move)
-		player.continued_move.connect(_on_player_continued_move)
-		num_players += 1
-
-	for enemy_obj in get_tree().get_nodes_in_group("enemy"):
-		var enemy: Enemy = enemy_obj
-		enemies.append(enemy)
-		enemy.finished_move.connect(_on_enemy_finished_move)
-		enemy.continued_move.connect(_on_enemy_continued_move)
-		num_enemies += 1
-
+	#for player_obj in get_tree().get_nodes_in_group("player"):
+		#var player: Player = player_obj
+		#players.append(player)
+		#player.player_selected.connect(_on_player_selected)
+		#player.finished_move.connect(_on_player_finished_move)
+		#player.continued_move.connect(_on_player_continued_move)
+		#num_players += 1
+#
+	#for enemy_obj in get_tree().get_nodes_in_group("enemy"):
+		#var enemy: Enemy = enemy_obj
+		#enemies.append(enemy)
+		#enemy.finished_move.connect(_on_enemy_finished_move)
+		#enemy.continued_move.connect(_on_enemy_continued_move)
+		#num_enemies += 1
+	
+	initialize_formation_dictionaries()
 	spawn_players()
 
+func initialize_formation_dictionaries() -> void:
+	formation_spawn_positions_host = {
+		0: _3_3_standard_host,
+		1: _2_4_standard_host,
+		2: _3_3_front_wide_host,
+		3: _4_2_split_host,
+		4: _5_1_standard_host
+	}
+	
+	formation_spawn_positions_guest = {
+		0: _3_3_standard_guest,
+		1: _2_4_standard_guest,
+		2: _3_3_front_wide_guest,
+		3: _4_2_split_guest,
+		4: _5_1_standard_guest
+	}
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
@@ -104,58 +167,143 @@ func _unhandled_input(event: InputEvent) -> void:
 		calculate_drag_direction()
 		#indicator_line.visible = false
 		do_action()
+		
+	if Input.is_action_pressed("pause_menu") and not post_match_screen.visible:
+		multiplayer_pause_menu.visible = true
+	if Input.is_action_just_released("pause_menu"):
+		multiplayer_pause_menu.visible = false
 
+var next_player_id: int = 0
+var next_enemy_id: int = 0
+func register_player(player: Player) -> void:
+	player.player_id = next_player_id
+	
+	var player_spawn_position: Vector3
+	var player_skin_id: int
+	player_skin_id = SkinsManager.selected_skin
+	player_spawn_position = host_spawn_points[next_player_id].global_position
+	player.set_skin(player_skin_id, true)
+		
+	player.global_position = player_spawn_position
+	player.spawn_position = player_spawn_position
+		
+	player.player_selected.connect(_on_player_selected)
+	player.finished_move.connect(_on_player_finished_move)
+	player.continued_move.connect(_on_player_continued_move)
+
+	players.append(player)
+	num_players += 1
+	next_player_id += 1
+
+
+func register_enemy(enemy: Enemy) -> void:
+	enemy.enemy_id = next_enemy_id
+	
+	var enemy_spawn_position: Vector3
+	var enemy_skin_id: int
+	enemy_skin_id = WebSdk.SDK.current_selected_level % SkinsManager.skins.size()
+	enemy_spawn_position = guest_spawn_points[next_enemy_id].global_position
+	enemy.set_skin(enemy_skin_id, false)
+	
+	enemy.global_position = enemy_spawn_position
+	enemy.spawn_position = enemy_spawn_position
+		
+	enemy.finished_move.connect(_on_enemy_finished_move)
+	enemy.continued_move.connect(_on_enemy_continued_move)
+
+	enemies.append(enemy)
+	num_enemies += 1
+	next_enemy_id += 1
 
 func _process(delta: float) -> void:
-	if is_action and has_game_started:
-		time_passed += delta * 10
-
-		var minutes: int = int(time_passed) / 60
-		var seconds: int = int(time_passed) % 60
-
-		time_label.text = "%02d:%02d" % [minutes, seconds]
 	if is_dragging:
 		calculate_drag_direction()
 		draw_indicator()
 
+func _physics_process(delta: float) -> void:
+	if is_action and has_game_started:
+		time_passed += delta * 10
+	
+		var minutes: int = int(time_passed) / 60
+		var seconds: int = int(time_passed) % 60
+		
+		time_label.text = "%02d:%02d" % [minutes, seconds]
+	if time_passed > MATCH_DURATION and match_state == MatchState.PLAYING:
+		for player: Player in players:
+			freeze_entities(player)
+		for enemy: Enemy in enemies:
+			freeze_entities(enemy)
+		freeze_entities(ball)
+		handle_match_finished_on_time()
 
-func reset_entities_position():
-	for player: Player in players:
-		player.respawn_entity()
+func handle_match_finished_on_time():
+	is_action = false
+	if my_score == enemy_score:
+		match_state = MatchState.DRAW
 
-	for enemy: Enemy in enemies:
-		enemy.respawn_entity()
-	ball.respawn_entity()
-	my_goal.reset_entity()
-	enemy_goal.reset_entity()
-	goal_scored_node.visible = false
-	await get_tree().physics_frame
-
-	referee_whistle_sound.play()
-	if not is_my_turn:
-		await get_tree().create_timer(1.0).timeout
-		has_game_started = true
-		handle_enemy_turn()
+	elif my_score > enemy_score:
+		match_state = MatchState.WON_ON_TIME
 	else:
-		has_game_started = true
+		match_state = MatchState.LOST_ON_TIME
+	_on_match_finished()
+
+
+func freeze_entities(body: RigidBody3D) -> void:
+	body.freeze = true
+func reset_entities_position():
+	match match_state:
+		MatchState.PLAYING:
+			for player: Player in players:
+				player.respawn_entity()
+
+			for enemy: Enemy in enemies:
+				enemy.respawn_entity()
+			ball.respawn_entity()
+			my_goal.reset_entity()
+			enemy_goal.reset_entity()
+			goal_scored_node.visible = false
+			await get_tree().physics_frame
+
+			referee_whistle_sound.play()
+			if not is_my_turn:
+				await get_tree().create_timer(1.0).timeout
+				has_game_started = true
+				handle_enemy_turn()
+			else:
+				has_game_started = true
+		_:
+			_on_match_finished()
+			#if MatchFinishState.FINISHED_NORMAL:
+				#FusionSdk.leave_room()
+
+
+func _on_match_finished():
+	goal_scored_node.visible = false
+	post_match_screen.visible = true
+	
+	post_match_screen.do_after_match()
 
 
 func spawn_players():
-	for my_spawn_point in get_tree().get_nodes_in_group("my_spawn_point"):
-		my_spawn_points.append(my_spawn_point)
-	for enemy_spawn_point in get_tree().get_nodes_in_group("enemy_spawn_point"):
-		enemy_spawn_points.append(enemy_spawn_point)
+	var host_formation_node: Node3D
+	var guest_formation_node: Node3D
+	host_formation_node = formation_spawn_positions_host[FormationsManager.selected_formation]
+	guest_formation_node = formation_spawn_positions_guest[WebSdk.SDK.current_selected_level % FormationsManager.formations.size()]
 
-	for i in range(0, players.size()):
-		var player_spawn_position: Vector3 = my_spawn_points[i].global_position
-		var enemy_spawn_position: Vector3 = enemy_spawn_points[i].global_position
-
-		players[i].global_position = player_spawn_position
-		enemies[i].global_position = enemy_spawn_position
-
-		players[i].spawn_position = player_spawn_position
-		enemies[i].spawn_position = enemy_spawn_position
-
+	for host_player_position: Marker3D in host_formation_node.get_children():
+		host_spawn_points.append(host_player_position)
+	for guest_player_position: Marker3D in guest_formation_node.get_children():
+		guest_spawn_points.append(guest_player_position)
+	
+	for i in range(0, 12):
+		if i <= 5:	
+			var player: Player = PLAYER_SCENE.instantiate()
+			add_child(player)
+		else:
+			var enemy: Enemy = ENEMY_SCENE.instantiate()
+			add_child(enemy)
+	
+	
 	ball.spawn_position = ball_spawn_position.global_position
 
 	has_game_started = true
@@ -163,16 +311,16 @@ func spawn_players():
 
 
 
-func _on_enemy_continued_move(enemy: Enemy):
+func _on_enemy_continued_move(_enemy: Enemy):
 	_on_move_continued()
 
-func _on_enemy_finished_move(enemy: Enemy):
+func _on_enemy_finished_move(_enemy: Enemy):
 	_on_move_finished()
 
-func _on_player_continued_move(player: Player):
+func _on_player_continued_move(_player: Player):
 	_on_move_continued()
 
-func _on_ball_continued_move(ball: Ball):
+func _on_ball_continued_move(_ball: Ball):
 	_on_move_continued()
 
 func _on_move_continued():
@@ -192,10 +340,10 @@ func _on_move_finished():
 func _reset_elements_in_action():
 	elements_in_action = 0
 
-func _on_ball_finished_move(ball: Ball):
+func _on_ball_finished_move(_ball: Ball):
 	_on_move_finished()
 
-func _on_player_finished_move(player: Player):
+func _on_player_finished_move(_player: Player):
 	_on_move_finished()
 
 
@@ -444,9 +592,16 @@ func play_goal_effect() -> void:
 func on_enemy_scored() -> void:
 	enemy_score += 1
 	enemy_score_label.text = str(enemy_score)
-	is_my_turn = true
+	if enemy_score < GOALS_TO_WIN:
+		is_my_turn = true
+	else:
+		match_state = MatchState.LOST_BY_GOALS
+
 
 func on_scored() -> void:
 	my_score += 1
 	my_score_label.text = str(my_score)
-	is_my_turn = false
+	if my_score < GOALS_TO_WIN:
+		is_my_turn = false
+	else:
+		match_state = MatchState.WON_BY_GOALS

@@ -23,10 +23,10 @@ var levels: Dictionary = {}
 var skins: Dictionary = {}
 
 #PLAYER STATS
-var current_level: int
-var money_amount: int
-var fans_amount: int
-var experience_amount: int
+var current_level = 1
+var money_amount = 0
+var fans_amount = 0
+var experience_amount = 0
 
 var level_experience_map: Dictionary = {
 	1: 10,

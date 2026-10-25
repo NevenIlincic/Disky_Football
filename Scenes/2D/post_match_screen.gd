@@ -2,7 +2,7 @@ class_name PostMatchScreen extends Control
 
 @onready var you_won_lost_label: Label = $You_Won_Lost_Label
 var has_done: bool = false
-var scene: MultiplayerScene
+var scene: Object
 var has_leveled_up: bool = false
 @onready var level_up_sound: AudioStreamPlayer = $Level_Up_Sound
 
@@ -21,6 +21,9 @@ var has_leveled_up: bool = false
 @onready var money_bonus_amount_label: Label = $Gained_Stats/Level_Up_Bonus_Node/Money_Bonus_Amount_Label
 @onready var level_up_label: Label = $Gained_Stats/Level_Up_Bonus_Node/Level_Up_Label
 
+#GAINED STATS NODE
+@onready var gained_stats: Control = $Gained_Stats
+
 #BUTTONS
 @onready var leave_button: TextureButton = $Leave_Button
 
@@ -33,24 +36,45 @@ var match_state: MultiplayerScene.MatchState
 var total_money_gained: int = 0
 var total_fans_gained: int = 0
 
+var is_singleplayer_match: bool = false
+
 func _exit_tree() -> void:
 	if WebSdk.SDK.interstitial_ad_watched.is_connected(_on_interstitial_ad_watched):
 		WebSdk.SDK.interstitial_ad_watched.disconnect(_on_interstitial_ad_watched)
 
 
+func set_is_singleplayer_match():
+	gained_stats.visible = false
+	is_singleplayer_match = true
+	scene = get_tree().get_first_node_in_group("singleplayer_scene") as SinglePlayerScene
+
 
 func _ready() -> void:
-	leave_button.visible = false
-	scene = get_tree().get_first_node_in_group("multiplayer_scene")
-	progress_bar.value = FusionSdk.experience_amount
-	progress_bar.max_value = FusionSdk.get_needed_experience_amount_to_level_up()
-	var percentage = int((progress_bar.value / progress_bar.max_value) * 100)
-	percentage_to_new_level_label.text = str(percentage) + "%"
-	
 	WebSdk.SDK.interstitial_ad_watched.connect(_on_interstitial_ad_watched)
+	leave_button.visible = false
+	
+	if not is_singleplayer_match:
+		scene = get_tree().get_first_node_in_group("multiplayer_scene") as MultiplayerScene
+		progress_bar.value = FusionSdk.experience_amount
+		progress_bar.max_value = FusionSdk.get_needed_experience_amount_to_level_up()
+		var percentage = int((progress_bar.value / progress_bar.max_value) * 100)
+		percentage_to_new_level_label.text = str(percentage) + "%"
 	
 #UZMI EXPERIENCE I LEVEL IGRACA PREKO SDK-a
 func _on_interstitial_ad_watched() -> void:
+	#SINGLEPLAYER
+	if is_singleplayer_match:
+		leave_button.visible = true
+		if WebSdk.SDK.current_selected_level != WebSdk.SDK.last_unlocked_singleplayer_level:
+			return
+		if match_state == scene.MatchState.WON_ON_TIME or match_state == scene.MatchState.WON_BY_GOALS:
+			if WebSdk.SDK.last_unlocked_singleplayer_level < 21:
+				WebSdk.SDK.last_unlocked_singleplayer_level += 1
+				WebSdk.SDK.current_selected_level = WebSdk.SDK.last_unlocked_singleplayer_level
+				WebSdk.SDK.save_singleplayer_data()
+		return
+	
+	#MULTIPLAYER
 	if not (FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up()):
 		handle_gaining_experience()
 	var currency_gained: Array[int] = handle_currency_gained()
@@ -104,9 +128,13 @@ func set_won_lost_label_text():
 			you_won_lost_label.text = str("GAME SUSPENDED!")
 		
 func _on_leave_button_pressed() -> void:
-	if Fusion.is_in_room():
-		FusionSdk.leave_room()
-	get_tree().change_scene_to_file("res://Scenes/Menus/Multiplayer_Menu_Scene.tscn")
+	if not is_singleplayer_match:
+		if Fusion.is_in_room():
+			FusionSdk.leave_room()
+		get_tree().change_scene_to_file("res://Scenes/Menus/Multiplayer_Menu_Scene.tscn")
+	else:
+		FusionSdk.has_disconnected_intentionally = true
+		get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 
 func handle_gaining_experience() -> void:
 	var experience_gained: int = get_gained_experience()
