@@ -125,6 +125,7 @@ var is_tutorial: bool = false
 @onready var tutorial_label: Label = $HUD/Control/Tutorial_Nodes/Tutorial_Label
 
 func _ready() -> void:
+	WebSdk.SDK.level_started()
 	if WebSdk.SDK.current_selected_level == 0:
 		is_tutorial = true
 	ball = get_tree().get_first_node_in_group("ball")
@@ -294,7 +295,8 @@ func reset_entities_position():
 			goal_scored_node.visible = false
 			await get_tree().physics_frame
 
-			referee_whistle_sound.play()
+			AudioManager.play_referee_whistle_sound()
+			#referee_whistle_sound.play()
 			if not is_my_turn:
 				await get_tree().create_timer(1.0).timeout
 				has_game_started = true
@@ -308,6 +310,7 @@ func reset_entities_position():
 
 
 func _on_match_finished():
+	WebSdk.SDK.level_completed()
 	goal_scored_node.visible = false
 	post_match_screen.visible = true
 	
@@ -337,7 +340,8 @@ func spawn_players():
 	ball.spawn_position = ball_spawn_position.global_position
 
 	has_game_started = true
-	referee_whistle_sound.play()
+	AudioManager.play_referee_whistle_sound()
+	#referee_whistle_sound.play()
 
 
 
@@ -609,7 +613,8 @@ func play_cheer_effect() -> void:
 
 
 func play_goal_effect() -> void:
-	goal_scored_sound.play()
+	AudioManager.play_goal_scored_sound()
+	#goal_scored_sound.play()
 	goal_scored_sprite.visible = true
 	goal_scored_sprite.scale = Vector2.ZERO
 

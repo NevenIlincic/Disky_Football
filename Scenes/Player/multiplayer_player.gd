@@ -96,8 +96,9 @@ func on_action_done():
 func apply_hit_force(drag_direction: Vector3):
 	drag_direction.x = clamp(drag_direction.x, -600.0, 600.0)
 	drag_direction.z = clamp(drag_direction.z, -600.0, 600.0)
-	swish_sound.pitch_scale = randf_range(1.5, 2.0)
-	swish_sound.play()
+	var pitch_scale: float = randf_range(1.5, 2.0)
+	#swish_sound.play()
+	AudioManager.play_player_move_sound(null, pitch_scale)
 	apply_central_impulse(drag_direction * 0.5)
 
 
@@ -128,8 +129,9 @@ func respawn_entity():
 
 func play_collide_sound() -> void:
 	if can_play_sound:
-		player_collide_sound.pitch_scale = randf_range(0.9, 1.1)
-		player_collide_sound.play()
+		var pitch_scale: float = randf_range(0.9, 1.1)
+		#player_collide_sound.play()
+		AudioManager.play_player_collide_sound(null, pitch_scale)
 		
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("multiplayer_player"):

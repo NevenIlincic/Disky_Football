@@ -281,7 +281,8 @@ func handle_animations(fans_gained: int, money_gained: int) -> void:
 	await tween.finished
 	
 	if has_leveled_up:
-		level_up_sound.play()
+		AudioManager.play_goal_scored_sound()
+		#level_up_sound.play()
 		total_money_gained += 3 * (FusionSdk.current_level - 1)
 		total_fans_gained += 5 * (FusionSdk.current_level - 1)
 		fans_bonus_amount_label.text = str("+", 5 * (FusionSdk.current_level - 1))
@@ -301,3 +302,7 @@ func handle_animations(fans_gained: int, money_gained: int) -> void:
 		tween.tween_property(fans_bonus_amount_label, "modulate:a", 1.0, 1.0)
 		tween.tween_property(money_bonus_amount_label, "modulate:a", 1.0, 1.0)
 		await tween.finished
+
+
+func _on_leave_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

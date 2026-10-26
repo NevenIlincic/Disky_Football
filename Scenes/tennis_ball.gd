@@ -78,7 +78,8 @@ func apply_hit_force(drag_direction: Vector3):
 	wave_effect.emitting = true
 	has_finished_move = false
 	kick_sound.pitch_scale = randf_range(0.7, 1.0)
-	kick_sound.play()
+	AudioManager.play_kick_sound()
+	#kick_sound.play()
 
 func respawn_entity():
 	linear_velocity = Vector3.ZERO
@@ -91,9 +92,10 @@ func _on_body_entered(body: Node) -> void:
 	var impact: float = last_velocity.length()
 	if impact < 5.0:
 		return
-	kick_sound.volume_db = linear_to_db(clampf(impact / 15.0, 0.05, 1.0))
-	kick_sound.pitch_scale = randf_range(0.9, 1.1)
-	kick_sound.play()
+	var volume: float = linear_to_db(clampf(impact / 15.0, 0.05, 1.0))
+	var pitch_scale: float = randf_range(0.9, 1.1)
+	AudioManager.play_kick_sound(volume, pitch_scale)
+	#kick_sound.play()
 
 const MIN_IMPACT_SPEED: float = 10.0  # minimalna brzina "udara" u normalu
 const COOLDOWN: float = 0.3 
@@ -113,8 +115,9 @@ func check_should_play_hit_sound(state: PhysicsDirectBodyState3D) -> void:
 		
 		var normal_speed: float = absf(velocity_at_contact.dot(normal))
 		if normal_speed > MIN_IMPACT_SPEED:
-			kick_sound.volume_db = linear_to_db(clampf(normal_speed / 15.0, 0.05, 1.0))
-			kick_sound.pitch_scale = randf_range(0.9, 1.1)
-			kick_sound.play()
+			var volume: float = linear_to_db(clampf(normal_speed / 15.0, 0.05, 1.0))
+			var pitch_scale: float = randf_range(0.9, 1.1)
+			AudioManager.play_kick_sound(volume, pitch_scale)
+			#kick_sound.play()
 			_cooldown_left = COOLDOWN
 			break

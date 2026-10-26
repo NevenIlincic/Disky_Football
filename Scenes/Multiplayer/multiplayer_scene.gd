@@ -184,7 +184,8 @@ func reset_entities_position():
 			goal_scored_node.visible = false
 			await get_tree().physics_frame
 			
-			referee_whistle_sound.play()
+			AudioManager.play_referee_whistle_sound()
+			#referee_whistle_sound.play()
 			Fusion.rpc(game_started)
 			
 		_:
@@ -194,6 +195,8 @@ func reset_entities_position():
 
 
 func _on_match_finished():
+	WebSdk.SDK.level_completed()
+	
 	turn_time_left_timer.stop()
 	turn_time_left_label.visible = false
 	FusionSdk.leave_room()
@@ -312,6 +315,8 @@ func set_team_name_labels() -> void:
 		guest_name_label.text = FusionSdk.my_name
 		
 func _ready() -> void:
+	WebSdk.SDK.level_started()
+
 	# INDICATOR
 	indicator_line.visible = false
 	power_bar.min_value = 0.0
@@ -332,7 +337,8 @@ func _ready() -> void:
 	spawn_field()
 	#Fusion.rpc(game_started)
 	#has_game_started = true
-	referee_whistle_sound.play()
+	AudioManager.play_referee_whistle_sound()
+	#referee_whistle_sound.play()
 	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
 	if Fusion.is_master_client():
 		buffer.put_utf8_string(my_id)
@@ -625,7 +631,8 @@ func play_cheer_effect() -> void:
 				.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 func play_goal_effect() -> void:
-	goal_scored_sound.play()
+	AudioManager.play_goal_scored_sound()
+	#goal_scored_sound.play()
 	goal_scored_sprite.visible = true
 	goal_scored_sprite.scale = Vector2.ZERO
 
@@ -1014,7 +1021,6 @@ func stop_ball_fire_effect(received_data_array: PackedByteArray):
 	var ball_effect_id: int = buffer.get_u8()
 	ball.set_ball_effect(ball_effect_id)
 	ball.fire_effect.stop_effects()
-
 
 func _on_turn_time_left_timer_timeout() -> void:
 	if is_my_turn and match_state == MatchState.PLAYING:

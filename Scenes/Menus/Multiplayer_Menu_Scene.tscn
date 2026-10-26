@@ -464,8 +464,13 @@ texture_hover = ExtResource("14_jis2f")
 ignore_texture_size = true
 stretch_mode = 0
 
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Ad_Node/Ad_Button" to="." method="_on_ad_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Ad_Button" to="." method="_on_ad_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Confirm_Button" to="." method="_on_ad_confirm_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Confirm_Button" to="." method="_on_ad_confirm_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Cancel_Button" to="." method="_on_ad_cancel_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node/Ad_Cancel_Button" to="." method="_on_ad_cancel_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Team_Name_Initial_Input_Node/Confirm_Button" to="." method="_on_confirm_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Confirm_Button" to="." method="_on_confirm_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Team_Name_Initial_Input_Node/Cancel_Button" to="." method="_on_cancel_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Team_Name_Initial_Input_Node/Cancel_Button" to="." method="_on_cancel_button_pressed"]

@@ -39,3 +39,11 @@ func set_selected_card(id: int) -> void:
 	FormationsManager.selected_formation = id
 func add_to_purchased_ids_list(id: int) -> void:
 	FormationsManager.purchased_formations_id.append(id)
+
+
+func _on_select_card_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_buy_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

@@ -47,4 +47,5 @@ texture_hover = SubResource("CompressedTexture2D_761ll")
 ignore_texture_size = true
 stretch_mode = 0
 
+[connection signal="mouse_entered" from="Leave_Button" to="." method="_on_leave_button_mouse_entered"]
 [connection signal="pressed" from="Leave_Button" to="." method="_on_leave_button_pressed"]

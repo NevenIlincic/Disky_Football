@@ -27,8 +27,8 @@ var skins: Dictionary = {
 var fans_price: Dictionary = {
 	0: 0,
 	1: 5,
-	2: 5,
-	3: 7,
+	2: 10,
+	3: 14,
 	4: 12,
 	5: 15,
 	6: 17,
@@ -37,10 +37,10 @@ var fans_price: Dictionary = {
 var money_price: Dictionary = {
 	0: 0,
 	1: 3,
-	2: 2,
-	3: 2,
+	2: 6,
+	3: 8,
 	4: 10,
-	5: 5,
+	5: 15,
 	6: 11,
 	7: 15
 }

@@ -116,3 +116,7 @@ func _on_percentage_to_new_level_label_mouse_entered() -> void:
 
 func _on_percentage_to_new_level_label_mouse_exited() -> void:
 	show_experience_amount_percentage()
+
+
+func _on_edit_team_name_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

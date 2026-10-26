@@ -23,6 +23,7 @@ func check_is_on_mobile_device() -> bool:
 		return false
 	return true
 
+
 func set_language():
 	Bridge.platform.language
 func show_rewarded_ad():
@@ -44,13 +45,16 @@ func _on_audio_state_changed(is_enabled):
 	var is_muted: bool = not is_enabled
 	set_audio_mute(is_muted)
 func _on_pause_state_changed(is_paused):
-	get_tree().paused = is_paused
+	if not Fusion.is_connected_to_photon():
+		get_tree().paused = is_paused
 	set_audio_mute(is_paused)
-func check_is_game_audio_muted():
+func check_is_game_audio_muted() -> bool:
 	var is_muted: bool = not Bridge.platform.is_audio_enabled
 	var master_bus_index: int = AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_mute(master_bus_index, is_muted)
+	return is_muted
 func set_audio_mute(is_muted: bool):
+	AudioManager.is_audio_muted = is_muted
 	var master_bus_index: int = AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_mute(master_bus_index, is_muted)
 

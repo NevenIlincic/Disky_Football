@@ -16,6 +16,9 @@ enum CurrentTab {
 }
 
 var current_tab: CurrentTab = CurrentTab.DISKS
+@onready var disk_tab_button: TextureButton = $Disk_Tab_Button
+@onready var ball_effects_tab_button: TextureButton = $Ball_Effects_Tab_Button
+@onready var formations_tab_button: TextureButton = $Formations_Tab_Button
 
 func _exit_tree() -> void:
 	if FusionSdk.pre_match_info_showed.is_connected(_on_match_found):
@@ -136,3 +139,18 @@ func _on_ball_effects_tab_button_toggled(toggled_on: bool) -> void:
 func _on_formations_tab_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		show_formations_tab()
+
+
+func _on_disk_tab_button_mouse_entered() -> void:
+	if not disk_tab_button.button_pressed:
+		AudioManager.play_hover_sound()
+
+
+func _on_ball_effects_tab_button_mouse_entered() -> void:
+	if not ball_effects_tab_button.button_pressed:
+		AudioManager.play_hover_sound()
+
+
+func _on_formations_tab_button_mouse_entered() -> void:
+	if not formations_tab_button.button_pressed:
+		AudioManager.play_hover_sound()

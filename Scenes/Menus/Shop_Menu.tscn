@@ -69,6 +69,9 @@ texture_hover = ExtResource("8_ps7ss")
 ignore_texture_size = true
 stretch_mode = 0
 
+[connection signal="mouse_entered" from="Disk_Tab_Button" to="." method="_on_disk_tab_button_mouse_entered"]
 [connection signal="toggled" from="Disk_Tab_Button" to="." method="_on_disk_tab_button_toggled"]
+[connection signal="mouse_entered" from="Ball_Effects_Tab_Button" to="." method="_on_ball_effects_tab_button_mouse_entered"]
 [connection signal="toggled" from="Ball_Effects_Tab_Button" to="." method="_on_ball_effects_tab_button_toggled"]
+[connection signal="mouse_entered" from="Formations_Tab_Button" to="." method="_on_formations_tab_button_mouse_entered"]
 [connection signal="toggled" from="Formations_Tab_Button" to="." method="_on_formations_tab_button_toggled"]

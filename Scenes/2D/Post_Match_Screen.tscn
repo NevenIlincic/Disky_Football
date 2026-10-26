@@ -191,4 +191,5 @@ theme_override_colors/font_color = Color(0.8039216, 0.09019608, 0.09019608, 1)
 theme_override_font_sizes/font_size = 32
 text = "+ 5"
 
+[connection signal="mouse_entered" from="Leave_Button" to="." method="_on_leave_button_mouse_entered"]
 [connection signal="pressed" from="Leave_Button" to="." method="_on_leave_button_pressed"]

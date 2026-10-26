@@ -22,3 +22,7 @@ func _on_leave_button_pressed() -> void:
 	else:
 		FusionSdk.has_disconnected_intentionally = true
 		get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
+
+
+func _on_leave_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

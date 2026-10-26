@@ -353,6 +353,9 @@ text = "5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="mouse_entered" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_pressed"]
+[connection signal="mouse_entered" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_mouse_entered"]
 [connection signal="pressed" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_pressed"]

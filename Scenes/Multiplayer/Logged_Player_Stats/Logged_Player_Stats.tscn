@@ -114,4 +114,5 @@ stretch_mode = 0
 
 [connection signal="mouse_entered" from="Progress_Bar/Percentage_To_New_Level_Label" to="." method="_on_percentage_to_new_level_label_mouse_entered"]
 [connection signal="mouse_exited" from="Progress_Bar/Percentage_To_New_Level_Label" to="." method="_on_percentage_to_new_level_label_mouse_exited"]
+[connection signal="mouse_entered" from="Edit_Team_Name_Button" to="." method="_on_edit_team_name_button_mouse_entered"]
 [connection signal="pressed" from="Edit_Team_Name_Button" to="." method="_on_edit_team_name_button_pressed"]

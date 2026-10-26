@@ -17,6 +17,12 @@
 [ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="14_yfte3"]
 [ext_resource type="Texture2D" uid="uid://bugt1fjnl44jw" path="res://Sprites/Game_Title/Game_Title.png" id="16_vu58q"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="18_l6l0r"]
+[ext_resource type="Texture2D" uid="uid://cf1whh7nm4ayq" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Normal.png" id="18_sp3pi"]
+[ext_resource type="Texture2D" uid="uid://b57xtf18ci765" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Pressed.png" id="19_i3d3d"]
+[ext_resource type="Texture2D" uid="uid://b3541omjl4ej2" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Hovered.png" id="20_tingw"]
+[ext_resource type="Texture2D" uid="uid://mhx85fpw7cuu" path="res://Sprites/Buttons/Unmute_Button/Unmute__Sound_Button_Normal.png" id="21_eertt"]
+[ext_resource type="Texture2D" uid="uid://d1pgjsb8h82uv" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Pressed.png" id="22_uqma0"]
+[ext_resource type="Texture2D" uid="uid://clh2b5bclrvfk" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Hovered.png" id="23_13mm0"]
 
 [sub_resource type="Environment" id="Environment_yfte3"]
 background_mode = 3
@@ -304,6 +310,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Mute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=484976770]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("18_sp3pi")
+texture_pressed = ExtResource("19_i3d3d")
+texture_hover = ExtResource("20_tingw")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Unmute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=1495182118]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("21_eertt")
+texture_pressed = ExtResource("22_uqma0")
+texture_hover = ExtResource("23_13mm0")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="Buttons_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1990418224]
 layout_mode = 1
 anchors_preset = 3
@@ -463,6 +504,11 @@ grow_vertical = 0
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("18_l6l0r")]
 visible = false
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Game_Title_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes" unique_id=413282156]
 layout_mode = 1
@@ -493,5 +539,11 @@ offset_right = 243.0
 offset_bottom = 603.0
 text = "Must be logged in to play online!"
 
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Mute_Button" to="." method="_on_mute_button_mouse_entered"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Mute_Button" to="." method="_on_mute_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Unmute_Button" to="." method="_on_unmute_button_mouse_entered"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Unmute_Button" to="." method="_on_unmute_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Buttons_Control/Start_Button" to="." method="_on_start_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Start_Button" to="." method="_on_start_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button" to="." method="_on_multiplayer_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button" to="." method="_on_multiplayer_button_pressed"]

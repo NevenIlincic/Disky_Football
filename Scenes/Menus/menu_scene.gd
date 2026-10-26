@@ -15,7 +15,17 @@ extends Node3D
 
 var level_buttons: Array[LevelSelectionButton]
 
+@onready var mute_button: TextureButton = $HUD/Main_Menu_Nodes/Mute_Button
+@onready var unmute_button: TextureButton = $HUD/Main_Menu_Nodes/Unmute_Button
+
 func _ready() -> void:
+	WebSdk.SDK.set_game_ready()
+	print("WEB SDK: ", WebSdk.SDK.check_is_game_audio_muted())
+	print("AUDIO MANAGER: ", AudioManager.is_audio_muted)
+	if WebSdk.SDK.check_is_game_audio_muted() or AudioManager.is_audio_muted:
+		unmute_button.visible = true
+		mute_button.visible = false
+	
 	Fusion.connected_to_photon.connect(_on_online_connected)
 	Fusion.connection_failed.connect(_on_connection_failed)
 	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
@@ -97,3 +107,31 @@ func hide_main_menu_nodes():
 func show_main_menu_nodes():
 	buttons_control.visible = true
 	level_selection_menu.visible = true
+
+
+func _on_start_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_multiplayer_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_mute_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_unmute_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_mute_button_pressed() -> void:
+	WebSdk.SDK.set_audio_mute(true)
+	mute_button.visible = false
+	unmute_button.visible = true
+
+
+func _on_unmute_button_pressed() -> void:
+	WebSdk.SDK.set_audio_mute(false)
+	mute_button.visible = true
+	unmute_button.visible = false

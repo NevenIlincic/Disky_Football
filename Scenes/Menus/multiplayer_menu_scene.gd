@@ -29,7 +29,7 @@ func _exit_tree() -> void:
 	if WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
 		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
 
-func _ready() -> void:
+func _ready() -> void:	
 	logged_player_stats.set_player_stats()
 	shop_menu.show_disks_tab()
 	
@@ -103,3 +103,23 @@ func _on_ad_confirm_button_pressed() -> void:
 
 func _on_ad_cancel_button_pressed() -> void:
 	confirmation_dialog_node.visible = false
+
+
+func _on_confirm_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_cancel_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_ad_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_ad_confirm_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_ad_cancel_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

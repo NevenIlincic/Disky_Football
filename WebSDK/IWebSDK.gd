@@ -55,3 +55,7 @@ func get_player_name() -> String;
 func check_is_ad_block_enabled() -> bool;
 @abstract
 func check_is_on_mobile_device() -> bool;
+@abstract
+func check_is_game_audio_muted() -> bool;
+@abstract
+func set_audio_mute(is_muted: bool);

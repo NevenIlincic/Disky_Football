@@ -51,3 +51,11 @@ func set_selected_card(id: int) -> void:
 	SkinsManager.selected_skin = id
 func add_to_purchased_ids_list(id: int) -> void:
 	SkinsManager.purchased_skins_ids.append(id)
+
+
+func _on_buy_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_select_card_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

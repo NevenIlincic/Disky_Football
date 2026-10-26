@@ -154,3 +154,15 @@ func get_my_name() -> String:
 
 func get_my_team_name() -> String:
 	return str("TEAM: ", FusionSdk.my_team_name)
+
+
+func _on_join_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_back_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_cancel_searching_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
