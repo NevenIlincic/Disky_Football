@@ -33,11 +33,11 @@ glow_enabled = true
 glow_intensity = 2.18
 glow_bloom = 0.06
 
-[sub_resource type="Gradient" id="Gradient_argnq"]
+[sub_resource type="Gradient" id="Gradient_1jnck"]
 colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_72tm3"]
-gradient = SubResource("Gradient_argnq")
+gradient = SubResource("Gradient_1jnck")
 width = 110
 height = 180
 fill_from = Vector2(0.5, 1)
@@ -48,12 +48,12 @@ rough = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kcebh"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7luwv"]
 albedo_texture = ExtResource("20_bi8w5")
 texture_filter = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4vm5g"]
-material = SubResource("StandardMaterial3D_h54ih")
+material = SubResource("StandardMaterial3D_7luwv")
 size = Vector2(80, 50)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nja13"]
@@ -68,12 +68,12 @@ size = Vector3(80, 25, 1)
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0pcd1"]
 friction = 0.1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrmkq"]
 transparency = 1
 albedo_color = Color(1, 1, 0, 0.25490198)
 
 [sub_resource type="BoxMesh" id="BoxMesh_hycsl"]
-material = SubResource("StandardMaterial3D_mwjvy")
+material = SubResource("StandardMaterial3D_lrmkq")
 size = Vector3(80, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xi12t"]
@@ -119,13 +119,13 @@ size = Vector3(1, 20, 19)
 _data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+[sub_resource type="CurveTexture" id="CurveTexture_88s4d"]
 curve = SubResource("Curve_ms33v")
 
 [sub_resource type="Gradient" id="Gradient_scjt1"]
 colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8tr4o"]
 gradient = SubResource("Gradient_scjt1")
 
 [sub_resource type="Curve" id="Curve_mepe5"]
@@ -133,22 +133,22 @@ _limits = [0.0, 20.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+[sub_resource type="CurveTexture" id="CurveTexture_fwowi"]
 curve = SubResource("Curve_mepe5")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vn3hk"]
 gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_dvlam")
-color_ramp = SubResource("GradientTexture1D_7una7")
-alpha_curve = SubResource("CurveTexture_0wwvh")
+scale_curve = SubResource("CurveTexture_fwowi")
+color_ramp = SubResource("GradientTexture1D_8tr4o")
+alpha_curve = SubResource("CurveTexture_88s4d")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moaut"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("21_ujlgx")
 
 [sub_resource type="QuadMesh" id="QuadMesh_s8n1f"]
-material = SubResource("StandardMaterial3D_jjc5n")
+material = SubResource("StandardMaterial3D_moaut")
 orientation = 1
 
 [node name="MultiplayerScene" type="Node3D" unique_id=417657300 groups=["multiplayer_scene"]]

@@ -18,6 +18,11 @@ func initialize_sdk():
 	#delete_data()
 	#load_data()
 
+func check_is_on_mobile_device() -> bool:
+	if Bridge.device.type == "desktop":
+		return false
+	return true
+
 func set_language():
 	Bridge.platform.language
 func show_rewarded_ad():
@@ -113,8 +118,9 @@ func _on_storage_set_completed(success: bool):
 	pass
 
 func _on_multiplayer_data_saved(success: bool):
-	if success:
-		print("Multiplayer data saved!")
+	pass
+	#if success:
+		#print("Multiplayer data saved!")
 
 func _on_options_storage_set_completed(success: bool):
 	pass

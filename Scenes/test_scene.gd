@@ -1,11 +1,11 @@
-class_name SinglePlayerScene extends Node3D
+class_name SinglePlayerScene extends LevelScene
 
 const ENEMY_SCENE = preload("uid://drhkcd78218ty")
 const PLAYER_SCENE = preload("uid://d1w5ccem33kle")
 
-const MAX_DRAG_LENGTH: float = 500.0
-const MIN_DRAG_LENGTH: float = 35.0
-const INDICATOR_LENGTH: float = 5.0
+#const MAX_DRAG_LENGTH: float = 500.0
+#const MIN_DRAG_LENGTH: float = 35.0
+#const INDICATOR_LENGTH: float = 5.0
 
 enum MatchState{
 	PLAYING,
@@ -20,7 +20,7 @@ enum MatchState{
 var match_state: MatchState = MatchState.PLAYING
 
 #GOALS
-const GOALS_TO_WIN: int = 1
+var GOALS_TO_WIN: int = 1
 
 var is_my_turn: bool = true:
 	set(value):
@@ -32,22 +32,22 @@ var is_my_turn: bool = true:
 
 #TIME
 var time_passed: float = 0
-const MATCH_DURATION: float = 1200
+var MATCH_DURATION: float = 1200
+#
+#var is_dragging: bool = false
+#var start_position: Vector2
+#var end_position: Vector2
+#
+#var is_action: bool = false
 
-var is_dragging: bool = false
-var start_position: Vector2
-var end_position: Vector2
-
-var is_action: bool = false
-
-@onready var ball: Ball = $Field/Ball
+#@onready var ball: Ball = $Field/Ball
 @onready var ball_spawn_position: Marker3D = $Field/Ball_Spawn_Position
 
 #HUD
-@onready var post_match_screen: PostMatchScreen = $HUD/Control/PostMatchScreen
-@onready var multiplayer_pause_menu: MultiplayerPauseMenu = $HUD/Control/MultiplayerPauseMenu
-
-var selected_player: Player
+#@onready var post_match_screen: PostMatchScreen = $HUD/Control/PostMatchScreen
+#@onready var multiplayer_pause_menu: MultiplayerPauseMenu = $HUD/Control/MultiplayerPauseMenu
+#
+#var selected_player: Player
 
 var my_spawn_points: Array[Marker3D] = []
 var enemy_spawn_points: Array[Marker3D] = []
@@ -56,11 +56,11 @@ var enemy_spawn_points: Array[Marker3D] = []
 @onready var field: Node3D = $Field
 @onready var shooting_indicator: Sprite3D = $HUD/Control/Shooting_Indicator
 
-@onready var indicator_line: Line2D = $HUD/Indicator_Line
+#@onready var indicator_line: Line2D = $HUD/Indicator_Line
 @onready var buttons: Node2D = $HUD/Control/Buttons
 @onready var kick_button: TextureButton = $HUD/Control/Buttons/Kick_Button
 @onready var move_player_button: TextureButton = $HUD/Control/Buttons/Move_Player_Button
-@onready var power_bar: TextureProgressBar = $HUD/Control/Power_Bar
+#@onready var power_bar: TextureProgressBar = $HUD/Control/Power_Bar
 @onready var time_label: Label = $HUD/Control/Scoreboard/Time_Label
 @onready var my_score_label: Label = $HUD/Control/Scoreboard/My_Score_Label
 @onready var enemy_score_label: Label = $HUD/Control/Scoreboard/Enemy_Score_Label
@@ -92,7 +92,7 @@ var formation_spawn_positions_guest: Dictionary
 @onready var _4_2_split_guest: Node3D = $"Guest_Formations/4_2_Split_Guest"
 
 
-var drag_direction: Vector3
+#var drag_direction: Vector3
 
 var elements_in_action: int = 0
 var num_players: int = 0
@@ -115,7 +115,19 @@ var is_initial_kick: bool = true
 @onready var host_team_name: Label = $HUD/Control/Scoreboard/Host_Team_Name
 @onready var guest_team_name: Label = $HUD/Control/Scoreboard/Guest_Team_Name
 
+var is_tutorial: bool = false
+
+@onready var tutorial_spawn_point_marker: Marker3D = $"Host_Formations/3-3_Standard_Host/Marker3D5"
+@onready var scoreboard: Control = $HUD/Control/Scoreboard
+
+#TUTORIAL
+@onready var tutorial_nodes: Control = $HUD/Control/Tutorial_Nodes
+@onready var tutorial_label: Label = $HUD/Control/Tutorial_Nodes/Tutorial_Label
+
 func _ready() -> void:
+	if WebSdk.SDK.current_selected_level == 0:
+		is_tutorial = true
+	ball = get_tree().get_first_node_in_group("ball")
 	post_match_screen.set_is_singleplayer_match()
 	multiplayer_pause_menu.set_is_singleplayer()
 	
@@ -127,12 +139,26 @@ func _ready() -> void:
 	ball.finished_move.connect(_on_ball_finished_move)
 	ball.continued_move.connect(_on_ball_continued_move)
 	
-	set_up_team_names()
+	if not is_tutorial:
+		set_up_team_names()
 
-	
-	initialize_formation_dictionaries()
-	spawn_players()
+		
+		initialize_formation_dictionaries()
+		spawn_players()
+	else:
+		if WebSdk.SDK.check_is_on_mobile_device():
+			tutorial_label.text = TutorialText.tutorial_text_mobile
+		else:
+			tutorial_label.text = TutorialText.tutorial_text_pc
+		tutorial_nodes.visible = true
+		GOALS_TO_WIN = 1
+		MATCH_DURATION = 9999	
+		scoreboard.visible = false
+		host_spawn_points.append(tutorial_spawn_point_marker)
+		var player: Player = PLAYER_SCENE.instantiate()
+		add_child(player)
 
+		
 func set_up_team_names() -> void:
 	if FusionSdk.my_team_name.is_empty():
 		host_team_name.text = FusionSdk.get_random_3_letter_string()
@@ -157,25 +183,25 @@ func initialize_formation_dictionaries() -> void:
 		4: _5_1_standard_guest
 	}
 
-func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("drag"):
-		if selected_player and (selected_player.is_moving or selected_player.is_shooting):
-			is_dragging = true
-			start_position = get_viewport().get_mouse_position()
-			end_position = start_position # bez zastarele vrednosti
-			drag_direction = Vector3.ZERO
-			#shooting_indicator.visible = true
-
-	if Input.is_action_just_released("drag") and is_dragging:
-		is_dragging = false
-		calculate_drag_direction()
-		#indicator_line.visible = false
-		do_action()
-		
-	if Input.is_action_pressed("pause_menu") and not post_match_screen.visible:
-		multiplayer_pause_menu.visible = true
-	if Input.is_action_just_released("pause_menu"):
-		multiplayer_pause_menu.visible = false
+#func _unhandled_input(event: InputEvent) -> void:
+	#if Input.is_action_just_pressed("drag"):
+		#if selected_player and (selected_player.is_moving or selected_player.is_shooting):
+			#is_dragging = true
+			#start_position = get_viewport().get_mouse_position()
+			#end_position = start_position # bez zastarele vrednosti
+			#drag_direction = Vector3.ZERO
+			##shooting_indicator.visible = true
+#
+	#if Input.is_action_just_released("drag") and is_dragging:
+		#is_dragging = false
+		#calculate_drag_direction()
+		##indicator_line.visible = false
+		#do_action()
+		#
+	#if Input.is_action_pressed("pause_menu") and not post_match_screen.visible:
+		#multiplayer_pause_menu.visible = true
+	#if Input.is_action_just_released("pause_menu"):
+		#multiplayer_pause_menu.visible = false
 
 var next_player_id: int = 0
 var next_enemy_id: int = 0
@@ -445,7 +471,8 @@ func on_action_done():
 	power_bar.value = 0.0
 	is_action = true
 	selected_player = null
-	is_my_turn = false
+	if not is_tutorial:
+		is_my_turn = false
 
 
 func _on_player_selected(player: Player):
@@ -486,7 +513,7 @@ func show_selected_player_elements(player: Player):
 ##ENEMY
 
 func handle_enemy_turn():
-	if not has_game_started:
+	if not has_game_started or is_tutorial:
 		return
 	var is_ball_in_range: bool = false
 	var closest_enemy_from_ball: Enemy
@@ -606,6 +633,9 @@ func on_scored() -> void:
 	my_score += 1
 	my_score_label.text = str(my_score)
 	if my_score < GOALS_TO_WIN:
-		is_my_turn = false
+		if not is_tutorial:
+			is_my_turn = false
+		else:
+			is_my_turn = true
 	else:
 		match_state = MatchState.WON_BY_GOALS

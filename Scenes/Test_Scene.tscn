@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://csp8eakdpce3" path="res://Scenes/Menus/Multiplayer_Pause_Menu.tscn" id="19_nja13"]
 [ext_resource type="PackedScene" uid="uid://bjfmp8qqsc7pr" path="res://Scenes/2D/Post_Match_Screen.tscn" id="19_q2r4x"]
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="20_518se"]
+[ext_resource type="Texture2D" uid="uid://cveckkc4863rk" path="res://Sprites/Progress_Bar/Experience_Under_Bar.png" id="21_s8unp"]
 [ext_resource type="AudioStream" uid="uid://c8c7stegv8vly" path="res://Audio/referee_whistle_sound .mp3" id="25_q2r4x"]
 [ext_resource type="AudioStream" uid="uid://w5orqjfikx3d" path="res://Audio/goal_scored_sound.mp3" id="26_nja13"]
 
@@ -338,6 +339,44 @@ texture = ExtResource("18_q2r4x")
 [node name="FootballFan8" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1722785190]
 position = Vector2(1072, 536)
 texture = ExtResource("18_q2r4x")
+
+[node name="Tutorial_Nodes" type="Control" parent="HUD/Control" unique_id=721327709]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Tutorial_Background" type="TextureRect" parent="HUD/Control/Tutorial_Nodes" unique_id=364830808]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = 24.0
+offset_right = -104.0
+offset_bottom = -480.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("21_s8unp")
+expand_mode = 1
+
+[node name="Tutorial_Label" type="Label" parent="HUD/Control/Tutorial_Nodes" unique_id=2118865122]
+custom_maximum_size = Vector2(800, -1)
+layout_mode = 1
+offset_left = 224.0
+offset_top = 40.0
+offset_right = 225.0
+offset_bottom = 153.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Welcome to training ground. Click on player to select him. After selection, you can move or shoot the ball if you're close enough.
+After pressing KICK or MOVE button, click and drag on screen to aim.
+Hold RMB (Right Mouse Button) to move the camera and use MOUSE WHEEL to zoom in and out."
+autowrap_mode = 2
 
 [node name="PostMatchScreen" parent="HUD/Control" unique_id=1257412164 instance=ExtResource("19_q2r4x")]
 visible = false

@@ -11,6 +11,11 @@ const MOUSE_SENSITIVITY: float = 0.05
 var current_zoom_value: float = 0.0
 const ZOOM_DISTANCE: float = 1.0
 
+const CAMERA_MIN_X: float = -50.0
+const CAMERA_MAX_X: float = 50.0
+const CAMERA_MIN_Z: float = -5.0
+const CAMERA_MAX_Z: float = 25.0
+
 func _unhandled_input(event: InputEvent) -> void:
 	
 	if Input.is_action_pressed("camera_drag"):
@@ -19,8 +24,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		is_dragging = false
 	
 	if event is InputEventMouseMotion and is_dragging:
+		#X
 		global_position.x -= event.relative.x * MOUSE_SENSITIVITY / (1 + current_zoom_value)
+		global_position.x = clampf(global_position.x , CAMERA_MIN_X, CAMERA_MAX_X)
+		
+		#Z
 		global_position.z -= event.relative.y * MOUSE_SENSITIVITY / (1 + current_zoom_value)
+		global_position.z = clampf(global_position.z , CAMERA_MIN_Z, CAMERA_MAX_Z)
 
 	if Input.is_action_just_pressed("zoom_in"):
 		_zoom_in()

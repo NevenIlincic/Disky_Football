@@ -19,7 +19,7 @@ photon/connection/app_id="4e07bb6c-81aa-4f7f-ad6d-ebe7aaf66292"
 [application]
 
 config/name="New Game Project"
-run/main_scene="uid://ccs2kesfln08v"
+run/main_scene="uid://ctxnm1j4iwp46"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -31,9 +31,11 @@ FormationsManager="*uid://yf0bkcqfv0fb"
 SkinsManager="*uid://cis5rlfubeu4j"
 Bridge="*uid://cx4klxojbw6ck"
 WebSdk="*uid://dwporwn7tse8u"
+TutorialText="*uid://cmq0ydirsm3kt"
 
 [display]
 
+window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/mode=1

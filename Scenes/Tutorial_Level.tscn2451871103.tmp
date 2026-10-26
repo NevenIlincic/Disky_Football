@@ -1,0 +1,438 @@
+[gd_scene format=3 uid="uid://dd72w0galg3kg"]
+
+[ext_resource type="Script" uid="uid://5mc2hsx3gt5b" path="res://Scenes/tutorial_level.gd" id="1_howsk"]
+[ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="1_jhlwr"]
+[ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="2_748n3"]
+[ext_resource type="Texture2D" uid="uid://dxig6lu7vv1eg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Enabled.png" id="3_howsk"]
+[ext_resource type="Texture2D" uid="uid://dbnykn5w8qtnc" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png" id="4_hswq3"]
+[ext_resource type="Texture2D" uid="uid://7nx4ywugf6vg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Hovered.png" id="5_soaca"]
+[ext_resource type="Texture2D" uid="uid://cr1k8jtjh5j4l" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Disabled.png" id="6_dybkl"]
+[ext_resource type="Texture2D" uid="uid://rhoa01h2l335" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Enabled.png" id="7_pggye"]
+[ext_resource type="Texture2D" uid="uid://dj72b0qoi4138" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Pressed.png" id="8_ggroj"]
+[ext_resource type="Texture2D" uid="uid://bjgk8xw5apx8b" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Hovered.png" id="9_ggcvq"]
+[ext_resource type="Texture2D" uid="uid://cpq3i66b8oi32" path="res://Sprites/Buttons/Move_Button/Move_Button_2_Disabled.png" id="10_8tcim"]
+[ext_resource type="Texture2D" uid="uid://vy5yui2vxfek" path="res://Sprites/Power_Bar/Under.png" id="11_yt5n1"]
+[ext_resource type="Texture2D" uid="uid://bfwjhdrc25vlo" path="res://Sprites/Power_Bar/Over.png" id="12_wmh21"]
+[ext_resource type="Texture2D" uid="uid://b0ae2py0kauie" path="res://Sprites/Goal_Scored/GOAL.png" id="14_phws6"]
+[ext_resource type="Texture2D" uid="uid://bqta7micod8yo" path="res://Sprites/Goal_Scored/Football Fan.png" id="15_hkea1"]
+[ext_resource type="Texture2D" uid="uid://cfk1hasv2i3ym" path="res://Sprites/Goal_Scored/Football Fan 2.png" id="16_fdyp5"]
+[ext_resource type="Texture2D" uid="uid://djrfpc7gogide" path="res://Sprites/Goal_Scored/Football Fan 3.png" id="17_fwvve"]
+[ext_resource type="PackedScene" uid="uid://bjfmp8qqsc7pr" path="res://Scenes/2D/Post_Match_Screen.tscn" id="18_2eygs"]
+[ext_resource type="PackedScene" uid="uid://csp8eakdpce3" path="res://Scenes/Menus/Multiplayer_Pause_Menu.tscn" id="19_m3njj"]
+[ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="20_800lr"]
+[ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="21_deftt"]
+[ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="22_748n3"]
+[ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="22_q7vbb"]
+[ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="23_howsk"]
+
+[sub_resource type="Environment" id="Environment_mgn4b"]
+background_mode = 3
+background_energy_multiplier = 0.0
+glow_enabled = true
+glow_intensity = 2.18
+glow_bloom = 0.06
+
+[sub_resource type="Gradient" id="Gradient_argnq"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2qxgy"]
+gradient = SubResource("Gradient_argnq")
+width = 110
+height = 180
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lp8on"]
+rough = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_fo7q2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+albedo_texture = ExtResource("20_800lr")
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_t0isj"]
+material = SubResource("StandardMaterial3D_h54ih")
+size = Vector2(80, 50)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lt1q7"]
+friction = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_mfaju"]
+size = Vector3(80.23, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vyqep"]
+size = Vector3(80, 25, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0l8wt"]
+friction = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.25490198)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1vxyg"]
+material = SubResource("StandardMaterial3D_mwjvy")
+size = Vector3(80, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6k8t6"]
+size = Vector3(80, 25.935669, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pggy2"]
+friction = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5wea3"]
+size = Vector3(80, 1, 60)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e4mpn"]
+friction = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_mwlyd"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kkinq"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_545i3"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d6lgo"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yxt7k"]
+friction = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_plug1"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pho54"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_og5vr"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6ph6m"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="Curve" id="Curve_6kf4y"]
+_data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+curve = SubResource("Curve_6kf4y")
+
+[sub_resource type="Gradient" id="Gradient_nyqbx"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+gradient = SubResource("Gradient_nyqbx")
+
+[sub_resource type="Curve" id="Curve_ld50d"]
+_limits = [0.0, 20.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+curve = SubResource("Curve_ld50d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o7omh"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_dvlam")
+color_ramp = SubResource("GradientTexture1D_7una7")
+alpha_curve = SubResource("CurveTexture_0wwvh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("21_deftt")
+
+[sub_resource type="QuadMesh" id="QuadMesh_74pux"]
+material = SubResource("StandardMaterial3D_jjc5n")
+orientation = 1
+
+[node name="TutorialLevel" type="Node3D" unique_id=1718141262 groups=["singleplayer_scene"]]
+script = ExtResource("1_howsk")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1409053876]
+transform = Transform3D(1, 0, 0, 0, 0.5029197, 0.8643332, 0, -0.8643332, 0.5029197, -0.5304804, 28.236576, 23.581345)
+script = ExtResource("1_jhlwr")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2104746785]
+environment = SubResource("Environment_mgn4b")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1172245589]
+transform = Transform3D(1, 0, 0, 0, 0.36029094, 0.93284, 0, -0.93284, 0.36029094, -4.3613186, 12.102816, 7.406451)
+sky_mode = 1
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=86523232]
+
+[node name="Control" type="Control" parent="HUD" unique_id=1287633958]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Shooting_Indicator" type="Sprite3D" parent="HUD/Control" unique_id=1705616971]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 12.285764, 0)
+visible = false
+offset = Vector2(0, 60)
+texture_filter = 0
+render_priority = 99
+texture = ExtResource("2_748n3")
+
+[node name="Buttons" type="Node2D" parent="HUD/Control" unique_id=736051286]
+visible = false
+
+[node name="Kick_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=208643775]
+offset_top = 24.0
+offset_right = 192.0
+offset_bottom = 124.0
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_howsk")
+texture_pressed = ExtResource("4_hswq3")
+texture_hover = ExtResource("5_soaca")
+texture_disabled = ExtResource("6_dybkl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Move_Player_Button" type="TextureButton" parent="HUD/Control/Buttons" unique_id=886895632]
+offset_top = 144.0
+offset_right = 192.0
+offset_bottom = 244.0
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("7_pggye")
+texture_pressed = ExtResource("8_ggroj")
+texture_hover = ExtResource("9_ggcvq")
+texture_disabled = ExtResource("10_8tcim")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Power_Bar" type="TextureProgressBar" parent="HUD/Control" unique_id=1535431349]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_bottom = 220.0
+grow_horizontal = 0
+fill_mode = 3
+texture_under = ExtResource("11_yt5n1")
+texture_over = ExtResource("12_wmh21")
+texture_progress = SubResource("GradientTexture2D_2qxgy")
+texture_progress_offset = Vector2(0, 20)
+
+[node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=410309714]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Goal_Scored_Sprite" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node" unique_id=692175668]
+position = Vector2(72, 272)
+texture = ExtResource("14_phws6")
+
+[node name="Football_Fans" type="Node2D" parent="HUD/Control/Goal_Scored_Node" unique_id=2093102241]
+position = Vector2(-568, 0)
+
+[node name="FootballFan" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=757365222]
+position = Vector2(464, 536)
+texture = ExtResource("15_hkea1")
+
+[node name="FootballFan2" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=822597380]
+position = Vector2(760, 536)
+texture = ExtResource("16_fdyp5")
+
+[node name="FootballFan3" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=517255204]
+position = Vector2(207.5, 536)
+texture = ExtResource("17_fwvve")
+
+[node name="FootballFan4" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1906383846]
+position = Vector2(79.5, 536)
+texture = ExtResource("16_fdyp5")
+
+[node name="FootballFan5" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=401001566]
+position = Vector2(327.5, 536)
+texture = ExtResource("16_fdyp5")
+
+[node name="FootballFan6" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=1031916462]
+position = Vector2(608, 536)
+texture = ExtResource("15_hkea1")
+
+[node name="FootballFan7" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=6479628]
+position = Vector2(904, 536)
+texture = ExtResource("17_fwvve")
+
+[node name="FootballFan8" type="Sprite2D" parent="HUD/Control/Goal_Scored_Node/Football_Fans" unique_id=71512541]
+position = Vector2(1072, 536)
+texture = ExtResource("17_fwvve")
+
+[node name="Turn_Label" type="Label" parent="HUD/Control" unique_id=1357312497]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 26.0
+text = "YOUR TURN"
+
+[node name="Synchronizing_Label" type="Label" parent="HUD/Control" unique_id=159489718]
+visible = false
+layout_mode = 0
+offset_left = 8.0
+offset_top = 608.0
+offset_right = 259.0
+offset_bottom = 634.0
+text = "Synchronizing positions and time..."
+
+[node name="Turn_Time_Left_Label" type="Label" parent="HUD/Control" unique_id=1906924980]
+visible = false
+layout_mode = 0
+offset_left = 520.0
+offset_top = 48.0
+offset_right = 632.0
+offset_bottom = 74.0
+text = "20s"
+horizontal_alignment = 1
+
+[node name="PostMatchScreen" parent="HUD/Control" unique_id=1257412164 instance=ExtResource("18_2eygs")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="MultiplayerPauseMenu" parent="HUD/Control" unique_id=1826597866 instance=ExtResource("19_m3njj")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="Indicator_Line" type="Line2D" parent="HUD" unique_id=1523230849]
+width = 1.0
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=685532308]
+transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=1224270011]
+transform = Transform3D(-0.05663065, 0.7930336, -0.60653996, -0.0737223, -0.60917795, -0.78959954, -0.9956696, -1.8557891e-09, 0.09296241, -52.470604, 17.136568, 0)
+light_energy = 0.2
+
+[node name="Field" type="Node3D" parent="." unique_id=1917366820]
+
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=2084369101 groups=["floor"]]
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_lp8on")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Floor" unique_id=41536793]
+shape = SubResource("WorldBoundaryShape3D_fo7q2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Floor" unique_id=1897629668]
+mesh = SubResource("PlaneMesh_t0isj")
+
+[node name="Wall" type="StaticBody3D" parent="Field" unique_id=1756959170]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_lt1q7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=984278095]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
+mesh = SubResource("BoxMesh_mfaju")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall" unique_id=521934850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -6.9647083)
+shape = SubResource("BoxShape3D_vyqep")
+
+[node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=1724124084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_0l8wt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=1573999909]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
+visible = false
+mesh = SubResource("BoxMesh_1vxyg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall_2" unique_id=1648271544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4678345, 12.55129)
+shape = SubResource("BoxShape3D_6k8t6")
+
+[node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=334833332]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_pggy2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1736987670]
+shape = SubResource("BoxShape3D_5wea3")
+
+[node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=659476207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_e4mpn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=839040398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_mwlyd")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=876125829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, 15)
+shape = SubResource("BoxShape3D_kkinq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=265670868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_545i3")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=2100769988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, -15.374)
+shape = SubResource("BoxShape3D_d6lgo")
+
+[node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=1620327502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_yxt7k")
+
+[node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=1325786297]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_plug1")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1715526618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, 15)
+shape = SubResource("BoxShape3D_pho54")
+
+[node name="Right_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=413876649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_og5vr")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=401134032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, -15.373857)
+shape = SubResource("BoxShape3D_6ph6m")
+
+[node name="Wave_Effect" type="GPUParticles3D" parent="Field" unique_id=2044935551 groups=["wave_effect"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4084432, -0.71547604)
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_o7omh")
+draw_pass_1 = SubResource("QuadMesh_74pux")
+
+[node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=1355492384]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.433443, 0.72427344, 0)
+visible = false
+
+[node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("22_q7vbb")]
+transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
+
+[node name="Enemy_Goal" parent="Field" unique_id=861722523 instance=ExtResource("22_q7vbb")]
+transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
+goal_owner = 1
+
+[node name="Ball" parent="Field" unique_id=1734501864 instance=ExtResource("22_748n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.033346, 0.55922586, 2.4429817)
+
+[node name="Player" parent="Field" unique_id=1368321486 instance=ExtResource("23_howsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.847059, 0.2505, 1.4031763)

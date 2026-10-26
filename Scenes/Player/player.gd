@@ -43,7 +43,7 @@ var can_play_sound: bool = false
 @onready var swish_sound: AudioStreamPlayer = $Swish_Sound
 @onready var player_collide_sound: AudioStreamPlayer = $Player_Collide_Sound
 
-var scene: SinglePlayerScene
+var scene: Object
 
 func _ready() -> void:
 	scene = get_tree().get_first_node_in_group("singleplayer_scene")

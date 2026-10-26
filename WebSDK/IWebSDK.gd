@@ -53,3 +53,5 @@ func get_player_id() -> String;
 func get_player_name() -> String;
 @abstract
 func check_is_ad_block_enabled() -> bool;
+@abstract
+func check_is_on_mobile_device() -> bool;
