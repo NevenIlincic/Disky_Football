@@ -6,6 +6,9 @@ signal rewarded_ad_closed_early()
 signal interstitial_ad_watched()
 signal data_loaded()
 signal single_player_data_loaded()
+signal sdk_initialized()
+
+var is_initial_boot: bool = true
 
 var is_initialized: bool = false
 var is_ad_block_enabled: bool = true
