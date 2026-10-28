@@ -13,10 +13,21 @@ bounce = 0.3
 height = 0.5
 radius = 1.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3lluj"]
+load_path = "res://.godot/imported/Player_Skin_5.png-91193308c72dbd532d693ac273850418.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e42fg"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.1254902, 0.28235295, 1, 1)
+albedo_texture = SubResource("CompressedTexture2D_3lluj")
+uv1_scale = Vector3(2, 2, 2)
+texture_filter = 0
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_55xwr"]
-material = ExtResource("1_c2dbo")
-top_radius = 1.0
-bottom_radius = 1.0
+material = SubResource("StandardMaterial3D_e42fg")
+top_radius = 0.9980469
+bottom_radius = 0.9980469
 height = 0.001
 cap_bottom = false
 
@@ -40,7 +51,9 @@ bottom_radius = 1.0
 height = 0.001
 cap_top = false
 
-[sub_resource type="FusionReplicationConfig" id="FusionReplicationConfig_3lluj"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jjc5n"]
+height = 0.05
+radius = 1.0
 
 [node name="MultiplayerPlayer" type="RigidBody3D" unique_id=982662902 groups=["multiplayer_player"]]
 input_ray_pickable = false
@@ -59,7 +72,7 @@ script = ExtResource("1_3lluj")
 shape = SubResource("CylinderShape3D_8vnr6")
 
 [node name="Top_Part" type="MeshInstance3D" parent="." unique_id=1325111260]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25011238, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00059460104, 0.25366732, 0.0012293421)
 mesh = SubResource("CylinderMesh_55xwr")
 
 [node name="Shooting_Area" type="Area3D" parent="." unique_id=648245798]
@@ -94,11 +107,11 @@ mesh = SubResource("CylinderMesh_yrjg2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 mesh = SubResource("CylinderMesh_fl6ts")
 
-[node name="FusionSharedReplicator" type="FusionSharedReplicator" parent="." unique_id=1939614666]
-owner_mode = 3
-replication_config = SubResource("FusionReplicationConfig_3lluj")
-root_replication_mode = 1
-root_global_coordinates = true
-root_interpolation_mode = 2
-process_priority = -2147483647
-process_physics_priority = -2147483647
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=119267799]
+transform = Transform3D(1, 0, 0, 0, 0.9982553, -0.059044804, 0, 0.059044804, 0.9982553, 0, 0.579355, 0)
+shape = SubResource("CylinderShape3D_jjc5n")
+disabled = true
+
+[connection signal="body_entered" from="Shooting_Area" to="." method="_on_shooting_area_body_entered"]
+[connection signal="body_exited" from="Shooting_Area" to="." method="_on_shooting_area_body_exited"]
+[connection signal="input_event" from="Selection_Area" to="." method="_on_selection_area_input_event"]

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://csp8eakdpce3"]
+
+[ext_resource type="Script" uid="uid://2w8t5atl0ltq" path="res://Scenes/Menus/multiplayer_pause_menu.gd" id="1_35e7r"]
+[ext_resource type="Texture2D" uid="uid://cpdhim2kn7imy" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Enabled.png" id="1_dkv6h"]
+[ext_resource type="Texture2D" uid="uid://b45c0iogcufh5" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Pressed.png" id="2_35e7r"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_761ll"]
+load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
+
+[node name="MultiplayerPauseMenu" type="Control" unique_id=1826597866]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_35e7r")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1417635465]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -112.0
+offset_right = 1288.0
+offset_bottom = 800.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
+
+[node name="Leave_Button" type="TextureButton" parent="." unique_id=1012091640]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -120.0
+offset_right = 8.0
+offset_bottom = -16.0
+texture_normal = ExtResource("1_dkv6h")
+texture_pressed = ExtResource("2_35e7r")
+texture_hover = SubResource("CompressedTexture2D_761ll")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="mouse_entered" from="Leave_Button" to="." method="_on_leave_button_mouse_entered"]
+[connection signal="pressed" from="Leave_Button" to="." method="_on_leave_button_pressed"]

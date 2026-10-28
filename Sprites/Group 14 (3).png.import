@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://lg7tta6ljwgo"
 path.s3tc="res://.godot/imported/Group 14 (3).png-7533f42864a0c52f703b490557102068.s3tc.ctex"
+path.etc2="res://.godot/imported/Group 14 (3).png-7533f42864a0c52f703b490557102068.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Group 14 (3).png"
-dest_files=["res://.godot/imported/Group 14 (3).png-7533f42864a0c52f703b490557102068.s3tc.ctex"]
+dest_files=["res://.godot/imported/Group 14 (3).png-7533f42864a0c52f703b490557102068.s3tc.ctex", "res://.godot/imported/Group 14 (3).png-7533f42864a0c52f703b490557102068.etc2.ctex"]
 
 [params]
 

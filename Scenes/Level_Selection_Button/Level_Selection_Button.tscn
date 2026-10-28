@@ -1,24 +1,32 @@
 [gd_scene format=3 uid="uid://c50ttf4dwnk5i"]
 
 [ext_resource type="Texture2D" uid="uid://droocj2ieyj6m" path="res://Sprites/Level_Spot/Level_Spot_Enabled.png" id="1_eq0g1"]
+[ext_resource type="Script" uid="uid://b0uptqdrjsff0" path="res://Scenes/Level_Selection_Button/level_selection_button.gd" id="1_xakbj"]
 [ext_resource type="Texture2D" uid="uid://csvfojstjb6f6" path="res://Sprites/Level_Spot/Level_Spot_Pressed.png" id="2_663p4"]
 [ext_resource type="Texture2D" uid="uid://cc6lt0bitkwt" path="res://Sprites/Level_Spot/Level_Spot_Hovered.png" id="2_n0uc7"]
+[ext_resource type="Texture2D" uid="uid://by3tmcg24ap5r" path="res://Sprites/Level_Spot/Level_Spot_Disabled.png" id="5_ycysr"]
 
 [node name="LevelSelectionButton" type="Node2D" unique_id=783150541]
+script = ExtResource("1_xakbj")
 
-[node name="TextureButton" type="TextureButton" parent="." unique_id=31489568]
+[node name="Level_Selection_Texture_Button" type="TextureButton" parent="." unique_id=31489568]
 offset_right = 48.0
 offset_bottom = 48.0
+toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("1_eq0g1")
 texture_pressed = ExtResource("2_663p4")
 texture_hover = ExtResource("2_n0uc7")
+texture_disabled = ExtResource("5_ycysr")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Level_Number" type="Label" parent="." unique_id=151643344]
+[node name="Level_Number_Label" type="Label" parent="." unique_id=151643344]
 offset_right = 48.0
 offset_bottom = 48.0
 theme_override_font_sizes/font_size = 24
 text = "15"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[connection signal="toggled" from="Level_Selection_Texture_Button" to="." method="_on_level_selection_texture_button_toggled"]

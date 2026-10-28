@@ -10,6 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://dueul4vgtbl3e" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Pressed.png" id="9_eekhh"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="10_1e1ep"]
 [ext_resource type="Texture2D" uid="uid://cmlvsr1jln0p2" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Hovered.png" id="10_wq2yq"]
+[ext_resource type="Texture2D" uid="uid://b2si4um31xchh" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Shared/3-3_Standard_Formation_Display.png" id="14_56gmq"]
+[ext_resource type="Texture2D" uid="uid://wlctnt188tq" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/3-3_Wide_Formation_Display (1).png" id="15_bsyyq"]
+[ext_resource type="Texture2D" uid="uid://dvydwj55suwv8" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/5-1_Formation_Display.png" id="16_esf8j"]
+[ext_resource type="Texture2D" uid="uid://c5iau1bap3uqa" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/4-2_Split_Formation_Display.png" id="17_wlmef"]
+[ext_resource type="Texture2D" uid="uid://duojkcc5tp5ws" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/2-4_Formation_Display.png" id="18_82ieo"]
+[ext_resource type="Texture2D" uid="uid://da8veegguuk7k" path="res://Sprites/Ball/Ball.png" id="19_s3u1o"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_skhyc"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -54,7 +60,11 @@ _data = {
 
 [node name="MultiplayerMenu" type="Control" unique_id=48373522]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_cqg3o")
 
 [node name="Not_Searching_Node" type="Control" parent="." unique_id=784701535]
@@ -66,9 +76,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 offset_left = 880.0
-offset_top = 338.0
+offset_top = 359.0
 offset_right = 1160.0
-offset_bottom = 442.0
+offset_bottom = 463.0
 texture_normal = ExtResource("2_1e1ep")
 texture_pressed = ExtResource("3_eekhh")
 texture_hover = ExtResource("4_wq2yq")
@@ -123,51 +133,229 @@ libraries/ = SubResource("AnimationLibrary_skhyc")
 [node name="Match_Found_Node" type="Control" parent="." unique_id=1866039169]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Football_Field_Texture_Rect" type="TextureRect" parent="Match_Found_Node" unique_id=1303125387]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 120.0
+offset_right = 961.0
+offset_bottom = 600.0
+texture = ExtResource("10_1e1ep")
+expand_mode = 1
+
 [node name="Match_Found_Label" type="Label" parent="Match_Found_Node" unique_id=2027324143]
 layout_mode = 0
-offset_left = 310.3579
-offset_top = 20.0
-offset_right = 627.3579
-offset_bottom = 123.0
+offset_left = 414.3579
+offset_right = 731.3579
+offset_bottom = 103.0
 theme_override_font_sizes/font_size = 32
 text = "MATCH FOUND!
 (game will start soon)"
 horizontal_alignment = 1
 
-[node name="Football_Field_Sprite" type="Sprite2D" parent="Match_Found_Node" unique_id=753091633]
-position = Vector2(474.58188, 380)
-scale = Vector2(0.34466836, 0.34339082)
-texture = ExtResource("10_1e1ep")
-
 [node name="Host_Name_Label" type="Label" parent="Match_Found_Node" unique_id=369819380]
 layout_mode = 0
-offset_left = 122.58203
-offset_top = 564.0
-offset_right = 226.58203
-offset_bottom = 590.0
+offset_left = 226.58203
+offset_top = 544.0
+offset_right = 572.0
+offset_bottom = 570.0
 text = "HOST NAME"
 
 [node name="Guest_Name_Label" type="Label" parent="Match_Found_Node" unique_id=2017688196]
 layout_mode = 0
-offset_left = 570.58203
-offset_top = 172.0
-offset_right = 828.58203
-offset_bottom = 198.0
+offset_left = 588.0
+offset_top = 152.0
+offset_right = 932.58203
+offset_bottom = 178.0
 text = "GUEST NAME"
 horizontal_alignment = 2
+text_overrun_behavior = 3
 
+[node name="Host_Team_Name_Label" type="Label" parent="Match_Found_Node" unique_id=1129376611]
+layout_mode = 0
+offset_left = 228.0
+offset_top = 512.0
+offset_right = 372.0
+offset_bottom = 538.0
+text = "TEAM:"
+
+[node name="Guest_Team_Name_Label" type="Label" parent="Match_Found_Node" unique_id=1771417230]
+layout_mode = 0
+offset_left = 789.0
+offset_top = 183.0
+offset_right = 933.0
+offset_bottom = 209.0
+text = "TEAM:"
+horizontal_alignment = 2
+
+[node name="Guest_Formation_Texture_Rect" type="TextureRect" parent="Match_Found_Node" unique_id=384633651]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 120.0
+offset_right = 580.0
+offset_bottom = 592.0
+expand_mode = 1
+
+[node name="Host_Formations" type="Node2D" parent="Match_Found_Node" unique_id=1645601903]
+position = Vector2(104, -20)
+
+[node name="3-3_Standard_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Formations" unique_id=1830988947]
+visible = false
+modulate = Color(0, 0.69411767, 1, 1)
+offset_left = 236.0
+offset_top = 276.0
+offset_right = 348.0
+offset_bottom = 485.77777
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="3-3_Wide_Front_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Formations" unique_id=427282570]
+visible = false
+modulate = Color(0, 0.69411767, 1, 1)
+offset_left = 236.0
+offset_top = 220.0
+offset_right = 356.0
+offset_bottom = 540.0
+texture = ExtResource("15_bsyyq")
+expand_mode = 1
+
+[node name="5-1_Front_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Formations" unique_id=74449623]
+visible = false
+modulate = Color(0, 0.69411767, 1, 1)
+offset_left = 225.0
+offset_top = 234.0
+offset_right = 348.0
+offset_bottom = 527.8334
+texture = ExtResource("16_esf8j")
+expand_mode = 1
+
+[node name="4-2_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Formations" unique_id=1271801552]
+visible = false
+modulate = Color(0, 0.69411767, 1, 1)
+offset_left = 225.0
+offset_top = 234.0
+offset_right = 348.0
+offset_bottom = 527.8334
+texture = ExtResource("17_wlmef")
+expand_mode = 1
+
+[node name="2-4_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Formations" unique_id=1414191731]
+visible = false
+modulate = Color(0, 0.69411767, 1, 1)
+offset_left = 220.0
+offset_top = 268.0
+offset_right = 348.0
+offset_bottom = 501.1057
+texture = ExtResource("18_82ieo")
+expand_mode = 1
+
+[node name="Guest_Formations" type="Node2D" parent="Match_Found_Node" unique_id=339452544]
+position = Vector2(104, -20)
+
+[node name="3-3_Standard_Texture_Rect_Guest" type="TextureRect" parent="Match_Found_Node/Guest_Formations" unique_id=2012997464]
+visible = false
+modulate = Color(0.92156863, 0.4627451, 0.7529412, 1)
+offset_left = 606.0
+offset_top = 276.0
+offset_right = 718.0
+offset_bottom = 485.77777
+texture = ExtResource("14_56gmq")
+expand_mode = 1
+
+[node name="3-3_Wide_Front_Texture_Rect_Guest" type="TextureRect" parent="Match_Found_Node/Guest_Formations" unique_id=1093907409]
+visible = false
+modulate = Color(0.92156863, 0.4627451, 0.7529412, 1)
+offset_left = 606.0
+offset_top = 220.0
+offset_right = 726.0
+offset_bottom = 540.0
+texture = ExtResource("15_bsyyq")
+expand_mode = 1
+flip_h = true
+
+[node name="5-1_Front_Texture_Rect_Guest" type="TextureRect" parent="Match_Found_Node/Guest_Formations" unique_id=689678868]
+visible = false
+modulate = Color(0.9221496, 0.46376592, 0.75311846, 1)
+offset_left = 606.0
+offset_top = 234.0
+offset_right = 729.0
+offset_bottom = 527.8334
+texture = ExtResource("16_esf8j")
+expand_mode = 1
+flip_h = true
+
+[node name="4-2_Texture_Rect_Guest" type="TextureRect" parent="Match_Found_Node/Guest_Formations" unique_id=848449686]
+visible = false
+modulate = Color(0.92156863, 0.4627451, 0.7529412, 1)
+offset_left = 606.0
+offset_top = 234.0
+offset_right = 729.0
+offset_bottom = 527.8334
+texture = ExtResource("17_wlmef")
+expand_mode = 1
+flip_h = true
+
+[node name="2-4_Texture_Rect_Guest" type="TextureRect" parent="Match_Found_Node/Guest_Formations" unique_id=668127817]
+visible = false
+modulate = Color(0.92156863, 0.4627451, 0.7529412, 1)
+offset_left = 606.0
+offset_top = 268.0
+offset_right = 734.0
+offset_bottom = 501.1057
+texture = ExtResource("18_82ieo")
+expand_mode = 1
+flip_h = true
+
+[node name="Host_Level" type="Node2D" parent="Match_Found_Node" unique_id=1072966430]
+position = Vector2(104, -16)
+
+[node name="Host_Level_Ball_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Host_Level" unique_id=429632207]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+texture = ExtResource("19_s3u1o")
+expand_mode = 1
+
+[node name="Host_Level_Label" type="Label" parent="Match_Found_Node/Host_Level" unique_id=2056064575]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Guest_Level" type="Node2D" parent="Match_Found_Node" unique_id=1108011886]
+position = Vector2(772, -272)
+
+[node name="Guest_Level_Ball_Texture_Rect" type="TextureRect" parent="Match_Found_Node/Guest_Level" unique_id=1935840019]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+texture = ExtResource("19_s3u1o")
+expand_mode = 1
+
+[node name="Guest_Level_Label" type="Label" parent="Match_Found_Node/Guest_Level" unique_id=105187212]
+offset_left = 124.0
+offset_top = 484.0
+offset_right = 164.0
+offset_bottom = 524.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_pressed"]
+[connection signal="mouse_entered" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_mouse_entered"]
 [connection signal="pressed" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_pressed"]

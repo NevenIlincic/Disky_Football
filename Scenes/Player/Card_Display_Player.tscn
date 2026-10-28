@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cws8luontlt5b"]
+
+[ext_resource type="Material" uid="uid://b2sd64lfjxf7i" path="res://Materials/Player_Material.tres" id="1_icm1a"]
+[ext_resource type="Script" uid="uid://hekt12j3jryc" path="res://Scenes/Player/card_display_player.gd" id="2_jkvrg"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jkvrg"]
+height = 0.5
+radius = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wt455"]
+material = ExtResource("1_icm1a")
+top_radius = 0.9980469
+bottom_radius = 0.9980469
+height = 0.001
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_auysl"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m0rbm"]
+material = ExtResource("1_icm1a")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.001
+cap_top = false
+
+[node name="Node2D" type="StaticBody3D" unique_id=40518942]
+script = ExtResource("2_jkvrg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1225918452]
+shape = SubResource("CylinderShape3D_jkvrg")
+
+[node name="Top_Part" type="MeshInstance3D" parent="." unique_id=672758817]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00059460104, 0.25366732, 0.0012293421)
+mesh = SubResource("CylinderMesh_wt455")
+
+[node name="Middle_Part" type="MeshInstance3D" parent="." unique_id=629223404]
+mesh = SubResource("CylinderMesh_auysl")
+
+[node name="Bottom_Part" type="MeshInstance3D" parent="." unique_id=1875799853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+mesh = SubResource("CylinderMesh_m0rbm")

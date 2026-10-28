@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ghximb2n4fgd"
 path.s3tc="res://.godot/imported/circle_03_a.png-e8a96f8c7bae54d6fbdd261a20665ca5.s3tc.ctex"
+path.etc2="res://.godot/imported/circle_03_a.png-e8a96f8c7bae54d6fbdd261a20665ca5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Effects/alpha/circle_03_a.png"
-dest_files=["res://.godot/imported/circle_03_a.png-e8a96f8c7bae54d6fbdd261a20665ca5.s3tc.ctex"]
+dest_files=["res://.godot/imported/circle_03_a.png-e8a96f8c7bae54d6fbdd261a20665ca5.s3tc.ctex", "res://.godot/imported/circle_03_a.png-e8a96f8c7bae54d6fbdd261a20665ca5.etc2.ctex"]
 
 [params]
 

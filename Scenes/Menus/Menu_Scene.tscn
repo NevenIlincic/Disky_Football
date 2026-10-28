@@ -10,14 +10,19 @@
 [ext_resource type="Texture2D" uid="uid://dc4d7tqgmc5rw" path="res://Sprites/Buttons/Start_Button/Start_Button_Enabled.png" id="7_ntokn"]
 [ext_resource type="Texture2D" uid="uid://8yh80csuric" path="res://Sprites/Buttons/Start_Button/Start_Button_Pressed.png" id="8_26fja"]
 [ext_resource type="Texture2D" uid="uid://bbe0iy2vjxxlp" path="res://Sprites/Buttons/Start_Button/Start_Button_Hovered.png" id="9_23287"]
-[ext_resource type="Texture2D" uid="uid://dve6yuggeuxb2" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Enabled.png" id="10_0s8ga"]
-[ext_resource type="Texture2D" uid="uid://dn8k2u4g6y16a" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Pressed.png" id="11_i8opw"]
 [ext_resource type="Texture2D" uid="uid://c172t8165eagf" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Enabled.png" id="11_vu58q"]
 [ext_resource type="Texture2D" uid="uid://d1qeqeen0jyml" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Pressed.png" id="12_l6l0r"]
-[ext_resource type="Texture2D" uid="uid://bndr5vrayev4h" path="res://Sprites/Buttons/Shop_Button/Shop_Button_Hovered.png" id="12_yfte3"]
 [ext_resource type="Texture2D" uid="uid://5xffkq60k8qr" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Hovered.png" id="13_jg06a"]
+[ext_resource type="Texture2D" uid="uid://c6vh46ux6ymqj" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Disabled.png" id="14_8hk6q"]
 [ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="14_yfte3"]
+[ext_resource type="Texture2D" uid="uid://bugt1fjnl44jw" path="res://Sprites/Game_Title/Game_Title.png" id="16_vu58q"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="18_l6l0r"]
+[ext_resource type="Texture2D" uid="uid://cf1whh7nm4ayq" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Normal.png" id="18_sp3pi"]
+[ext_resource type="Texture2D" uid="uid://b57xtf18ci765" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Pressed.png" id="19_i3d3d"]
+[ext_resource type="Texture2D" uid="uid://b3541omjl4ej2" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Hovered.png" id="20_tingw"]
+[ext_resource type="Texture2D" uid="uid://mhx85fpw7cuu" path="res://Sprites/Buttons/Unmute_Button/Unmute__Sound_Button_Normal.png" id="21_eertt"]
+[ext_resource type="Texture2D" uid="uid://d1pgjsb8h82uv" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Pressed.png" id="22_uqma0"]
+[ext_resource type="Texture2D" uid="uid://clh2b5bclrvfk" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Hovered.png" id="23_13mm0"]
 
 [sub_resource type="Environment" id="Environment_yfte3"]
 background_mode = 3
@@ -31,12 +36,12 @@ rough = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8hk6q"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6l0r"]
 albedo_texture = ExtResource("4_26fja")
 texture_filter = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vu58q"]
-material = SubResource("StandardMaterial3D_h54ih")
+material = SubResource("StandardMaterial3D_l6l0r")
 size = Vector2(80, 50)
 
 [sub_resource type="BoxMesh" id="BoxMesh_l6l0r"]
@@ -45,12 +50,12 @@ size = Vector3(80.23, 5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jg06a"]
 size = Vector3(80, 25, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jg06a"]
 transparency = 1
 albedo_color = Color(1, 1, 0, 0.25490198)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sp3pi"]
-material = SubResource("StandardMaterial3D_mwjvy")
+material = SubResource("StandardMaterial3D_jg06a")
 size = Vector3(80, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i3d3d"]
@@ -87,13 +92,13 @@ size = Vector3(1, 20, 19)
 _data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+[sub_resource type="CurveTexture" id="CurveTexture_sp3pi"]
 curve = SubResource("Curve_il16n")
 
 [sub_resource type="Gradient" id="Gradient_qn25q"]
 colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i3d3d"]
 gradient = SubResource("Gradient_qn25q")
 
 [sub_resource type="Curve" id="Curve_bohc2"]
@@ -101,22 +106,22 @@ _limits = [0.0, 20.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+[sub_resource type="CurveTexture" id="CurveTexture_tingw"]
 curve = SubResource("Curve_bohc2")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_powv0"]
 gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_dvlam")
-color_ramp = SubResource("GradientTexture1D_7una7")
-alpha_curve = SubResource("CurveTexture_0wwvh")
+scale_curve = SubResource("CurveTexture_tingw")
+color_ramp = SubResource("GradientTexture1D_i3d3d")
+alpha_curve = SubResource("CurveTexture_sp3pi")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eertt"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("5_23287")
 
 [sub_resource type="QuadMesh" id="QuadMesh_015ep"]
-material = SubResource("StandardMaterial3D_jjc5n")
+material = SubResource("StandardMaterial3D_eertt")
 orientation = 1
 
 [node name="MenuScene" type="Node3D" unique_id=175652418]
@@ -305,6 +310,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Mute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=484976770]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("18_sp3pi")
+texture_pressed = ExtResource("19_i3d3d")
+texture_hover = ExtResource("20_tingw")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Unmute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=1495182118]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("21_eertt")
+texture_pressed = ExtResource("22_uqma0")
+texture_hover = ExtResource("23_13mm0")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="Buttons_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1990418224]
 layout_mode = 1
 anchors_preset = 3
@@ -340,18 +380,7 @@ offset_bottom = -104.0
 texture_normal = ExtResource("11_vu58q")
 texture_pressed = ExtResource("12_l6l0r")
 texture_hover = ExtResource("13_jg06a")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Shop_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Buttons_Control" unique_id=832999412]
-layout_mode = 0
-offset_left = -144.0
-offset_top = -96.0
-offset_right = 136.0
-offset_bottom = 8.0
-texture_normal = ExtResource("10_0s8ga")
-texture_pressed = ExtResource("11_i8opw")
-texture_hover = ExtResource("12_yfte3")
+texture_disabled = ExtResource("14_8hk6q")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -360,7 +389,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TextureRect" type="TextureRect" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1272441691]
+[node name="Field_Texture_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1272441691]
 layout_mode = 0
 offset_left = 48.0
 offset_top = 104.0
@@ -369,8 +398,94 @@ offset_bottom = 528.0
 texture = ExtResource("4_26fja")
 expand_mode = 1
 
-[node name="LevelSelectionButton" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1137878850 instance=ExtResource("14_yfte3")]
-position = Vector2(72, 296)
+[node name="Level_Buttons_Node" type="Node2D" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=855546372]
+
+[node name="LevelSelectionButton" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1137878850 instance=ExtResource("14_yfte3")]
+position = Vector2(72, 288)
+
+[node name="LevelSelectionButton2" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=783150541 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 432)
+level_number = 1
+
+[node name="LevelSelectionButton3" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=377474969 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 344)
+level_number = 2
+
+[node name="LevelSelectionButton4" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1653200308 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 232)
+level_number = 3
+
+[node name="LevelSelectionButton5" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=504645342 instance=ExtResource("14_yfte3")]
+position = Vector2(136, 152)
+level_number = 4
+
+[node name="LevelSelectionButton6" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=709595846 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 192)
+level_number = 5
+
+[node name="LevelSelectionButton7" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=282583954 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 384)
+level_number = 7
+
+[node name="LevelSelectionButton8" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=722454838 instance=ExtResource("14_yfte3")]
+position = Vector2(232, 288)
+level_number = 6
+
+[node name="LevelSelectionButton9" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=386709618 instance=ExtResource("14_yfte3")]
+position = Vector2(328, 168)
+level_number = 9
+
+[node name="LevelSelectionButton10" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=424790288 instance=ExtResource("14_yfte3")]
+position = Vector2(365, 288)
+level_number = 10
+
+[node name="LevelSelectionButton11" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=738411962 instance=ExtResource("14_yfte3")]
+position = Vector2(328, 416)
+level_number = 8
+
+[node name="LevelSelectionButton12" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1180896991 instance=ExtResource("14_yfte3")]
+position = Vector2(472, 352)
+level_number = 11
+
+[node name="LevelSelectionButton13" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=37861019 instance=ExtResource("14_yfte3")]
+position = Vector2(472, 232)
+level_number = 12
+
+[node name="LevelSelectionButton14" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1356546873 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 248)
+level_number = 14
+
+[node name="LevelSelectionButton15" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=383664821 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 168)
+level_number = 13
+
+[node name="LevelSelectionButton16" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1440908541 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 336)
+level_number = 15
+
+[node name="LevelSelectionButton17" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1623768641 instance=ExtResource("14_yfte3")]
+position = Vector2(576, 416)
+level_number = 16
+
+[node name="LevelSelectionButton18" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=333816237 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 248)
+level_number = 19
+
+[node name="LevelSelectionButton19" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=989579218 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 168)
+level_number = 20
+
+[node name="LevelSelectionButton20" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=716358786 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 336)
+level_number = 18
+
+[node name="LevelSelectionButton21" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=946858944 instance=ExtResource("14_yfte3")]
+position = Vector2(664, 416)
+level_number = 17
+
+[node name="LevelSelectionButton22" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1781105020 instance=ExtResource("14_yfte3")]
+position = Vector2(736, 296)
+level_number = 21
 
 [node name="Multiplayer_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=375682100]
 layout_mode = 1
@@ -389,6 +504,24 @@ grow_vertical = 0
 [node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("18_l6l0r")]
 visible = false
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Game_Title_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes" unique_id=413282156]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -640.0
+offset_top = 24.0
+offset_right = -12.800049
+offset_bottom = 80.0
+grow_horizontal = 0
+texture = ExtResource("16_vu58q")
+expand_mode = 1
 
 [node name="Connecting_Label" type="Label" parent="HUD" unique_id=174976378]
 visible = false
@@ -398,5 +531,19 @@ offset_right = 107.0
 offset_bottom = 34.0
 text = "Connecting..."
 
+[node name="Must_Be_Logged_In_Label" type="Label" parent="HUD" unique_id=1485679696]
+visible = false
+offset_left = 8.0
+offset_top = 577.0
+offset_right = 243.0
+offset_bottom = 603.0
+text = "Must be logged in to play online!"
+
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Mute_Button" to="." method="_on_mute_button_mouse_entered"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Mute_Button" to="." method="_on_mute_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Unmute_Button" to="." method="_on_unmute_button_mouse_entered"]
+[connection signal="pressed" from="HUD/Main_Menu_Nodes/Unmute_Button" to="." method="_on_unmute_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Buttons_Control/Start_Button" to="." method="_on_start_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Start_Button" to="." method="_on_start_button_pressed"]
+[connection signal="mouse_entered" from="HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button" to="." method="_on_multiplayer_button_mouse_entered"]
 [connection signal="pressed" from="HUD/Main_Menu_Nodes/Buttons_Control/Multiplayer_Button" to="." method="_on_multiplayer_button_pressed"]

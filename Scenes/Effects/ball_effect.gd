@@ -1,6 +1,5 @@
 class_name ShootEffect extends GPUParticles3D
 
-
 @onready var smoke_effect: GPUParticles3D = $Smoke_Effect
 
 func _ready() -> void:

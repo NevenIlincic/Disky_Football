@@ -8,6 +8,14 @@
 
 config_version=5
 
+[GD-Sync]
+
+version="1.0.2"
+
+[addons]
+
+photon/connection/app_id="4e07bb6c-81aa-4f7f-ad6d-ebe7aaf66292"
+
 [application]
 
 config/name="New Game Project"
@@ -18,6 +26,13 @@ config/icon="res://icon.svg"
 [autoload]
 
 FusionSdk="*uid://dirxpm6bjesk6"
+BallEffects="*uid://d0aufkeb8twm5"
+FormationsManager="*uid://yf0bkcqfv0fb"
+SkinsManager="*uid://cis5rlfubeu4j"
+Bridge="*uid://cx4klxojbw6ck"
+WebSdk="*uid://dwporwn7tse8u"
+TutorialText="*uid://cmq0ydirsm3kt"
+AudioManager="*uid://dfhem0lyyemw8"
 
 [display]
 
@@ -27,12 +42,13 @@ window/mode=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg")
+enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", "res://addons/minimize_html_build/plugin.cfg", "res://addons/playgama_bridge/plugin.cfg")
 
 [fusion]
 
-connection/app_id="4e07bb6c-81aa-4f7f-ad6d-ebe7aaf66292"
+connection/app_id="d0726586-7812-4cb0-84d2-33ed225f5da3"
 connection/default_region="eu"
+debug/log_level=0
 
 [gui]
 
@@ -75,6 +91,11 @@ restart={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"location":0,"echo":false,"script":null)
 ]
 }
+pause_menu={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194306,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [physics]
 
@@ -85,3 +106,4 @@ restart={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

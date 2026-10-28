@@ -12,12 +12,12 @@ var went_over: bool = false
 
 const SPEED_TO_START_MOVE: float = 0.5
 const SPEED_TO_FINISH_MOVE: float = 0.2  
-const SETTLE_TIME: float = 0.15          
+const SETTLE_TIME: float = 0.5         
 
 var move_state: MoveState = MoveState.IDLE
 var settle_timer: float = 0.0
 
-var enemy_id: String
+var enemy_id: int
 
 var spawn_position: Vector3 = Vector3.ZERO
 
@@ -27,8 +27,14 @@ var spawn_position: Vector3 = Vector3.ZERO
 var can_play_sound: bool = false
 
 
+var scene: SinglePlayerScene
+@onready var top_part: MeshInstance3D = $Top_Part
+
 func _ready() -> void:
-	enemy_id = str(Time.get_ticks_usec(),"_", randi())
+	scene = get_tree().get_first_node_in_group("singleplayer_scene")
+	if scene:
+		scene.register_enemy(self)
+		
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var linear_velocity_length = state.linear_velocity.length()
@@ -82,3 +88,23 @@ func _on_body_entered(body: Node) -> void:
 			play_collide_sound()
 	else:
 		play_collide_sound()
+
+func set_skin(skin_id: int, is_host: bool):
+	var skin_texture: CompressedTexture2D = SkinsManager.get_skin_texture_from_id(skin_id)
+	var material = top_part.get_surface_override_material(0) as StandardMaterial3D
+	
+	if not material:
+		var active_mat = top_part.get_active_material(0) as StandardMaterial3D
+		if active_mat:
+			material = active_mat.duplicate() as StandardMaterial3D
+			top_part.set_surface_override_material(0, material)
+		else:
+			material = StandardMaterial3D.new()
+			top_part.set_surface_override_material(0, material)
+	
+	if material:
+		material.albedo_texture = skin_texture
+		if is_host:
+			material.albedo_color = Color("2048ff")
+		else:
+			material.albedo_color = Color("ff0000")

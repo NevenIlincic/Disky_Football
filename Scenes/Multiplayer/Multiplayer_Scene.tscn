@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ci517kw17do2b" path="res://Scenes/camera.gd" id="1_1jnck"]
 [ext_resource type="Script" uid="uid://docdj3hrtlhcq" path="res://Scenes/Multiplayer/multiplayer_scene.gd" id="1_7luwv"]
 [ext_resource type="Texture2D" uid="uid://uhr5k0pqack2" path="res://Sprites/Arrow/cil_arrow-thick-top.png" id="2_7luwv"]
+[ext_resource type="PackedScene" uid="uid://bjfmp8qqsc7pr" path="res://Scenes/2D/Post_Match_Screen.tscn" id="3_jrvm5"]
 [ext_resource type="Texture2D" uid="uid://dxig6lu7vv1eg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Enabled.png" id="3_lrmkq"]
 [ext_resource type="Texture2D" uid="uid://dbnykn5w8qtnc" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Pressed.png" id="4_88s4d"]
 [ext_resource type="Texture2D" uid="uid://7nx4ywugf6vg" path="res://Sprites/Buttons/Kick_Button/Kick_Button_2_Hovered.png" id="5_8tr4o"]
@@ -18,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bqta7micod8yo" path="res://Sprites/Goal_Scored/Football Fan.png" id="15_wtevs"]
 [ext_resource type="Texture2D" uid="uid://cfk1hasv2i3ym" path="res://Sprites/Goal_Scored/Football Fan 2.png" id="16_ifrsi"]
 [ext_resource type="Texture2D" uid="uid://djrfpc7gogide" path="res://Sprites/Goal_Scored/Football Fan 3.png" id="17_yvxgm"]
+[ext_resource type="PackedScene" uid="uid://csp8eakdpce3" path="res://Scenes/Menus/Multiplayer_Pause_Menu.tscn" id="20_1jnck"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="20_bi8w5"]
 [ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="21_ujlgx"]
 [ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="23_k3iuy"]
@@ -31,11 +33,11 @@ glow_enabled = true
 glow_intensity = 2.18
 glow_bloom = 0.06
 
-[sub_resource type="Gradient" id="Gradient_argnq"]
+[sub_resource type="Gradient" id="Gradient_1jnck"]
 colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_72tm3"]
-gradient = SubResource("Gradient_argnq")
+gradient = SubResource("Gradient_1jnck")
 width = 110
 height = 180
 fill_from = Vector2(0.5, 1)
@@ -46,13 +48,16 @@ rough = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kcebh"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54ih"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7luwv"]
 albedo_texture = ExtResource("20_bi8w5")
 texture_filter = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4vm5g"]
-material = SubResource("StandardMaterial3D_h54ih")
+material = SubResource("StandardMaterial3D_7luwv")
 size = Vector2(80, 50)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nja13"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_llka4"]
 size = Vector3(80.23, 5, 1)
@@ -60,19 +65,28 @@ size = Vector3(80.23, 5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_7qj7h"]
 size = Vector3(80, 25, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwjvy"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0pcd1"]
+friction = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lrmkq"]
 transparency = 1
 albedo_color = Color(1, 1, 0, 0.25490198)
 
 [sub_resource type="BoxMesh" id="BoxMesh_hycsl"]
-material = SubResource("StandardMaterial3D_mwjvy")
+material = SubResource("StandardMaterial3D_lrmkq")
 size = Vector3(80, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xi12t"]
 size = Vector3(80, 25.935669, 1)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jrvm5"]
+friction = 0.1
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_sdnxn"]
 size = Vector3(80, 1, 60)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1jnck"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_1ccg8"]
 size = Vector3(1, 5, 19)
@@ -85,6 +99,9 @@ size = Vector3(1, 5, 19.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_01yrl"]
 size = Vector3(1, 20, 19)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7luwv"]
+friction = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_s62fa"]
 size = Vector3(1, 5, 19)
@@ -102,13 +119,13 @@ size = Vector3(1, 20, 19)
 _data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_0wwvh"]
+[sub_resource type="CurveTexture" id="CurveTexture_88s4d"]
 curve = SubResource("Curve_ms33v")
 
 [sub_resource type="Gradient" id="Gradient_scjt1"]
 colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7una7"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8tr4o"]
 gradient = SubResource("Gradient_scjt1")
 
 [sub_resource type="Curve" id="Curve_mepe5"]
@@ -116,25 +133,23 @@ _limits = [0.0, 20.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_dvlam"]
+[sub_resource type="CurveTexture" id="CurveTexture_fwowi"]
 curve = SubResource("Curve_mepe5")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vn3hk"]
 gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_dvlam")
-color_ramp = SubResource("GradientTexture1D_7una7")
-alpha_curve = SubResource("CurveTexture_0wwvh")
+scale_curve = SubResource("CurveTexture_fwowi")
+color_ramp = SubResource("GradientTexture1D_8tr4o")
+alpha_curve = SubResource("CurveTexture_88s4d")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjc5n"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moaut"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("21_ujlgx")
 
 [sub_resource type="QuadMesh" id="QuadMesh_s8n1f"]
-material = SubResource("StandardMaterial3D_jjc5n")
+material = SubResource("StandardMaterial3D_moaut")
 orientation = 1
-
-[sub_resource type="BoxMesh" id="BoxMesh_xlfdk"]
 
 [node name="MultiplayerScene" type="Node3D" unique_id=417657300 groups=["multiplayer_scene"]]
 script = ExtResource("1_7luwv")
@@ -159,8 +174,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="Shooting_Indicator" type="Sprite3D" parent="HUD/Control" unique_id=1913243173]
@@ -257,6 +270,44 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Host_Team_Name" type="Label" parent="HUD/Control/Scoreboard" unique_id=1973587724]
+layout_mode = 0
+offset_left = -184.0
+offset_right = -112.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "AKL"
+vertical_alignment = 1
+
+[node name="Guest_Team_Name" type="Label" parent="HUD/Control/Scoreboard" unique_id=394055316]
+layout_mode = 0
+offset_left = 110.0
+offset_right = 182.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "AKL"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Host_Name_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=1604917786]
+layout_mode = 0
+offset_left = -408.0
+offset_right = -200.0
+offset_bottom = 48.0
+text = "MeXa"
+horizontal_alignment = 2
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Guest_Name_Label" type="Label" parent="HUD/Control/Scoreboard" unique_id=2136146719]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 408.0
+offset_bottom = 48.0
+text = "MeXa"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
 [node name="Goal_Scored_Node" type="Control" parent="HUD/Control" unique_id=1299776774]
 visible = false
 layout_mode = 1
@@ -304,6 +355,43 @@ texture = ExtResource("17_yvxgm")
 position = Vector2(1072, 536)
 texture = ExtResource("17_yvxgm")
 
+[node name="Turn_Label" type="Label" parent="HUD/Control" unique_id=924916707]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 26.0
+text = "YOUR TURN"
+
+[node name="Synchronizing_Label" type="Label" parent="HUD/Control" unique_id=791762688]
+visible = false
+layout_mode = 0
+offset_left = 8.0
+offset_top = 608.0
+offset_right = 259.0
+offset_bottom = 634.0
+text = "Synchronizing positions and time..."
+
+[node name="Turn_Time_Left_Label" type="Label" parent="HUD/Control" unique_id=547460577]
+layout_mode = 0
+offset_left = 520.0
+offset_top = 48.0
+offset_right = 632.0
+offset_bottom = 74.0
+text = "20s"
+horizontal_alignment = 1
+
+[node name="PostMatchScreen" parent="HUD/Control" unique_id=162344343 instance=ExtResource("3_jrvm5")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="MultiplayerPauseMenu" parent="HUD/Control" unique_id=829326047 instance=ExtResource("20_1jnck")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="Indicator_Line" type="Line2D" parent="HUD" unique_id=1332653344]
+width = 1.0
+
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=424191993]
 transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
 light_energy = 0.2
@@ -315,7 +403,7 @@ light_energy = 0.2
 
 [node name="Field" type="Node3D" parent="." unique_id=1525963902]
 
-[node name="Floor" type="StaticBody3D" parent="Field" unique_id=510854489]
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=510854489 groups=["floor"]]
 input_ray_pickable = false
 physics_material_override = SubResource("PhysicsMaterial_ub488")
 
@@ -328,6 +416,7 @@ mesh = SubResource("PlaneMesh_4vm5g")
 [node name="Wall" type="StaticBody3D" parent="Field" unique_id=1334804161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_nja13")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=1311391244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
@@ -340,6 +429,7 @@ shape = SubResource("BoxShape3D_7qj7h")
 [node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=706004618]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_0pcd1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=1707745269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
@@ -353,6 +443,7 @@ shape = SubResource("BoxShape3D_xi12t")
 [node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=1200014371]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_jrvm5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1433161925]
 shape = SubResource("BoxShape3D_sdnxn")
@@ -360,6 +451,7 @@ shape = SubResource("BoxShape3D_sdnxn")
 [node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=1435718674]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_1jnck")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=753717014]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
@@ -380,6 +472,7 @@ shape = SubResource("BoxShape3D_01yrl")
 [node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=398903582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
 input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_7luwv")
 
 [node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=732235063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
@@ -408,7 +501,8 @@ process_material = SubResource("ParticleProcessMaterial_vn3hk")
 draw_pass_1 = SubResource("QuadMesh_s8n1f")
 
 [node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=820798048]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
 
 [node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("23_k3iuy")]
 transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
@@ -417,90 +511,222 @@ transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -4
 transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
 goal_owner = 1
 
-[node name="My_Formation_3-3" type="Node3D" parent="." unique_id=1153216101]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1734000353]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, 8.168045)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
-
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D" unique_id=2037455887 groups=["host_spawn_point"]]
+[node name="Host_Formations" type="Node3D" parent="." unique_id=1153216101]
 visible = false
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1628700315]
+[node name="3-3_Standard_Host" type="Node3D" parent="Host_Formations" unique_id=810574824]
+visible = false
+
+[node name="Marker3D2" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=1321511931 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=129533481 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, -8)
+
+[node name="Marker3D4" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=1276191003 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=446211095 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, 0)
+
+[node name="Marker3D6" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=468085791 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, -8)
+
+[node name="Marker3D" type="Marker3D" parent="Host_Formations/3-3_Standard_Host" unique_id=2037455887 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 8)
+
+[node name="3-3_Front_Wide_Host" type="Node3D" parent="Host_Formations" unique_id=1720852198]
+visible = false
+
+[node name="Marker3D" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=546140979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 8)
+
+[node name="Marker3D2" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=248192389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -0.80334044)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
 
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D2" unique_id=1321511931 groups=["host_spawn_point", "my_spawn_point"]]
+[node name="Marker3D3" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=1567133578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, -8)
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1972871814]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -6.8007593)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D4" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=1496180712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, 16)
 
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D3" unique_id=129533481 groups=["host_spawn_point", "my_spawn_point"]]
+[node name="Marker3D5" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=2102569474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, 0)
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=1758292205]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, 8.168045)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D6" type="Marker3D" parent="Host_Formations/3-3_Front_Wide_Host" unique_id=1061282321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436, 0.197, -16)
 
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D4" unique_id=1276191003 groups=["host_spawn_point", "my_spawn_point"]]
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=141923202]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -0.80334044)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
-
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D5" unique_id=446211095 groups=["host_spawn_point", "my_spawn_point"]]
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="My_Formation_3-3" unique_id=926212837]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -6.8007593)
-visible = false
-mesh = SubResource("BoxMesh_xlfdk")
-
-[node name="Marker3D" type="Marker3D" parent="My_Formation_3-3/MeshInstance3D6" unique_id=468085791 groups=["host_spawn_point", "my_spawn_point"]]
-
-[node name="Enemy_Formation_3-3" type="Node3D" parent="." unique_id=2006468027]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.997684, 0, 0)
+[node name="5-1_Standard_Host" type="Node3D" parent="Host_Formations" unique_id=955620089]
 visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=363237179]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, 8.168045)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=1653362019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 8)
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D" unique_id=556128311 groups=["guest_spawn_point"]]
+[node name="Marker3D2" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=1594446996]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 0)
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=789656263]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -0.80334044)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D4" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=843770668]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 16)
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D2" unique_id=1952580960 groups=["guest_spawn_point"]]
+[node name="Marker3D5" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=668758075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 0)
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=1777867220]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.830086, 0.19691789, -6.8007593)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D6" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=2075582896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -16)
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D3" unique_id=921941998 groups=["guest_spawn_point"]]
+[node name="Marker3D3" type="Marker3D" parent="Host_Formations/5-1_Standard_Host" unique_id=1250584012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -8)
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=992643502]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, 8.168045)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="2_4_Standard_Host" type="Node3D" parent="Host_Formations" unique_id=2075737748]
+visible = false
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D4" unique_id=547872202 groups=["guest_spawn_point"]]
+[node name="Marker3D2" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=1170020428 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 4)
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=290832733]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -0.80334044)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D3" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=1284004160 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -4)
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D5" unique_id=1029026675 groups=["guest_spawn_point"]]
+[node name="Marker3D4" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=1102590177 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 12)
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Enemy_Formation_3-3" unique_id=843293307]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436373, 0.19691789, -6.8007593)
-mesh = SubResource("BoxMesh_xlfdk")
+[node name="Marker3D5" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=712075355 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -12)
 
-[node name="Marker3D" type="Marker3D" parent="Enemy_Formation_3-3/MeshInstance3D6" unique_id=748541012 groups=["guest_spawn_point"]]
+[node name="Marker3D6" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=116935670 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -4)
+
+[node name="Marker3D" type="Marker3D" parent="Host_Formations/2_4_Standard_Host" unique_id=1862703705 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 4)
+
+[node name="4_2_Split_Host" type="Node3D" parent="Host_Formations" unique_id=589898307]
+visible = false
+
+[node name="Marker3D2" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=1008516139 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 16)
+
+[node name="Marker3D3" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=359213877 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -16)
+
+[node name="Marker3D4" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=509245959 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=431119392 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -8)
+
+[node name="Marker3D6" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=15700700 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -4)
+
+[node name="Marker3D" type="Marker3D" parent="Host_Formations/4_2_Split_Host" unique_id=1401842425 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 4)
+
+[node name="Guest_Formations" type="Node3D" parent="." unique_id=2006468027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 0)
+visible = false
+
+[node name="3-3_Standard_Guest" type="Node3D" parent="Guest_Formations" unique_id=669997133]
+visible = false
+
+[node name="Marker3D" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=556128311 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 8)
+
+[node name="Marker3D2" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=1952580960 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=921941998 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, -8)
+
+[node name="Marker3D4" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=547872202 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=1029026675 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, 0)
+
+[node name="Marker3D6" type="Marker3D" parent="Guest_Formations/3-3_Standard_Guest" unique_id=748541012 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, -8)
+
+[node name="3-3_Front_Wide_Guest" type="Node3D" parent="Guest_Formations" unique_id=386153517]
+visible = false
+
+[node name="Marker3D" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=1393156333 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 16)
+
+[node name="Marker3D2" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=977514378 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=676680593 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.83, 0.197, -16)
+
+[node name="Marker3D4" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=409170534 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=1853026993 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, 0)
+
+[node name="Marker3D6" type="Marker3D" parent="Guest_Formations/3-3_Front_Wide_Guest" unique_id=1442162930 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.436001, 0.197, -8)
+
+[node name="5-1_Standard_Guest" type="Node3D" parent="Guest_Formations" unique_id=171308699]
+visible = false
+
+[node name="Marker3D" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=601302074 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 16)
+
+[node name="Marker3D2" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=1042853182 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=764898369 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -16)
+
+[node name="Marker3D4" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=1778694751 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=1121518742 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 0)
+
+[node name="Marker3D6" type="Marker3D" parent="Guest_Formations/5-1_Standard_Guest" unique_id=1122998780 groups=["3-3_Standard_Guest"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -8)
+
+[node name="2_4_Standard_Guest" type="Node3D" parent="Guest_Formations" unique_id=1617757722]
+visible = false
+
+[node name="Marker3D7" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=346958640 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 4)
+
+[node name="Marker3D3" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=2100740587 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -4)
+
+[node name="Marker3D4" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=1656244100 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 12)
+
+[node name="Marker3D5" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=1024770411 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -12)
+
+[node name="Marker3D6" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=552206913 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -4)
+
+[node name="Marker3D" type="Marker3D" parent="Guest_Formations/2_4_Standard_Guest" unique_id=317546812 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 4)
+
+[node name="4_2_Split_Guest" type="Node3D" parent="Guest_Formations" unique_id=512184994]
+visible = false
+
+[node name="Marker3D2" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=1591926366 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 16)
+
+[node name="Marker3D3" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=1874804094 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -16)
+
+[node name="Marker3D4" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=1133429397 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, 8)
+
+[node name="Marker3D5" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=282692465 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.197, -8)
+
+[node name="Marker3D6" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=468628341 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, -4)
+
+[node name="Marker3D" type="Marker3D" parent="Guest_Formations/4_2_Split_Guest" unique_id=936945643 groups=["3-3_Standard_Host"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.197, 4)
 
 [node name="Referee_Whistle_Sound" type="AudioStreamPlayer" parent="." unique_id=947798521]
 stream = ExtResource("24_hh84i")
@@ -508,4 +734,12 @@ stream = ExtResource("24_hh84i")
 [node name="Goal_Scored_Sound" type="AudioStreamPlayer" parent="." unique_id=2094840179]
 stream = ExtResource("25_xstoj")
 
-[node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1420256094]
+[node name="FusionSpawner" type="FusionSpawner" parent="." unique_id=1440459462]
+
+[node name="Turn_Time_Left_Timer" type="Timer" parent="." unique_id=1640438102]
+process_callback = 0
+wait_time = 15.0
+
+[connection signal="toggled" from="HUD/Control/Buttons/Kick_Button" to="." method="_on_kick_button_toggled"]
+[connection signal="toggled" from="HUD/Control/Buttons/Move_Player_Button" to="." method="_on_move_player_button_toggled"]
+[connection signal="timeout" from="Turn_Time_Left_Timer" to="." method="_on_turn_time_left_timer_timeout"]

@@ -1,0 +1,554 @@
+[gd_scene format=3 uid="uid://bg8467tvxt5w7"]
+
+[ext_resource type="PackedScene" uid="uid://duc7fboo8raui" path="res://Scenes/Ball/Ball.tscn" id="1_mcayo"]
+[ext_resource type="PackedScene" uid="uid://d1w5ccem33kle" path="res://Scenes/Player/Player.tscn" id="2_hx6sn"]
+[ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="3_klqcj"]
+[ext_resource type="Texture2D" uid="uid://bm16mthdqyvdl" path="res://Sprites/Effects/alpha/circle_04_a.png" id="4_pnas5"]
+[ext_resource type="PackedScene" uid="uid://drhkcd78218ty" path="res://Scenes/Enemy/Enemy.tscn" id="5_r2ecr"]
+[ext_resource type="PackedScene" uid="uid://cctmr66sccguo" path="res://Scenes/Goal/Goal.tscn" id="6_pvj3u"]
+[ext_resource type="Texture2D" uid="uid://cf1whh7nm4ayq" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Normal.png" id="7_cs5y2"]
+[ext_resource type="Texture2D" uid="uid://b57xtf18ci765" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Pressed.png" id="8_h6fxk"]
+[ext_resource type="Texture2D" uid="uid://b3541omjl4ej2" path="res://Sprites/Buttons/Mute_Button/Mute_Sound_Button_Hovered.png" id="9_4wujw"]
+[ext_resource type="Texture2D" uid="uid://mhx85fpw7cuu" path="res://Sprites/Buttons/Unmute_Button/Unmute__Sound_Button_Normal.png" id="10_wmjih"]
+[ext_resource type="Texture2D" uid="uid://d1pgjsb8h82uv" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Pressed.png" id="11_i2m30"]
+[ext_resource type="Texture2D" uid="uid://clh2b5bclrvfk" path="res://Sprites/Buttons/Unmute_Button/Unmute_Sound_Button_Hovered.png" id="12_86rb5"]
+[ext_resource type="Texture2D" uid="uid://dc4d7tqgmc5rw" path="res://Sprites/Buttons/Start_Button/Start_Button_Enabled.png" id="13_p4lby"]
+[ext_resource type="Texture2D" uid="uid://8yh80csuric" path="res://Sprites/Buttons/Start_Button/Start_Button_Pressed.png" id="14_dh3rp"]
+[ext_resource type="Texture2D" uid="uid://bbe0iy2vjxxlp" path="res://Sprites/Buttons/Start_Button/Start_Button_Hovered.png" id="15_ib8va"]
+[ext_resource type="Texture2D" uid="uid://c172t8165eagf" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Enabled.png" id="16_tsw8m"]
+[ext_resource type="Texture2D" uid="uid://d1qeqeen0jyml" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Pressed.png" id="17_pjv88"]
+[ext_resource type="Texture2D" uid="uid://5xffkq60k8qr" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Hovered.png" id="18_a5cim"]
+[ext_resource type="Texture2D" uid="uid://c6vh46ux6ymqj" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Disabled.png" id="19_6skjw"]
+[ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="20_hvhnb"]
+[ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="21_owhds"]
+[ext_resource type="Texture2D" uid="uid://bugt1fjnl44jw" path="res://Sprites/Game_Title/Game_Title.png" id="22_u07xp"]
+
+[sub_resource type="Environment" id="Environment_fom2g"]
+background_mode = 3
+background_energy_multiplier = 0.0
+glow_enabled = true
+glow_intensity = 2.18
+glow_bloom = 0.06
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_doc5c"]
+rough = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_csexd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6l0r"]
+albedo_texture = ExtResource("3_klqcj")
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ubtjd"]
+material = SubResource("StandardMaterial3D_l6l0r")
+size = Vector2(80, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4n6e5"]
+size = Vector3(80.23, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_otq0d"]
+size = Vector3(80, 25, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jg06a"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.25490198)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l5nql"]
+material = SubResource("StandardMaterial3D_jg06a")
+size = Vector3(80, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s64iy"]
+size = Vector3(80, 25.935669, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_drbdk"]
+size = Vector3(80, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2df6a"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a6vtu"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_twavk"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f8l8r"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ygki8"]
+size = Vector3(1, 5, 19)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hshsg"]
+size = Vector3(1, 20, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nu277"]
+size = Vector3(1, 5, 19.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kc0rd"]
+size = Vector3(1, 20, 19)
+
+[sub_resource type="Curve" id="Curve_mhool"]
+_data = [Vector2(0.06451613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sp3pi"]
+curve = SubResource("Curve_mhool")
+
+[sub_resource type="Gradient" id="Gradient_l3g6k"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.2509804, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i3d3d"]
+gradient = SubResource("Gradient_l3g6k")
+
+[sub_resource type="Curve" id="Curve_6oo2k"]
+_limits = [0.0, 20.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 20), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tingw"]
+curve = SubResource("Curve_6oo2k")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j0iws"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_tingw")
+color_ramp = SubResource("GradientTexture1D_i3d3d")
+alpha_curve = SubResource("CurveTexture_sp3pi")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eertt"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_pnas5")
+
+[sub_resource type="QuadMesh" id="QuadMesh_dikgo"]
+material = SubResource("StandardMaterial3D_eertt")
+orientation = 1
+
+[node name="CoverImage" type="Node3D" unique_id=886645190]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=300739146]
+transform = Transform3D(1, 0, 0, 0, 0.5029197, 0.8643332, 0, -0.8643332, 0.5029197, -0.5304804, 21.78799, 21.533604)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1419670960]
+environment = SubResource("Environment_fom2g")
+
+[node name="Field" type="Node3D" parent="." unique_id=1849157966]
+
+[node name="Ball" parent="Field" unique_id=1734501864 instance=ExtResource("1_mcayo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9993095, 0.5592249, 4.0355825)
+
+[node name="Player2" parent="Field" unique_id=1368321486 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3827057, 0.25, -0.3622365)
+
+[node name="Player" parent="Field" unique_id=165400565 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.407911, 0.25, -2.0692425)
+
+[node name="Floor" type="StaticBody3D" parent="Field" unique_id=116945659]
+input_ray_pickable = false
+physics_material_override = SubResource("PhysicsMaterial_doc5c")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Floor" unique_id=1975210583]
+shape = SubResource("WorldBoundaryShape3D_csexd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Floor" unique_id=1520986872]
+mesh = SubResource("PlaneMesh_ubtjd")
+
+[node name="Wall" type="StaticBody3D" parent="Field" unique_id=178937066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.072708)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall" unique_id=1267751294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.38, -7.44)
+mesh = SubResource("BoxMesh_4n6e5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall" unique_id=1106367856]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -6.9647083)
+shape = SubResource("BoxShape3D_otq0d")
+
+[node name="Wall_2" type="StaticBody3D" parent="Field" unique_id=1700456715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.578038, 11.152648)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Wall_2" unique_id=1319724230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9632673, 13.670426)
+visible = false
+mesh = SubResource("BoxMesh_l5nql")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Wall_2" unique_id=1450406167]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4678345, 12.55129)
+shape = SubResource("BoxShape3D_s64iy")
+
+[node name="Ceiling" type="StaticBody3D" parent="Field" unique_id=829223131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.23407, 0)
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Field/Ceiling" unique_id=1686617763]
+shape = SubResource("BoxShape3D_drbdk")
+
+[node name="Vertical_Wall_1" type="StaticBody3D" parent="Field" unique_id=603874945]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.613, 0, 0)
+input_ray_pickable = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=1303523985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_2df6a")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=561718103]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, 15)
+shape = SubResource("BoxShape3D_a6vtu")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Field/Vertical_Wall_1" unique_id=1714596416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_twavk")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_1" unique_id=478081806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.403, -15.374)
+shape = SubResource("BoxShape3D_f8l8r")
+
+[node name="Vertical_Wall_2" type="StaticBody3D" parent="Field" unique_id=1316856946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.61259, 0, 0)
+input_ray_pickable = false
+
+[node name="Left_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=809737269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, 15.523)
+mesh = SubResource("BoxMesh_ygki8")
+
+[node name="Closer_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1502979662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, 15)
+shape = SubResource("BoxShape3D_hshsg")
+
+[node name="Right_Wall" type="MeshInstance3D" parent="Field/Vertical_Wall_2" unique_id=950806316]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.62, -15.376)
+mesh = SubResource("BoxMesh_nu277")
+
+[node name="Further_Collision_Box" type="CollisionShape3D" parent="Field/Vertical_Wall_2" unique_id=1868901652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.403, -15.373857)
+shape = SubResource("BoxShape3D_kc0rd")
+
+[node name="Wave_Effect" type="GPUParticles3D" parent="Field" unique_id=794294189]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4084432, -0.71547604)
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_j0iws")
+draw_pass_1 = SubResource("QuadMesh_dikgo")
+
+[node name="Enemy" parent="Field" unique_id=594854611 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.792366, 0.25000095, -14.882816)
+
+[node name="Enemy2" parent="Field" unique_id=807640344 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6036835, 0.25, 7.0285044)
+
+[node name="Player3" parent="Field" unique_id=427389296 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.391686, 0.25, -10.641853)
+
+[node name="Player5" parent="Field" unique_id=79950485 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.932785, 0.25, 14.114393)
+
+[node name="Player7" parent="Field" unique_id=891220926 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6495457, 0.25, -7.0221105)
+
+[node name="Player8" parent="Field" unique_id=1278632486 instance=ExtResource("2_hx6sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.041312, 0.25, 0.1139822)
+
+[node name="Enemy3" parent="Field" unique_id=1672874997 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.702248, 0.25000095, -7.8006506)
+
+[node name="Enemy4" parent="Field" unique_id=324691411 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.926107, 0.25, 7.0285044)
+
+[node name="Enemy5" parent="Field" unique_id=1109552828 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.10329, 0.25000095, 2.18999)
+
+[node name="Enemy6" parent="Field" unique_id=247814650 instance=ExtResource("5_r2ecr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5326462, 0.25, 15.456355)
+
+[node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=1713817339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+
+[node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("6_pvj3u")]
+transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)
+
+[node name="Enemy_Goal" parent="Field" unique_id=1064171631 instance=ExtResource("6_pvj3u")]
+transform = Transform3D(-1.7484555e-07, 0, -4, 0, 4, 0, 4, 0, -1.7484555e-07, 41.11, -1.077, 0.085)
+goal_owner = 1
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1361455903]
+transform = Transform3D(1, 0, 0, 0, 0.36029094, 0.93284, 0, -0.93284, 0.36029094, -4.3613186, 12.102816, 7.406451)
+sky_mode = 1
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1280672286]
+transform = Transform3D(0.08901034, -0.28847453, 0.95334136, 0.026817283, 0.9574876, 0.2872253, -0.9956696, -1.3998996e-10, 0.0929624, 39.462456, 17.136568, 0)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="." unique_id=1317003086]
+transform = Transform3D(-0.05663065, 0.7930336, -0.60653996, -0.0737223, -0.60917795, -0.78959954, -0.9956696, -1.8557891e-09, 0.09296241, -52.470604, 17.136568, 0)
+light_energy = 0.2
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=500421355]
+
+[node name="Background" type="ColorRect" parent="HUD" unique_id=2081637137]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 168.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.4862745, 0.4862745, 0.4862745, 0.3254902)
+metadata/_edit_use_anchors_ = true
+
+[node name="Main_Menu_Nodes" type="Control" parent="HUD" unique_id=1317669461]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Mute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=684931885]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("7_cs5y2")
+texture_pressed = ExtResource("8_h6fxk")
+texture_hover = ExtResource("9_4wujw")
+ignore_texture_size = true
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Unmute_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes" unique_id=676720461]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("10_wmjih")
+texture_pressed = ExtResource("11_i2m30")
+texture_hover = ExtResource("12_86rb5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Buttons_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=875467303]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -112.0
+offset_right = -88.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Start_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Buttons_Control" unique_id=987601538]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -320.0
+offset_right = 136.0
+offset_bottom = -216.0
+texture_normal = ExtResource("13_p4lby")
+texture_pressed = ExtResource("14_dh3rp")
+texture_hover = ExtResource("15_ib8va")
+ignore_texture_size = true
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Multiplayer_Button" type="TextureButton" parent="HUD/Main_Menu_Nodes/Buttons_Control" unique_id=2066118476]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -208.0
+offset_right = 136.0
+offset_bottom = -104.0
+texture_normal = ExtResource("16_tsw8m")
+texture_pressed = ExtResource("17_pjv88")
+texture_hover = ExtResource("18_a5cim")
+texture_disabled = ExtResource("19_6skjw")
+ignore_texture_size = true
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Level_Selection_Menu" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=208450654]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Field_Texture_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=1205368309]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 104.0
+offset_right = 810.13043
+offset_bottom = 528.0
+texture = ExtResource("3_klqcj")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Level_Buttons_Node" type="Node2D" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu" unique_id=2040148642]
+
+[node name="LevelSelectionButton" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=783150541 instance=ExtResource("20_hvhnb")]
+position = Vector2(72, 288)
+
+[node name="LevelSelectionButton2" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1492033561 instance=ExtResource("20_hvhnb")]
+position = Vector2(136, 432)
+level_number = 1
+
+[node name="LevelSelectionButton3" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1972824238 instance=ExtResource("20_hvhnb")]
+position = Vector2(136, 344)
+level_number = 2
+
+[node name="LevelSelectionButton4" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=739729551 instance=ExtResource("20_hvhnb")]
+position = Vector2(136, 232)
+level_number = 3
+
+[node name="LevelSelectionButton5" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=2038953818 instance=ExtResource("20_hvhnb")]
+position = Vector2(136, 152)
+level_number = 4
+
+[node name="LevelSelectionButton6" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=41103663 instance=ExtResource("20_hvhnb")]
+position = Vector2(232, 192)
+level_number = 5
+
+[node name="LevelSelectionButton7" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1511526692 instance=ExtResource("20_hvhnb")]
+position = Vector2(232, 384)
+level_number = 7
+
+[node name="LevelSelectionButton8" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=527941732 instance=ExtResource("20_hvhnb")]
+position = Vector2(232, 288)
+level_number = 6
+
+[node name="LevelSelectionButton9" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=377248378 instance=ExtResource("20_hvhnb")]
+position = Vector2(328, 168)
+level_number = 9
+
+[node name="LevelSelectionButton10" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=692747923 instance=ExtResource("20_hvhnb")]
+position = Vector2(365, 288)
+level_number = 10
+
+[node name="LevelSelectionButton11" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1571496690 instance=ExtResource("20_hvhnb")]
+position = Vector2(328, 416)
+level_number = 8
+
+[node name="LevelSelectionButton12" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1022844566 instance=ExtResource("20_hvhnb")]
+position = Vector2(472, 352)
+level_number = 11
+
+[node name="LevelSelectionButton13" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=848407315 instance=ExtResource("20_hvhnb")]
+position = Vector2(472, 232)
+level_number = 12
+
+[node name="LevelSelectionButton14" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=475516859 instance=ExtResource("20_hvhnb")]
+position = Vector2(576, 248)
+level_number = 14
+
+[node name="LevelSelectionButton15" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1436074776 instance=ExtResource("20_hvhnb")]
+position = Vector2(576, 168)
+level_number = 13
+
+[node name="LevelSelectionButton16" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=128874502 instance=ExtResource("20_hvhnb")]
+position = Vector2(576, 336)
+level_number = 15
+
+[node name="LevelSelectionButton17" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=211560037 instance=ExtResource("20_hvhnb")]
+position = Vector2(576, 416)
+level_number = 16
+
+[node name="LevelSelectionButton18" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=1741418844 instance=ExtResource("20_hvhnb")]
+position = Vector2(664, 248)
+level_number = 19
+
+[node name="LevelSelectionButton19" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=760272295 instance=ExtResource("20_hvhnb")]
+position = Vector2(664, 168)
+level_number = 20
+
+[node name="LevelSelectionButton20" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=396825299 instance=ExtResource("20_hvhnb")]
+position = Vector2(664, 336)
+level_number = 18
+
+[node name="LevelSelectionButton21" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=593601577 instance=ExtResource("20_hvhnb")]
+position = Vector2(664, 416)
+level_number = 17
+
+[node name="LevelSelectionButton22" parent="HUD/Main_Menu_Nodes/Level_Selection_Menu/Level_Buttons_Node" unique_id=534515381 instance=ExtResource("20_hvhnb")]
+position = Vector2(736, 296)
+level_number = 21
+
+[node name="Multiplayer_Control" type="Control" parent="HUD/Main_Menu_Nodes" unique_id=1792520336]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1152.0
+offset_top = -648.0
+offset_right = -1112.0
+offset_bottom = -608.0
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MultiplayerMenu" parent="HUD/Main_Menu_Nodes/Multiplayer_Control" unique_id=48373522 instance=ExtResource("21_owhds")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Game_Title_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes" unique_id=1879215299]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.38194445
+anchor_right = 1.0
+anchor_bottom = 0.38194445
+offset_left = -640.0
+offset_top = 24.0
+offset_right = -12.800049
+offset_bottom = 80.0
+grow_horizontal = 0
+texture = ExtResource("22_u07xp")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Connecting_Label" type="Label" parent="HUD" unique_id=318575064]
+visible = false
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 107.0
+offset_bottom = 34.0
+text = "Connecting..."
+
+[node name="Must_Be_Logged_In_Label" type="Label" parent="HUD" unique_id=1108217508]
+visible = false
+offset_left = 8.0
+offset_top = 577.0
+offset_right = 243.0
+offset_bottom = 603.0
+text = "Must be logged in to play online!"
