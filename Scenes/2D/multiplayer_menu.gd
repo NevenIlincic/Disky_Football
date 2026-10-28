@@ -3,12 +3,15 @@ class_name MultiplayerMenu extends Control
 signal disconnected_from_multiplayer()
 signal search_started()
 signal search_canceled()
+signal custom_lobby_button_pressed()
 
 var logged_in_player_stats: LoggedPlayerStats
 
 @onready var not_searching_node: Control = $Not_Searching_Node
 @onready var while_searching_node: Control = $While_Searching_Node
 @onready var match_found_node: Control = $Match_Found_Node
+@onready var create_custom_lobby_node: Control = $Create_Custom_Lobby_Node
+@onready var while_waiting_custom_node: Control = $While_Waiting_Custom_Node
 
 @onready var searching_animation_player: AnimationPlayer = $Searching_Animation_Player
 #LABELS
@@ -141,12 +144,19 @@ func show_not_searching_node():
 	searching_animation_player.stop()
 	not_searching_node.visible = true
 	while_searching_node.visible = false
+	while_waiting_custom_node.visible = false
 
 func show_while_searching_node():
 	searching_label.visible = true
 	searching_animation_player.play("Searching_Animation")
 	not_searching_node.visible = false
 	while_searching_node.visible = true
+	while_waiting_custom_node.visible = false
+
+func show_while_waiting_node():
+	not_searching_node.visible = false
+	while_waiting_custom_node.visible = true
+	searching_animation_player.play("Waiting_Animation")
 
 func get_my_name() -> String:
 	#ZAMENI SA PLAYGAMA SDK
@@ -166,3 +176,21 @@ func _on_back_button_mouse_entered() -> void:
 
 func _on_cancel_searching_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
+
+
+func _on_custom_game_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_custom_game_button_pressed() -> void:
+	create_custom_lobby_node.visible = true
+	not_searching_node.visible = false
+	custom_lobby_button_pressed.emit()
+
+
+func _on_custom_lobby_cancel_button_pressed() -> void:
+	_on_cancel_searching_button_pressed()
+
+
+func _on_custom_lobby_confirm_button_pressed() -> void:
+	show_while_waiting_node()

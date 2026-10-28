@@ -12,6 +12,8 @@ extends Node3D
 @onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
 @onready var ad_button: TextureButton = $HUD/Main_Menu_Nodes/Ad_Node/Ad_Button
 
+
+
 var forbidden_names: Dictionary = {
 	"XXX": true,
 	"SEX": true
@@ -37,6 +39,7 @@ func _ready() -> void:
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
+	multiplayer_menu.custom_lobby_button_pressed.connect(_on_custom_lobby_button_pressed)
 	check_is_ad_block_enabled()
 	
 func check_is_ad_block_enabled() -> void:
@@ -79,12 +82,16 @@ func _on_confirm_button_pressed() -> void:
 		team_name_initial_input_node.visible = false
 		main_menu_nodes.visible = true
 		logged_player_stats.set_player_team_name(entered_input)
-		
+
+func _on_custom_lobby_button_pressed() -> void:
+	team_name_initial_input_node.visible = false
+	main_menu_nodes.visible = false
+	
 func _on_edit_team_name_button_pressed() -> void:
-		team_name_initial_input_node.visible = true
-		cancel_button.visible = true
-		label_text.visible = false
-		main_menu_nodes.visible = false
+	team_name_initial_input_node.visible = true
+	cancel_button.visible = true
+	label_text.visible = false
+	main_menu_nodes.visible = false
 
 
 func _on_cancel_button_pressed() -> void:
@@ -123,3 +130,5 @@ func _on_ad_confirm_button_mouse_entered() -> void:
 
 func _on_ad_cancel_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
+
+		

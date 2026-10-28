@@ -15,6 +15,8 @@ var match_scene: PackedScene
 var my_name: String = str("MeXa", "_", randi())   
 var my_team_name: String
 
+var is_in_private_room: bool = false
+
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
 var formations: Dictionary = {}
@@ -81,7 +83,7 @@ func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
 
-	id = str(randi(), my_name)
+	#id = str(randi(), my_name)
 	#my_team_name = get_random_3_letter_string()
 	connect_to_signals()
 
@@ -101,6 +103,7 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
+	id = WebSdk.SDK.get_player_id()
 	WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
@@ -108,6 +111,28 @@ func _on_connected():
 	#current_level = 2
 	#experience_amount = 19
 
+
+func create_private_room(custom_room_name: String) -> void:
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = false
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	
+	Fusion.join_or_create_room(custom_room_name, room_options)
+	
+	
+func create_quick_match_room() -> void:
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = true
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	Fusion.join_or_create_room("", room_options)
 
 func create_room():
 	match_searching_started.emit()
@@ -117,7 +142,7 @@ func create_room():
 		"fusion_map_data": "deafult_map"
 	}
 	
-	var room_name: String = "Room_" + str(randi_range(100000, 999999))
+	#var room_name: String = "Room_" + str(randi_range(100000, 999999))
 	Fusion.join_or_create_room("", room_options)
 
 
@@ -137,12 +162,14 @@ func leave_room() -> void:
 	skins.clear()
 	Fusion.leave_room()
 
-func join_room() -> void:
-	#var room_options: FusionRoomOptions = FusionRoomOptions.new()
-	#room_options.custom_properties = {
-		#"fusion_map_data": "default_map"
-	#}
-	Fusion.join_room("TEST_ROOM_1")
+func join_private_room(room_name: String) -> void:
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.custom_properties = {
+		"fusion_map_data": "deafult_map"
+	}
+	Fusion.join_room(room_name, room_options)
 
 func _on_player_joined(player_id: int, user_id: String):
 	if id == user_id:
@@ -296,7 +323,6 @@ func get_opponents_skin_id() -> int:
 
 
 func get_team_name() -> String:
-	#ZAMENITI SA PLAYGAMA SDK
 	return get_random_3_letter_string()
 
 func get_random_3_letter_string() -> String:

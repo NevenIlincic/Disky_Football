@@ -220,6 +220,7 @@ func _on_multiplayer_data_loaded(success, data):
 			var parse_result = json.parse(data)
 			if parse_result == OK:
 				var multiplayer_stats: Dictionary = json.data
+				FusionSdk.my_name = get_player_name()
 				FusionSdk.my_team_name = multiplayer_stats["team_name"]
 				FusionSdk.money_amount = int(multiplayer_stats["money"])
 				FusionSdk.fans_amount = int(multiplayer_stats["fans"])
