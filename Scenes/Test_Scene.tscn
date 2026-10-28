@@ -409,7 +409,7 @@ light_energy = 0.2
 [node name="Field" type="Node3D" parent="." unique_id=1493409086]
 
 [node name="Ball" parent="Field" unique_id=1734501864 instance=ExtResource("7_mykrp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.392437, 0.5592249, 0.8023712)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 
 [node name="Floor" type="StaticBody3D" parent="Field" unique_id=1316239740]
 input_ray_pickable = false
@@ -509,7 +509,7 @@ process_material = SubResource("ParticleProcessMaterial_88mxo")
 draw_pass_1 = SubResource("QuadMesh_8c5ma")
 
 [node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=151517408]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72427344, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 
 [node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("20_518se")]
 transform = Transform3D(-1.7484555e-07, 0, 4, 0, 4, 0, -4, 0, -1.7484555e-07, -41.11, -1.077, 0.085)

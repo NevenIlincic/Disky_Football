@@ -20,7 +20,7 @@ enum MatchState{
 var match_state: MatchState = MatchState.PLAYING
 
 #GOALS
-var GOALS_TO_WIN: int = 1
+var GOALS_TO_WIN: int = 5
 
 var is_my_turn: bool = true:
 	set(value):

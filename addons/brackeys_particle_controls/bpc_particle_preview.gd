@@ -104,4 +104,3 @@ func get_total_sim_time() -> float:
 		return 999999 
 	var max_emission_time = original.lifetime * (1.0 - original.explosiveness)
 	return (max_emission_time + original.lifetime - original.preprocess) / original.speed_scale
-

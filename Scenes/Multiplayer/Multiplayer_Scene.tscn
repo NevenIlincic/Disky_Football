@@ -501,7 +501,7 @@ process_material = SubResource("ParticleProcessMaterial_vn3hk")
 draw_pass_1 = SubResource("QuadMesh_s8n1f")
 
 [node name="Ball_Spawn_Position" type="Marker3D" parent="Field" unique_id=820798048]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.433443, 0.72427344, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 visible = false
 
 [node name="My_Goal" parent="Field" unique_id=455571177 instance=ExtResource("23_k3iuy")]

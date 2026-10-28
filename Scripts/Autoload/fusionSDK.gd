@@ -189,12 +189,35 @@ func _on_room_joined():
 	
 	Fusion.rpc(player_ready, buffer.data_array)
 
+#@rpc("any_peer", "call_remote")
+#func introduce(received_data_array: PackedByteArray):
+	#print("PRIMLJEN INTRODUCE, velicina bajtova: ", received_data_array.size())
+	#var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	#buffer.data_array = received_data_array
+	#var player_id: String = buffer.get_utf8_string()
+	#var is_new = not names.has(player_id)
+	#var player_name: String = buffer.get_utf8_string()
+	#var player_team_name: String = buffer.get_utf8_string()
+	#var player_formation_id: int = buffer.get_u8()
+	#var player_ball_effect_id: int = buffer.get_u8()
+	#var player_level: int = buffer.get_u8()
+	#var player_skin_id: int = buffer.get_u8()
+	#
+	#names[player_id] = player_name
+	#teams[player_id] = player_team_name
+	#formations[player_id] = player_formation_id
+	#ball_effects[player_id] = player_ball_effect_id
+	#levels[player_id] = player_level
+	#skins[player_id] = player_skin_id
+	#if is_new:
+		#Fusion.rpc(introduce, received_data_array)
+
 @rpc("any_peer", "call_remote")
 func introduce(received_data_array: PackedByteArray):
 	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
 	buffer.data_array = received_data_array
+	
 	var player_id: String = buffer.get_utf8_string()
-	var is_new = not names.has(player_id)
 	var player_name: String = buffer.get_utf8_string()
 	var player_team_name: String = buffer.get_utf8_string()
 	var player_formation_id: int = buffer.get_u8()
@@ -202,15 +225,26 @@ func introduce(received_data_array: PackedByteArray):
 	var player_level: int = buffer.get_u8()
 	var player_skin_id: int = buffer.get_u8()
 	
+	var is_new = not names.has(player_id)
+	
 	names[player_id] = player_name
 	teams[player_id] = player_team_name
 	formations[player_id] = player_formation_id
 	ball_effects[player_id] = player_ball_effect_id
 	levels[player_id] = player_level
 	skins[player_id] = player_skin_id
-	if is_new:
-		Fusion.rpc(introduce, received_data_array)
-
+		
+	if is_new and player_id != id:
+		var reply_buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+		reply_buffer.put_utf8_string(id)
+		reply_buffer.put_utf8_string(my_name)
+		reply_buffer.put_utf8_string(my_team_name)
+		reply_buffer.put_u8(FormationsManager.selected_formation)
+		reply_buffer.put_u8(BallEffects.selected_effect)
+		reply_buffer.put_u8(current_level)
+		reply_buffer.put_u8(SkinsManager.selected_skin)
+		
+		Fusion.rpc(introduce, reply_buffer.data_array)
 
 func get_opponents_name() -> String:
 	var opponents_name: String

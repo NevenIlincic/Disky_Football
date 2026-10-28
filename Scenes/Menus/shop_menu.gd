@@ -84,7 +84,6 @@ func _on_disk_skin_selected(card_id: int):
 			continue
 		var card: SkinsPurchasableCard = child as SkinsPurchasableCard
 		card.update_card_display()
-		print("AA")
 
 func show_disks_tab() -> void:
 	current_tab = CurrentTab.DISKS

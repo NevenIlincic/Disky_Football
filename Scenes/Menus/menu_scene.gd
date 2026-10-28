@@ -51,14 +51,12 @@ func _on_level_button_pressed(level_number: int) -> void:
 			level_button.level_selection_texture_button.set_pressed_no_signal(false)
 
 func check_is_login_supported() -> void:
-	pass
-	#if not WebSdk.SDK.check_is_login_supported():
-		#multiplayer_button.visible = false
-	#else:
-	#if not WebSdk.SDK.check_is_player_logged_in():
-		#multiplayer_button.disabled = true
-		#must_be_logged_in_label.visible = true
-			
+	if not WebSdk.SDK.check_is_login_supported():
+		multiplayer_button.visible = false
+	else:
+		if not WebSdk.SDK.check_is_player_logged_in():
+			multiplayer_button.disabled = true
+			must_be_logged_in_label.visible = true
 
 func _exit_tree() -> void:
 	if Fusion.connected_to_photon.is_connected(_on_online_connected):
