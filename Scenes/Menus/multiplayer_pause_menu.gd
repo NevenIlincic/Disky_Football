@@ -10,10 +10,7 @@ var is_singleplayer: bool = false
 func set_is_singleplayer():
 	is_singleplayer = true
 
-#
-#func _ready() -> void:
-	#scene = get_tree().get_first_node_in_group("multiplayer_scene")
-	##Fusion.room_left.connect(_on_room_left)
+
 
 func _on_leave_button_pressed() -> void:
 	if not is_singleplayer:

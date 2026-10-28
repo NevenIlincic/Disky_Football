@@ -515,39 +515,192 @@ func show_selected_player_elements(player: Player):
 
 
 ##ENEMY
+#var closest_enemy_from_ball: Enemy
+#var consecutive_plays: int = 0
+#func handle_enemy_turn():
+	#if not has_game_started or is_tutorial:
+		#return
+	#var is_ball_in_range: bool = false
+	#var closest_enemy_distance_from_ball: float = INF
+	#for enemy: Enemy in enemies:
+		#if closest_enemy_from_ball == null:
+			#closest_enemy_from_ball = enemy
+		#if enemy.is_ball_in_range:
+			#is_ball_in_range = true
+			#break
+		#else:
+			#if closest_enemy_from_ball.enemy_id == enemy.enemy_id and consecutive_plays >= 3:
+				#consecutive_plays = 0
+				#continue
+			#var distance_from_ball: float = enemy.global_position.distance_to(ball.global_position)
+			#if distance_from_ball < closest_enemy_distance_from_ball:
+				#closest_enemy_distance_from_ball = distance_from_ball
+				#closest_enemy_from_ball = enemy
+				#consecutive_plays += 1
+	#
+	#var direction: Vector3 = Vector3.ZERO
+	#direction.x = randf_range(-600, 600.0)
+	#direction.z = randf_range(-600.0, 600.0)
+	#
+	#var intensity_multiplier: int
+	#if is_ball_in_range: ### SHOOT BALL
+		#var height_multiplier: int
+		#if WebSdk.SDK.current_selected_level <= 5:
+			#intensity_multiplier = randi_range(5, 15)
+			#height_multiplier = randi_range(3, 5)
+		#elif WebSdk.SDK.current_selected_level > 5 and WebSdk.SDK.current_selected_level <= 15:
+			#intensity_multiplier = randi_range(15, 25)
+			#height_multiplier = randi_range(3, 5)
+		#else:
+			#intensity_multiplier = randi_range(25, 35)
+			#height_multiplier = 3
+		#var target_position: Vector3 = my_goal.global_position
+		#var ball_position: Vector3 = ball.global_position 
+		#
+		#direction = target_position - ball_position
+		#direction.x = direction.x * intensity_multiplier
+		#direction.z = direction.z * intensity_multiplier
+		#
+		#var distance = direction.length()
+				#
+		#direction.y = sqrt(distance) * height_multiplier
+		#ball.apply_hit_force(direction)
+	#else: ## MOVE ENEMY
+		#intensity_multiplier = randi_range(20, 30)
+		#direction.x = (ball.global_position.x - closest_enemy_from_ball.global_position.x) * intensity_multiplier
+		#direction.z = (ball.global_position.z - closest_enemy_from_ball.global_position.z) * intensity_multiplier
+		#direction.y = 0.0
+		#closest_enemy_from_ball.apply_hit_force(direction)
+	#
+	#is_my_turn = true
+	#closest_enemy_from_ball = null
+	#consecutive_plays = 0
+
+##ENEMY
+var last_moved_enemy_id = null
+var consecutive_plays: int = 0
+const MAX_CONSECUTIVE_PLAYS: int = 2
+
 
 func handle_enemy_turn():
 	if not has_game_started or is_tutorial:
 		return
-	var is_ball_in_range: bool = false
-	var closest_enemy_from_ball: Enemy
-	var closest_enemy_distance_from_ball: float = INF
+
+	var diff: Dictionary = _get_difficulty(WebSdk.SDK.current_selected_level)
+	var can_shoot: bool = false
 	for enemy: Enemy in enemies:
 		if enemy.is_ball_in_range:
-			is_ball_in_range = true
+			can_shoot = true
 			break
-		else:
-			var distance_from_ball: float = enemy.global_position.distance_to(ball.global_position)
-			if distance_from_ball < closest_enemy_distance_from_ball:
-				closest_enemy_distance_from_ball = distance_from_ball
-				closest_enemy_from_ball = enemy
 
-	var direction: Vector3 = Vector3.ZERO
-	direction.x = randf_range(-600, 600.0)
-	direction.z = randf_range(-600.0, 600.0)
+	if can_shoot:
+		_shoot_ball(diff)
+	else:
+		var chosen: Enemy = _pick_enemy_to_move(diff)
+		_move_enemy(chosen)
 
-	if is_ball_in_range: ### SHOOT BALL
-		direction.y = sqrt(direction.length()) * 3
-		ball.apply_hit_force(direction)
-	else: ## MOVE ENEMY
-		var intensity_multiplier: int = randi_range(15, 25)
-		direction.x = (ball.global_position.x - closest_enemy_from_ball.global_position.x) * intensity_multiplier
-		direction.z = (ball.global_position.z - closest_enemy_from_ball.global_position.z) * intensity_multiplier
-		direction.y = 0.0
-		closest_enemy_from_ball.apply_hit_force(direction)
 	is_my_turn = true
 
 
+func _get_difficulty(level: int) -> Dictionary:
+	if level <= 5:
+		return {
+			"random_range": 4.0,
+			"second_best_chance": 0.4,
+			"cover_bonus": 0.5,
+			"shoot_min": 5, "shoot_max": 12,
+			"height_min": 3, "height_max": 5,
+			"aim_error": 150.0
+		}
+	elif level <= 10:
+		return {
+			"random_range": 2.5,
+			"second_best_chance": 0.25,
+			"cover_bonus": 1.5,
+			"shoot_min": 12, "shoot_max": 20,
+			"height_min": 3, "height_max": 5,
+			"aim_error": 80.0
+		}
+	else:
+		return {
+			"random_range": 1.0,
+			"second_best_chance": 0.1,
+			"cover_bonus": 2.5,
+			"shoot_min": 20, "shoot_max": 30,
+			"height_min": 3, "height_max": 3,
+			"aim_error": 30.0
+		}
+
+
+func _pick_enemy_to_move(diff: Dictionary) -> Enemy:
+	var scored: Array = []
+
+	var max_dist: float = 0.001
+	for enemy: Enemy in enemies:
+		max_dist = max(max_dist, enemy.global_position.distance_to(ball.global_position))
+
+	var to_goal: Vector3 = (my_goal.global_position - ball.global_position).normalized()
+
+	for enemy: Enemy in enemies:
+		var dist: float = enemy.global_position.distance_to(ball.global_position)
+		var score: float = 0.0
+
+		score += (1.0 - dist / max_dist) * 5.0
+
+		var to_enemy: Vector3 = (enemy.global_position - ball.global_position).normalized()
+		var covers_goal: float = to_goal.dot(to_enemy)
+		if covers_goal > 0.5:
+			score += diff.cover_bonus
+
+		if enemy.enemy_id == last_moved_enemy_id:
+			score -= consecutive_plays * 3.0
+			if consecutive_plays >= MAX_CONSECUTIVE_PLAYS:
+				score -= 100.0
+
+		score += randf_range(0.0, diff.random_range)
+
+		scored.append({"enemy": enemy, "score": score})
+
+	scored.sort_custom(func(a, b): return a.score > b.score)
+
+	var pick_index: int = 0
+	if scored.size() > 1 and randf() < diff.second_best_chance:
+		pick_index = 1
+
+	var chosen: Enemy = scored[pick_index].enemy
+
+	if chosen.enemy_id == last_moved_enemy_id:
+		consecutive_plays += 1
+	else:
+		last_moved_enemy_id = chosen.enemy_id
+		consecutive_plays = 1
+
+	return chosen
+
+
+func _move_enemy(enemy: Enemy) -> void:
+	var intensity_multiplier: int = randi_range(20, 30)
+	var direction: Vector3 = Vector3.ZERO
+	direction.x = (ball.global_position.x - enemy.global_position.x) * intensity_multiplier
+	direction.z = (ball.global_position.z - enemy.global_position.z) * intensity_multiplier
+	direction.y = 0.0
+	enemy.apply_hit_force(direction)
+
+
+func _shoot_ball(diff: Dictionary) -> void:
+	var intensity_multiplier: int = randi_range(diff.shoot_min, diff.shoot_max)
+	var height_multiplier: int = randi_range(diff.height_min, diff.height_max)
+
+	var target: Vector3 = my_goal.global_position
+	target.x += randf_range(-diff.aim_error, diff.aim_error)
+	target.z += randf_range(-diff.aim_error, diff.aim_error)
+
+	var direction: Vector3 = target - ball.global_position
+	direction.x *= intensity_multiplier
+	direction.z *= intensity_multiplier
+	direction.y = sqrt(direction.length()) * height_multiplier
+	ball.apply_hit_force(direction)
+	
 #BUTTONS
 func _on_kick_button_pressed() -> void:
 	if selected_player:

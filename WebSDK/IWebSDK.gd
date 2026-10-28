@@ -13,6 +13,10 @@ var is_ad_block_enabled: bool = true
 var current_selected_level: int = 0
 var last_unlocked_singleplayer_level: int = 1
 
+#LEAVE LEVELS
+const LEAVE_LEVEL_AMOUNT_BEFORE_AD: int = 2
+var remain_left_levels: int = 2 
+
 @abstract
 func initialize_sdk();
 @abstract

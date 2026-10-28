@@ -20,8 +20,6 @@ var level_buttons: Array[LevelSelectionButton]
 
 func _ready() -> void:
 	WebSdk.SDK.set_game_ready()
-	print("WEB SDK: ", WebSdk.SDK.check_is_game_audio_muted())
-	print("AUDIO MANAGER: ", AudioManager.is_audio_muted)
 	if WebSdk.SDK.check_is_game_audio_muted() or AudioManager.is_audio_muted:
 		unmute_button.visible = true
 		mute_button.visible = false
