@@ -127,7 +127,7 @@ func prepare_match_info():
 func _on_join_button_pressed() -> void:
 	search_started.emit()
 	show_while_searching_node()
-	FusionSdk.create_room()
+	FusionSdk.create_quick_match_room()
 
 
 func _on_back_button_pressed() -> void:

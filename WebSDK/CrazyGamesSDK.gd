@@ -242,22 +242,23 @@ func _on_storage_delete_completed(success: bool):
 	pass
 
 func show_interstitial_ad():
-	CrazyGames.Ad.requestAd("midgame", {
-		"adStarted": func():
-			var is_muted_and_paused: bool = true
-			_on_pause_state_changed(is_muted_and_paused),
-			
-		"adFinished": func():
-			var is_muted_and_paused: bool = false
-			_on_pause_state_changed(is_muted_and_paused)
-			interstitial_ad_watched.emit(),
-		
-		
-		"adError": func(error):
-			var is_muted_and_paused: bool = false
-			_on_pause_state_changed(is_muted_and_paused)
-			interstitial_ad_watched.emit(),
-	})
+	interstitial_ad_watched.emit()
+	#CrazyGames.Ad.requestAd("midgame", {
+		#"adStarted": func():
+			#var is_muted_and_paused: bool = true
+			#_on_pause_state_changed(is_muted_and_paused),
+			#
+		#"adFinished": func():
+			#var is_muted_and_paused: bool = false
+			#_on_pause_state_changed(is_muted_and_paused)
+			#interstitial_ad_watched.emit(),
+		#
+		#
+		#"adError": func(error):
+			#var is_muted_and_paused: bool = false
+			#_on_pause_state_changed(is_muted_and_paused)
+			#interstitial_ad_watched.emit(),
+	#})
 
 func _on_interstitial_state_changed(state: String):
 	match state:

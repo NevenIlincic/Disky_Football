@@ -26,6 +26,7 @@ var has_leveled_up: bool = false
 
 #BUTTONS
 @onready var leave_button: TextureButton = $Leave_Button
+@onready var rematch_button: TextureButton = $Rematch_Button
 
 #NODES
 @onready var level_up_bonus_node: Node2D = $Gained_Stats/Level_Up_Bonus_Node
@@ -75,20 +76,23 @@ func _on_interstitial_ad_watched() -> void:
 		return
 	
 	#MULTIPLAYER
-	if not (FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up()):
-		handle_gaining_experience()
-	var currency_gained: Array[int] = handle_currency_gained()
-	var fans_gained: int = currency_gained[0]
-	var money_gained: int = currency_gained[1]
-	await handle_animations(fans_gained, money_gained)
-	
-	FusionSdk.handle_fans_and_money_gained(total_fans_gained, total_money_gained)
-	
-	#FusionSdk.handle_money_gained(total_money_gained)
-	#FusionSdk.handle_fans_gained(total_fans_gained)
-	
-	leave_button.visible = true
 
+	if not FusionSdk.is_in_private_room:
+		if not (FusionSdk.check_is_max_level() and FusionSdk.experience_amount >= FusionSdk.get_needed_experience_amount_to_level_up()):
+			handle_gaining_experience()
+		var currency_gained: Array[int] = handle_currency_gained()
+		var fans_gained: int = currency_gained[0]
+		var money_gained: int = currency_gained[1]
+		await handle_animations(fans_gained, money_gained)
+		
+		FusionSdk.handle_fans_and_money_gained(total_fans_gained, total_money_gained)
+		
+
+	FusionSdk.ready_players.clear()
+	if scene.match_state != scene.MatchState.WON_BY_OPPONENT_DISCONNECTION and scene.match_state != scene.MatchState.GAME_SUSPENDED:
+		rematch_button.visible = true
+		
+	leave_button.visible = true
 func do_after_match():
 	if has_done: return
 	match_state = scene.match_state
@@ -305,4 +309,13 @@ func handle_animations(fans_gained: int, money_gained: int) -> void:
 
 
 func _on_leave_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_rematch_button_pressed() -> void:
+	FusionSdk.request_rematch()
+	rematch_button.disabled = true
+
+
+func _on_rematch_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()

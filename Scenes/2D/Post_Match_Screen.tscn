@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="6_isi6v"]
 [ext_resource type="Texture2D" uid="uid://c877slould2bf" path="res://Sprites/Multiplayer_Info/Money/money.png" id="8_htfhy"]
 [ext_resource type="AudioStream" uid="uid://w5orqjfikx3d" path="res://Audio/goal_scored_sound.mp3" id="9_c624b"]
+[ext_resource type="Texture2D" uid="uid://c1iywg0yydyps" path="res://Sprites/Buttons/Rematch_Button/Rematch_Button_Enabled.png" id="10_gd6yd"]
+[ext_resource type="Texture2D" uid="uid://dyugwx4djea7p" path="res://Sprites/Buttons/Rematch_Button/Rematch_Button_Pressed.png" id="11_q4qfd"]
+[ext_resource type="Texture2D" uid="uid://2vah81x16qq6" path="res://Sprites/Buttons/Rematch_Button/Rematch_Button_Hovered.png" id="12_ut463"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_isi6v"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -191,5 +194,27 @@ theme_override_colors/font_color = Color(0.8039216, 0.09019608, 0.09019608, 1)
 theme_override_font_sizes/font_size = 32
 text = "+ 5"
 
+[node name="Rematch_Button" type="TextureButton" parent="." unique_id=1920501304]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+offset_top = -264.0
+offset_right = 8.0
+offset_bottom = -160.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("10_gd6yd")
+texture_pressed = ExtResource("11_q4qfd")
+texture_hover = ExtResource("12_ut463")
+ignore_texture_size = true
+stretch_mode = 0
+
 [connection signal="mouse_entered" from="Leave_Button" to="." method="_on_leave_button_mouse_entered"]
 [connection signal="pressed" from="Leave_Button" to="." method="_on_leave_button_pressed"]
+[connection signal="mouse_entered" from="Rematch_Button" to="." method="_on_rematch_button_mouse_entered"]
+[connection signal="pressed" from="Rematch_Button" to="." method="_on_rematch_button_pressed"]

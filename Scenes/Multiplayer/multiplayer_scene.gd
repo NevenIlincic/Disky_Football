@@ -35,7 +35,7 @@ var formation_spawn_positions_guest: Dictionary
 #############################
 
 const MATCH_DURATION: float = 1200
-const GOALS_TO_WIN: int = 5
+const GOALS_TO_WIN: int = 1
 
 # INDICATOR
 const MAX_DRAG_LENGTH: float = 500.0
@@ -199,7 +199,6 @@ func _on_match_finished():
 	
 	turn_time_left_timer.stop()
 	turn_time_left_label.visible = false
-	FusionSdk.leave_room()
 	goal_scored_node.visible = false
 	post_match_screen.visible = true
 	post_match_screen.do_after_match()

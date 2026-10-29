@@ -118,7 +118,6 @@ func _on_connected():
 
 func create_or_join_private_room(custom_room_name: String) -> void:
 	is_in_private_room = true
-	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
 	room_options.is_visible = false
@@ -140,16 +139,17 @@ func create_quick_match_room() -> void:
 	}
 	Fusion.join_or_create_room("", room_options)
 
-func create_room():
-	match_searching_started.emit()
-	var room_options: FusionRoomOptions = FusionRoomOptions.new()
-	room_options.max_players = 2
-	room_options.custom_properties = {
-		"fusion_map_data": "deafult_map"
-	}
-	
-	#var room_name: String = "Room_" + str(randi_range(100000, 999999))
-	Fusion.join_or_create_room("", room_options)
+#func create_room():
+	#is_in_private_room = false
+	#match_searching_started.emit()
+	#var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	#room_options.max_players = 2
+	#room_options.custom_properties = {
+		#"fusion_map_data": "deafult_map"
+	#}
+	#
+	##var room_name: String = "Room_" + str(randi_range(100000, 999999))
+	#Fusion.join_or_create_room("", room_options)
 
 
 func _notification(what: int) -> void:
@@ -159,7 +159,6 @@ func _notification(what: int) -> void:
 		get_tree().quit()
 
 func leave_room() -> void:
-	is_in_private_room = false
 	ready_players.clear()
 	names.clear()
 	teams.clear()
@@ -202,6 +201,24 @@ func player_ready(received_data_array: PackedByteArray):
 func start_match():
 	get_tree().change_scene_to_file.call_deferred("res://Scenes/Multiplayer/Multiplayer_Scene.tscn")
 
+@rpc("any_peer", "call_local")
+func confirm_rematch(received_data_array: PackedByteArray) -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var player_id: String = buffer.get_utf8_string()
+	
+	if not Fusion.is_master_client():
+		return
+		
+	ready_players[player_id] = true	
+	if ready_players.size() == 2:
+		ready_players.clear()
+		Fusion.rpc(start_match)
+		
+func request_rematch() -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_utf8_string(id)
+	Fusion.rpc(confirm_rematch, buffer.data_array)
 
 func _on_room_joined():
 	names[id] = my_name
