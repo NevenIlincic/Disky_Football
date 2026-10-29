@@ -33,6 +33,19 @@ var formation_texture_dicts_guest: Dictionary
 @onready var start_custom_lobby_button: TextureButton = $Start_Custom_Lobby_Button
 @onready var invite_link_button: TextureButton = $Invite_Link_Button
 
+func _exit_tree() -> void:
+	if Fusion.room_joined.is_connected(_on_room_joined):
+		Fusion.room_joined.disconnect(_on_room_joined)
+	if Fusion.room_left.is_connected(_on_room_left):
+		Fusion.room_left.disconnect(_on_room_left)
+	if Fusion.player_left.is_connected(_on_player_left):
+		Fusion.player_left.disconnect(_on_player_left)
+	if FusionSdk.player_introduced.is_connected(_on_player_introduced):
+		FusionSdk.player_introduced.disconnect(_on_player_introduced)
+	if FusionSdk.custom_lobby_full.is_connected(_on_custom_lobby_full):
+		FusionSdk.custom_lobby_full.disconnect(_on_custom_lobby_full)
+
+
 func _ready() -> void:
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.room_left.connect(_on_room_left)

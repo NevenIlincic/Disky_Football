@@ -79,7 +79,10 @@ func _on_confirm_button_pressed() -> void:
 	if entered_input.length() == 3 and entered_input != FusionSdk.my_team_name:
 		team_name_initial_input_node.visible = false
 		main_menu_nodes.visible = true
-		logged_player_stats.set_player_team_name(entered_input)
+		var is_initial_team_change: bool = false
+		if FusionSdk.my_team_name.is_empty():
+			is_initial_team_change = true
+		logged_player_stats.set_player_team_name(entered_input, is_initial_team_change)
 
 func _on_custom_lobby_button_pressed() -> void:
 	team_name_initial_input_node.visible = false

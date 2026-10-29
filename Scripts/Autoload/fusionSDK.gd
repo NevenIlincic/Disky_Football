@@ -106,8 +106,7 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	#id = WebSdk.SDK.get_player_id()
-	id = str(randi_range(0, 99999))
+	id = WebSdk.SDK.get_player_id()
 	WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
@@ -196,7 +195,7 @@ func player_ready(received_data_array: PackedByteArray):
 			match_found.emit()
 		else:
 			custom_lobby_full.emit()
-			WebSdk.SDK.update_room_status(Fusion.get_room().room_name, false)
+		WebSdk.SDK.update_room_status(Fusion.get_room().room_name, false)
 
 		#Fusion.rpc(start_match)
 	else:

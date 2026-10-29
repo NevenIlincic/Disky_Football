@@ -49,6 +49,7 @@ enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", 
 
 connection/app_id="8056db0f-7ef2-4d62-90ac-3e727373a599"
 connection/default_region="eu"
+debug/log_level=0
 
 [gui]
 

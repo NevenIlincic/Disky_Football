@@ -35,7 +35,7 @@ var formation_spawn_positions_guest: Dictionary
 #############################
 
 const MATCH_DURATION: float = 1200
-const GOALS_TO_WIN: int = 1
+const GOALS_TO_WIN: int = 5
 
 # INDICATOR
 const MAX_DRAG_LENGTH: float = 500.0
