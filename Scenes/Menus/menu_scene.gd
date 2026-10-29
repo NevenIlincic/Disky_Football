@@ -20,11 +20,7 @@ var level_buttons: Array[LevelSelectionButton]
 @onready var start_button: TextureButton = $HUD/Main_Menu_Nodes/Buttons_Control/Start_Button
 
 func connect_to_signals() -> void:
-	Fusion.connected_to_photon.connect(_on_online_connected)
-	Fusion.connection_failed.connect(_on_connection_failed)
-	WebSdk.SDK.single_player_data_loaded.connect(_on_singleplayer_data_loaded)
-	WebSdk.SDK.sdk_initialized.connect(_on_sdk_initialized)
-	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
+	WebSdk.sdk_initialized.connect(_on_sdk_initialized)
 
 func enable_start_button() -> void:
 	start_button.disabled = false
@@ -34,53 +30,56 @@ func set_up_mute_button() -> void:
 		unmute_button.visible = true
 		mute_button.visible = false
 
-func _on_sdk_initialized() -> void:
-	WebSdk.SDK.set_game_ready()
-	set_up_mute_button()
-	
-	if WebSdk.SDK.is_initial_boot:
-		enable_start_button()
-		WebSdk.SDK.is_initial_boot = false
-		WebSdk.SDK.load_singleplayer_data()
-		WebSdk.SDK.load_multiplayer_data()
-		check_is_login_supported()
+func _on_sdk_initialized() -> void:		
+	WebSdk.SDK.single_player_data_loaded.connect(_on_singleplayer_data_loaded)
+	Fusion.connected_to_photon.connect(_on_online_connected)
+	Fusion.connection_failed.connect(_on_connection_failed)
+	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
+
+	if WebSdk.is_initial_boot:
+		WebSdk.is_initial_boot = false
+		await WebSdk.SDK.load_singleplayer_data()
+		await WebSdk.SDK.load_multiplayer_data()
+		if WebSdk.SDK.check_is_player_logged_in():
+			WebSdk.SDK.check_instant_multiplayer_join()
 	else:
 		set_up_menu()
-			
-	WebSdk.SDK.check_instant_multiplayer_join()
 	
 func set_up_menu() -> void:
 	WebSdk.SDK.set_game_ready()
 	set_up_mute_button()
-	enable_start_button()
 	level_buttons = []
 	for button in level_buttons_node.get_children():
 		var level_button: LevelSelectionButton = button as LevelSelectionButton
 		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
 		level_buttons.append(level_button)
-		if FusionSdk.has_connection_lost or FusionSdk.has_disconnected_intentionally:
-			level_button.update_display()
+		#if FusionSdk.has_connection_lost or FusionSdk.has_disconnected_intentionally:
+		level_button.update_display()
 	
 	if FusionSdk.has_connection_lost and not FusionSdk.has_disconnected_intentionally:
 		connecting_label.visible = true
 		connecting_label.text = "Lost connection with the server! Try again!"
 		await get_tree().create_timer(3.0).timeout
 		connecting_label.visible = false
+	
+	enable_start_button()
 	check_is_login_supported()
 	
 func _ready() -> void:
 	connect_to_signals()
-	if not WebSdk.SDK.is_initial_boot:
-		set_up_menu()
+	WebSdk.initialize_sdk()
+	#if not WebSdk.SDK.is_initial_boot:
+		#set_up_menu()
 		
 
 func _on_singleplayer_data_loaded() -> void:
-	level_buttons = []
-	for button in level_buttons_node.get_children():
-		var level_button: LevelSelectionButton = button as LevelSelectionButton
-		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
-		level_buttons.append(level_button)
-		level_button.update_display()
+	set_up_menu()
+	#level_buttons = []
+	#for button in level_buttons_node.get_children():
+		#var level_button: LevelSelectionButton = button as LevelSelectionButton
+		#level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
+		#level_buttons.append(level_button)
+		#level_button.update_display()
 
 func _on_level_button_pressed(level_number: int) -> void:
 	for level_button in level_buttons:

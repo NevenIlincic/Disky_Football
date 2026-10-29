@@ -28,6 +28,9 @@ func _exit_tree() -> void:
 		multiplayer_menu.search_canceled.disconnect(_on_match_search_canceled)
 	if WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
 		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
+	if multiplayer_menu.instant_multiplayer_activated.is_connected(_on_instant_multiplayer_activated):
+		multiplayer_menu.instant_multiplayer_activated.disconnect(_on_instant_multiplayer_activated)
+
 
 func _ready() -> void:	
 	logged_player_stats.set_player_stats()
@@ -38,7 +41,10 @@ func _ready() -> void:
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
 	multiplayer_menu.custom_lobby_button_pressed.connect(_on_custom_lobby_button_pressed)
+	multiplayer_menu.instant_multiplayer_activated.connect(_on_instant_multiplayer_activated)
 	check_is_ad_block_enabled()
+	
+	multiplayer_menu.check_is_instant_multiplayer_join()
 	
 func check_is_ad_block_enabled() -> void:
 	if WebSdk.SDK.check_is_ad_block_enabled():
@@ -89,7 +95,10 @@ func _on_custom_lobby_button_pressed() -> void:
 	ad_node.visible = false
 	logged_player_stats.visible = false
 	shop_menu.visible = false
-	
+
+func _on_instant_multiplayer_activated() -> void:
+	_on_custom_lobby_button_pressed()
+
 func _on_edit_team_name_button_pressed() -> void:
 	team_name_initial_input_node.visible = true
 	cancel_button.visible = true

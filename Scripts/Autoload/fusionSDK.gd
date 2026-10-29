@@ -15,7 +15,7 @@ var ready_players: Dictionary = {}
 var id: String
 var room_id: int
 var match_scene: PackedScene
-var my_name: String = str("MeXa", "_", randi())   
+var my_name: String 
 var my_team_name: String
 
 var is_in_private_room: bool = false
@@ -80,15 +80,15 @@ func _exit_tree() -> void:
 		Fusion.player_joined.disconnect(_on_player_joined)
 	if Fusion.connection_status_changed.is_connected(_on_connection_status_changed):
 		Fusion.connection_status_changed.disconnect(_on_connection_status_changed)
-	
-	
+
 func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
-
+	
 	#id = str(randi(), my_name)
 	#my_team_name = get_random_3_letter_string()
 	connect_to_signals()
+
 
 func connect_to_signals():
 	Fusion.connected_to_photon.connect(_on_connected)
@@ -106,8 +106,8 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	id = WebSdk.SDK.get_player_id()
-	WebSdk.SDK.load_multiplayer_data()
+	pass
+	#WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
 	#fans_amount = 100
@@ -123,7 +123,6 @@ func create_or_join_private_room(custom_room_name: String) -> void:
 	room_options.custom_properties = {
 		"fusion_map_data": "default_map"
 	}
-	
 	
 	Fusion.join_or_create_room(custom_room_name, room_options)
 	

@@ -108,8 +108,8 @@ func update_lobby():
 
 
 func show_host_info_as_host() -> void:
-	host_name_label.text = FusionSdk.my_name
-	host_team_name_label.text = FusionSdk.my_team_name
+	host_name_label.text = str("COACH: ", FusionSdk.my_name)
+	host_team_name_label.text = str("TEAM: ", FusionSdk.my_team_name)
 	host_level_label.text = str(FusionSdk.current_level)
 	var formation_id: int = FormationsManager.selected_formation
 	var texture_dict_host: TextureRect = formation_texture_dicts_host[formation_id]

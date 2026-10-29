@@ -10,7 +10,12 @@ func initialize_sdk():
 	is_initialized = true
 	is_ad_block_enabled = CrazyGames.has_adblock
 	user = await CrazyGames.User.get_user_async()
-	sdk_initialized.emit()
+	#FusionSdk.id = str(randi_range(0, 99999))
+	FusionSdk.id = get_player_id()
+	#FusionSdk.my_name = str("MeXa_",randi_range(0, 99999))
+	FusionSdk.my_name = get_player_name()
+	
+	#check_instant_multiplayer_join()
 	#CrazyGamesBridge.callbacks.ad_started.connect(_on_ad_started)
 	#CrazyGamesBridge.callbacks.ad_finished.connect(_on_ad_finished)
 	#CrazyGamesBridge.callbacks.ad_error.connect(_on_ad_error)
@@ -220,7 +225,6 @@ func _on_multiplayer_data_loaded(success, data):
 			var parse_result = json.parse(data)
 			if parse_result == OK:
 				var multiplayer_stats: Dictionary = json.data
-				FusionSdk.my_name = get_player_name()
 				FusionSdk.my_team_name = multiplayer_stats["team_name"]
 				FusionSdk.money_amount = int(multiplayer_stats["money"])
 				FusionSdk.fans_amount = int(multiplayer_stats["fans"])
@@ -242,22 +246,23 @@ func _on_storage_delete_completed(success: bool):
 	pass
 
 func show_interstitial_ad():
-	CrazyGames.Ad.requestAd("midgame", {
-		"adStarted": func():
-			var is_muted_and_paused: bool = true
-			_on_pause_state_changed(is_muted_and_paused),
-			
-		"adFinished": func():
-			var is_muted_and_paused: bool = false
-			_on_pause_state_changed(is_muted_and_paused)
-			interstitial_ad_watched.emit(),
-		
-		
-		"adError": func(error):
-			var is_muted_and_paused: bool = false
-			_on_pause_state_changed(is_muted_and_paused)
-			interstitial_ad_watched.emit(),
-	})
+	interstitial_ad_watched.emit()
+	#CrazyGames.Ad.requestAd("midgame", {
+		#"adStarted": func():
+			#var is_muted_and_paused: bool = true
+			#_on_pause_state_changed(is_muted_and_paused),
+			#
+		#"adFinished": func():
+			#var is_muted_and_paused: bool = false
+			#_on_pause_state_changed(is_muted_and_paused)
+			#interstitial_ad_watched.emit(),
+		#
+		#
+		#"adError": func(error):
+			#var is_muted_and_paused: bool = false
+			#_on_pause_state_changed(is_muted_and_paused)
+			#interstitial_ad_watched.emit(),
+	#})
 
 func _on_interstitial_state_changed(state: String):
 	match state:
@@ -283,24 +288,24 @@ func check_is_ad_block_enabled() -> bool:
 
 func check_instant_multiplayer_join() -> void:
 	if OS.get_name() == "Web":
-		var room_name: String = CrazyGames.Game.get_invite_link_param("room_name")
+		var room_name: String = CrazyGames.Game.get_invite_link_param("roomName")
 		if room_name != "":
+			instant_multiplayer_room_name = room_name
 			print("[INSTANT MULTIPLAYER] Detektovan ulaz preko SDK-a: ", room_name)
 		
 			if not Fusion.is_connected_to_photon():
-				await Fusion.connected_to_photon
+				await FusionSdk.connect_to_server()
 			
-			instant_multiplayer_room_name = room_name
 			return
 		instant_multiplayer_room_name = ""
 func generate_invite_url(custom_room_name: String) -> void:
-	invite_url = CrazyGames.Game.request_invite_url({"room_name": custom_room_name})
+	invite_url = CrazyGames.Game.request_invite_url({"roomName": custom_room_name})
 
 func copy_invite_url() -> void:
 	CrazyGamesBridge.copy_to_clipboard(invite_url)
 
 func get_room_name_from_invite_url() -> String:
-	return CrazyGames.Game.get_invite_link_param("room_name")
+	return CrazyGames.Game.get_invite_link_param("roomName")
 
 func update_room_status(room_name: String, is_joinable: bool) -> void:
 	if OS.get_name() == "Web":
