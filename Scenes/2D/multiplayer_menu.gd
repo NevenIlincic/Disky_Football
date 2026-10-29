@@ -236,4 +236,5 @@ func check_is_instant_multiplayer_join() -> void:
 		while_waiting_custom_node.visible = false
 		create_custom_lobby_node.visible = false
 		instant_multiplayer_activated.emit()
-		FusionSdk.create_or_join_private_room(room_name)
+		FusionSdk.join_instant_multiplayer_room_invite_link(room_name)
+		#FusionSdk.create_or_join_private_room(room_name)

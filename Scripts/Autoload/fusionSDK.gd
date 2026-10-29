@@ -126,7 +126,17 @@ func create_or_join_private_room(custom_room_name: String) -> void:
 	
 	Fusion.join_or_create_room(custom_room_name, room_options)
 	
+
+func join_instant_multiplayer_room_invite_link(custom_room_name: String) -> void:
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = false
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
 	
+	Fusion.join_or_create_room(custom_room_name, room_options)
+
 func create_quick_match_room() -> void:
 	is_in_private_room = false
 	match_searching_started.emit()

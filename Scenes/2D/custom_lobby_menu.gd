@@ -144,8 +144,8 @@ func show_host_info_as_guest() -> void:
 
 func show_guest_info_as_guest()	-> void:
 	
-	guest_name_label.text = FusionSdk.my_name
-	guest_team_name_label.text = FusionSdk.my_team_name
+	guest_name_label.text = str("COACH: ", FusionSdk.my_name)
+	guest_team_name_label.text = str("TEAM: ", FusionSdk.my_team_name)
 	guest_level_label.text = str(FusionSdk.current_level)
 	
 	var formation_id: int = FormationsManager.selected_formation

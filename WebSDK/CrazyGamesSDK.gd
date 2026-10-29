@@ -289,17 +289,23 @@ func check_is_ad_block_enabled() -> bool:
 func check_instant_multiplayer_join() -> void:
 	if OS.get_name() == "Web":
 		var room_name: String = CrazyGames.Game.get_invite_link_param("roomName")
+		var is_private_str: String = CrazyGames.Game.get_invite_link_param("isPrivate")
+		
+		if is_private_str != "":
+			FusionSdk.is_in_private_room = true if is_private_str == "true" else false
+		
 		if room_name != "":
 			instant_multiplayer_room_name = room_name
 			print("[INSTANT MULTIPLAYER] Detektovan ulaz preko SDK-a: ", room_name)
-		
+			
+			
 			if not Fusion.is_connected_to_photon():
 				await FusionSdk.connect_to_server()
 			
 			return
 		instant_multiplayer_room_name = ""
 func generate_invite_url(custom_room_name: String) -> void:
-	invite_url = CrazyGames.Game.request_invite_url({"roomName": custom_room_name})
+	invite_url = CrazyGames.Game.request_invite_url({"roomName": custom_room_name, "isPrivate": "true"})
 
 func copy_invite_url() -> void:
 	CrazyGamesBridge.copy_to_clipboard(invite_url)
@@ -308,17 +314,22 @@ func get_room_name_from_invite_url() -> String:
 	return CrazyGames.Game.get_invite_link_param("roomName")
 
 func update_room_status(room_name: String, is_joinable: bool) -> void:
-	if OS.get_name() == "Web":
-		var joinable_str = "true" if is_joinable else "false"
+	if not Fusion.is_connected_to_photon() or not Fusion.is_master_client():
+		return
 		
+	if OS.get_name() == "Web":
+		var is_private_room_str: String = "true" if FusionSdk.is_in_private_room else "false"
+		var joinable_str = "true" if is_joinable else "false"
 		var js_code = """
 			if (window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game) {
 				window.CrazyGames.SDK.game.updateRoom({
 					roomId: '%s',
 					isJoinable: %s,
-					inviteParams: { roomName: '%s' }
+					inviteParams: { 
+						roomName: '%s',
+						isPrivate: %s }
 				});
 			}
-		""" % [room_name, joinable_str, room_name]
+		""" % [room_name, joinable_str, room_name, is_private_room_str]
 		
 		JavaScriptBridge.eval(js_code)
