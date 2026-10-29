@@ -20,6 +20,9 @@ var last_unlocked_singleplayer_level: int = 1
 const LEAVE_LEVEL_AMOUNT_BEFORE_AD: int = 2
 var remain_left_levels: int = 2 
 
+var invite_url: String
+var instant_multiplayer_room_name: String
+
 @abstract
 func initialize_sdk();
 @abstract
@@ -66,3 +69,16 @@ func check_is_on_mobile_device() -> bool;
 func check_is_game_audio_muted() -> bool;
 @abstract
 func set_audio_mute(is_muted: bool);
+func check_instant_multiplayer_join() -> void: pass
+
+@abstract
+func generate_invite_url(custom_room_name: String) -> void;
+
+func remove_invite_url() -> void:
+	invite_url = ""
+@abstract
+func copy_invite_url() -> void;
+@abstract
+func get_room_name_from_invite_url() -> String;
+
+func update_room_status(room_name: String, is_joinable: bool) -> void: pass

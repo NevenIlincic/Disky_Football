@@ -125,6 +125,7 @@ func create_or_join_private_room(custom_room_name: String) -> void:
 		"fusion_map_data": "default_map"
 	}
 	
+	
 	Fusion.join_or_create_room(custom_room_name, room_options)
 	
 	
@@ -168,7 +169,7 @@ func leave_room() -> void:
 	skins.clear()
 	Fusion.leave_room()
 
-func join_private_room(room_name: String) -> void:
+func join_private_room(_room_name: String) -> void:
 	is_in_private_room = true
 	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
@@ -176,7 +177,7 @@ func join_private_room(room_name: String) -> void:
 	room_options.custom_properties = {
 		"fusion_map_data": "deafult_map"
 	}
-	Fusion.join_room(room_name, room_options)
+	Fusion.join_room(_room_name, room_options)
 
 func _on_player_joined(player_id: int, user_id: String):
 	if id == user_id:
@@ -195,8 +196,11 @@ func player_ready(received_data_array: PackedByteArray):
 			match_found.emit()
 		else:
 			custom_lobby_full.emit()
-		#Fusion.rpc(start_match)
+			WebSdk.SDK.update_room_status(Fusion.get_room().room_name, false)
 
+		#Fusion.rpc(start_match)
+	else:
+		WebSdk.SDK.update_room_status(Fusion.get_room().room_name, true)
 @rpc("any_peer", "call_local")
 func start_match():
 	get_tree().change_scene_to_file.call_deferred("res://Scenes/Multiplayer/Multiplayer_Scene.tscn")

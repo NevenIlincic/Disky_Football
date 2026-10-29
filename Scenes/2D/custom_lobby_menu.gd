@@ -31,6 +31,7 @@ var formation_texture_dicts_guest: Dictionary
 
 #BUTTONS
 @onready var start_custom_lobby_button: TextureButton = $Start_Custom_Lobby_Button
+@onready var invite_link_button: TextureButton = $Invite_Link_Button
 
 func _ready() -> void:
 	Fusion.room_joined.connect(_on_room_joined)
@@ -41,6 +42,7 @@ func _ready() -> void:
 	FusionSdk.custom_lobby_full.connect(_on_custom_lobby_full)
 	if not Fusion.is_master_client():
 		start_custom_lobby_button.visible = false
+		invite_link_button.visible = false
 	
 	formation_texture_dicts_host = {
 		0: _3_3_standard_texture_rect,
@@ -143,6 +145,7 @@ func _on_room_joined() -> void:
 	if Fusion.is_master_client():
 		show_host_info_as_host()
 		start_custom_lobby_button.visible = true
+		invite_link_button.visible = true
 	else:
 		show_guest_info_as_guest()		
 		start_custom_lobby_button.visible = false
@@ -171,16 +174,23 @@ func hide_guest_elements() -> void:
 
 func _on_player_left(player_id: int, is_inactive: bool) -> void:
 	FusionSdk.remove_opponents_data()
+	WebSdk.SDK.update_room_status(Fusion.get_room().room_name, true)
+
 	if Fusion.is_master_client():
 		FusionSdk.ready_players[FusionSdk.id] = true
 		start_custom_lobby_button.visible = true
 		start_custom_lobby_button.disabled = true
+		
+		invite_link_button.visible = true
+		invite_link_button.disabled = false
+		
 		show_host_info_as_host()
 		hide_guest_elements()
 
 
 func _on_custom_lobby_full() -> void:
 	start_custom_lobby_button.disabled = false
+	invite_link_button.disabled = true
 
 
 func _on_start_custom_lobby_button_pressed() -> void:
@@ -199,3 +209,8 @@ func _on_start_custom_lobby_button_mouse_entered() -> void:
 
 func _on_leave_custom_lobby_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
+
+func _on_invite_link_button_pressed() -> void:
+	var room_name: String = Fusion.get_room().room_name
+	WebSdk.SDK.generate_invite_url(room_name)
+	WebSdk.SDK.copy_invite_url()

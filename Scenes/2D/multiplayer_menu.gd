@@ -48,6 +48,7 @@ var formation_texture_dicts_guest: Dictionary
 @onready var custom_lobby_menu: CustomLobbyMenu = $CustomLobbyMenu
 
 func _ready() -> void:
+	check_is_instant_multiplayer_join()
 	formation_texture_dicts_host = {
 		0: _3_3_standard_texture_rect,
 		1: _2_4_texture_rect,
@@ -225,3 +226,11 @@ func _on_custom_lobby_confirm_button_mouse_entered() -> void:
 
 func _on_custom_lobby_cancel_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
+
+func check_is_instant_multiplayer_join() -> void:
+	if not WebSdk.SDK.instant_multiplayer_room_name.is_empty():
+		FusionSdk.create_or_join_private_room(WebSdk.SDK.instant_multiplayer_room_name)
+		custom_lobby_menu.visible = true
+		not_searching_node.visible = false
+		while_waiting_custom_node.visible = false
+		create_custom_lobby_node.visible = false

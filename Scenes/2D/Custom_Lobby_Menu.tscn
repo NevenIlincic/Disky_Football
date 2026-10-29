@@ -14,6 +14,9 @@
 [ext_resource type="Texture2D" uid="uid://cpdhim2kn7imy" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Enabled.png" id="11_eosx1"]
 [ext_resource type="Texture2D" uid="uid://b45c0iogcufh5" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Pressed.png" id="12_7cd87"]
 [ext_resource type="Texture2D" uid="uid://cakl13x87w0ja" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Hovered.png" id="13_ys6fr"]
+[ext_resource type="Texture2D" uid="uid://d0bx5mguwv7hw" path="res://Sprites/Buttons/Invite_Link_Button/Invite_Link_Button_Enabled.png" id="15_84tth"]
+[ext_resource type="Texture2D" uid="uid://cdndnuasd48r1" path="res://Sprites/Buttons/Invite_Link_Button/Invite_Link_Button_Pressed.png" id="16_ypk00"]
+[ext_resource type="Texture2D" uid="uid://vb7ev7hk3s7h" path="res://Sprites/Buttons/Invite_Link_Button/Invite_Link_Button_Hovered.png" id="17_fj3eh"]
 
 [node name="CustomLobbyMenu" type="Control" unique_id=1031755761]
 layout_mode = 3
@@ -276,7 +279,21 @@ texture_hover = ExtResource("13_ys6fr")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="Invite_Link_Button" type="TextureButton" parent="." unique_id=2021578239]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 880.0
+offset_top = 72.0
+offset_right = 1160.0
+offset_bottom = 176.0
+texture_normal = ExtResource("15_84tth")
+texture_pressed = ExtResource("16_ypk00")
+texture_hover = ExtResource("17_fj3eh")
+ignore_texture_size = true
+stretch_mode = 0
+
 [connection signal="mouse_entered" from="Start_Custom_Lobby_Button" to="." method="_on_start_custom_lobby_button_mouse_entered"]
 [connection signal="pressed" from="Start_Custom_Lobby_Button" to="." method="_on_start_custom_lobby_button_pressed"]
 [connection signal="mouse_entered" from="Leave_Custom_Lobby_Button" to="." method="_on_leave_custom_lobby_button_mouse_entered"]
 [connection signal="pressed" from="Leave_Custom_Lobby_Button" to="." method="_on_leave_custom_lobby_button_pressed"]
+[connection signal="pressed" from="Invite_Link_Button" to="." method="_on_invite_link_button_pressed"]

@@ -281,3 +281,40 @@ func _on_check_adblock_completed(result: bool):
 
 func check_is_ad_block_enabled() -> bool:
 	return CrazyGames.has_adblock
+
+func check_instant_multiplayer_join() -> void:
+	if OS.get_name() == "Web":
+		var room_name: String = CrazyGames.Game.get_invite_link_param("room_name")
+		if room_name != "":
+			print("[INSTANT MULTIPLAYER] Detektovan ulaz preko SDK-a: ", room_name)
+		
+			if not Fusion.is_connected_to_photon():
+				await Fusion.connected_to_photon
+			
+			instant_multiplayer_room_name = room_name
+			return
+		instant_multiplayer_room_name = ""
+func generate_invite_url(custom_room_name: String) -> void:
+	invite_url = CrazyGames.Game.request_invite_url({"room_name": custom_room_name})
+
+func copy_invite_url() -> void:
+	CrazyGamesBridge.copy_to_clipboard(invite_url)
+
+func get_room_name_from_invite_url() -> String:
+	return CrazyGames.Game.get_invite_link_param("room_name")
+
+func update_room_status(room_name: String, is_joinable: bool) -> void:
+	if OS.get_name() == "Web":
+		var joinable_str = "true" if is_joinable else "false"
+		
+		var js_code = """
+			if (window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game) {
+				window.CrazyGames.SDK.game.updateRoom({
+					roomId: '%s',
+					isJoinable: %s,
+					inviteParams: { roomName: '%s' }
+				});
+			}
+		""" % [room_name, joinable_str, room_name, room_name]
+		
+		JavaScriptBridge.eval(js_code)

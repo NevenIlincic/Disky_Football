@@ -47,7 +47,8 @@ func _on_sdk_initialized() -> void:
 	else:
 		set_up_menu()
 			
-
+	WebSdk.SDK.check_instant_multiplayer_join()
+	
 func set_up_menu() -> void:
 	WebSdk.SDK.set_game_ready()
 	set_up_mute_button()
