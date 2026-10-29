@@ -7,6 +7,9 @@ signal money_spent(amount: int)
 signal fans_spent(amount: int)
 signal leveled_up()
 
+signal player_introduced()
+signal custom_lobby_full()
+
 var ready_players: Dictionary = {}
 
 var id: String
@@ -103,7 +106,8 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	id = WebSdk.SDK.get_player_id()
+	#id = WebSdk.SDK.get_player_id()
+	id = str(randi_range(0, 99999))
 	WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
@@ -112,7 +116,8 @@ func _on_connected():
 	#experience_amount = 19
 
 
-func create_private_room(custom_room_name: String) -> void:
+func create_or_join_private_room(custom_room_name: String) -> void:
+	is_in_private_room = true
 	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
@@ -125,6 +130,7 @@ func create_private_room(custom_room_name: String) -> void:
 	
 	
 func create_quick_match_room() -> void:
+	is_in_private_room = false
 	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
@@ -153,6 +159,7 @@ func _notification(what: int) -> void:
 		get_tree().quit()
 
 func leave_room() -> void:
+	is_in_private_room = false
 	ready_players.clear()
 	names.clear()
 	teams.clear()
@@ -163,6 +170,7 @@ func leave_room() -> void:
 	Fusion.leave_room()
 
 func join_private_room(room_name: String) -> void:
+	is_in_private_room = true
 	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
@@ -184,7 +192,10 @@ func player_ready(received_data_array: PackedByteArray):
 	var player_id: String = buffer.get_utf8_string()
 	ready_players[player_id] = true
 	if ready_players.size() == 2:
-		match_found.emit()
+		if not is_in_private_room:
+			match_found.emit()
+		else:
+			custom_lobby_full.emit()
 		#Fusion.rpc(start_match)
 
 @rpc("any_peer", "call_local")
@@ -272,6 +283,8 @@ func introduce(received_data_array: PackedByteArray):
 		reply_buffer.put_u8(SkinsManager.selected_skin)
 		
 		Fusion.rpc(introduce, reply_buffer.data_array)
+		player_introduced.emit()
+		
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -320,6 +333,18 @@ func get_opponents_skin_id() -> int:
 			opponents_skin_id = skins[player_id]
 			break
 	return opponents_skin_id
+
+
+func remove_opponents_data() -> void:
+	for player_id in names.keys():
+		if player_id != id:
+			names.erase(player_id)
+			teams.erase(player_id)
+			formations.erase(player_id)
+			ball_effects.erase(player_id)
+			levels.erase(player_id)
+			skins.erase(player_id)
+			ready_players.erase(player_id)
 
 
 func get_team_name() -> String:

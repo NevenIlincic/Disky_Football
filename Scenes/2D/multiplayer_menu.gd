@@ -42,6 +42,10 @@ var logged_in_player_stats: LoggedPlayerStats
 var formation_texture_dicts_host: Dictionary
 var formation_texture_dicts_guest: Dictionary
 
+#INPUTS
+@onready var lobby_name_input: LineEdit = $Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node/Lobby_Name_Input
+
+@onready var custom_lobby_menu: CustomLobbyMenu = $CustomLobbyMenu
 
 func _ready() -> void:
 	formation_texture_dicts_host = {
@@ -73,9 +77,12 @@ func _exit_tree() -> void:
 @rpc("any_peer","call_local")
 func _on_match_found():
 	FusionSdk.pre_match_info_showed.emit()
+	custom_lobby_menu.visible = false
 	logged_in_player_stats.hide_stats()
 	not_searching_node.visible = false
 	while_searching_node.visible = false
+	while_waiting_custom_node.visible = false
+	
 	match_found_node.visible = true
 	var opponents_name: String = FusionSdk.get_opponents_name()
 	var opponents_team_name: String = FusionSdk.get_opponents_team_name()
@@ -145,6 +152,7 @@ func show_not_searching_node():
 	not_searching_node.visible = true
 	while_searching_node.visible = false
 	while_waiting_custom_node.visible = false
+	create_custom_lobby_node.visible = false
 
 func show_while_searching_node():
 	searching_label.visible = true
@@ -157,6 +165,7 @@ func show_while_waiting_node():
 	not_searching_node.visible = false
 	while_waiting_custom_node.visible = true
 	searching_animation_player.play("Waiting_Animation")
+	create_custom_lobby_node.visible = false
 
 func get_my_name() -> String:
 	#ZAMENI SA PLAYGAMA SDK
@@ -193,4 +202,26 @@ func _on_custom_lobby_cancel_button_pressed() -> void:
 
 
 func _on_custom_lobby_confirm_button_pressed() -> void:
-	show_while_waiting_node()
+	var room_name: String = lobby_name_input.text
+	if room_name.length() == 5:
+		FusionSdk.create_or_join_private_room(room_name)
+		custom_lobby_menu.visible = true
+		not_searching_node.visible = false
+		while_waiting_custom_node.visible = false
+		create_custom_lobby_node.visible = false
+
+func _on_cancel_waiting_button_pressed() -> void:
+	if Fusion.is_in_room():
+		FusionSdk.leave_room()
+		search_canceled.emit()
+	else:
+		_on_search_canceled()
+		search_canceled.emit()
+
+
+func _on_custom_lobby_confirm_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()
+
+
+func _on_custom_lobby_cancel_button_mouse_entered() -> void:
+	AudioManager.play_hover_sound()

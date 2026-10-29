@@ -12,8 +12,6 @@ extends Node3D
 @onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
 @onready var ad_button: TextureButton = $HUD/Main_Menu_Nodes/Ad_Node/Ad_Button
 
-
-
 var forbidden_names: Dictionary = {
 	"XXX": true,
 	"SEX": true
@@ -85,7 +83,9 @@ func _on_confirm_button_pressed() -> void:
 
 func _on_custom_lobby_button_pressed() -> void:
 	team_name_initial_input_node.visible = false
-	main_menu_nodes.visible = false
+	ad_node.visible = false
+	logged_player_stats.visible = false
+	shop_menu.visible = false
 	
 func _on_edit_team_name_button_pressed() -> void:
 	team_name_initial_input_node.visible = true
