@@ -288,22 +288,30 @@ func check_is_ad_block_enabled() -> bool:
 
 func check_instant_multiplayer_join() -> void:
 	if OS.get_name() == "Web":
-		var room_name: String = CrazyGames.Game.get_invite_link_param("roomName")
-		var is_private_str: String = CrazyGames.Game.get_invite_link_param("isPrivate")
-		
-		if is_private_str != "":
-			FusionSdk.is_in_private_room = true if is_private_str == "true" else false
-		
-		if room_name != "":
-			instant_multiplayer_room_name = room_name
-			print("[INSTANT MULTIPLAYER] Detektovan ulaz preko SDK-a: ", room_name)
-			
-			
+		var is_instant: bool = bool(JavaScriptBridge.eval("!!(window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.isInstantMultiplayer)"))
+		print("INSTANT: ", is_instant)
+		if is_instant:
+			is_instant_multiplayer_join = true
+			instant_multiplayer_room_name = ""
 			if not Fusion.is_connected_to_photon():
 				await FusionSdk.connect_to_server()
+		else:
+			is_instant_multiplayer_join = false
+			var room_name: String = CrazyGames.Game.get_invite_link_param("roomName")
+			var is_private_str: String = CrazyGames.Game.get_invite_link_param("isPrivate")
 			
-			return
-		instant_multiplayer_room_name = ""
+			if is_private_str != "":
+				FusionSdk.is_in_private_room = true if is_private_str == "true" else false
+				print("IS PRIVATE ROOM: ", FusionSdk.is_in_private_room)
+			if room_name != "":
+				instant_multiplayer_room_name = room_name
+				print("[INSTANT MULTIPLAYER] Detektovan ulaz preko SDK-a: ", room_name)
+				if not Fusion.is_connected_to_photon():
+					await FusionSdk.connect_to_server()
+			else:
+				instant_multiplayer_room_name = ""				
+			
+				
 func generate_invite_url(custom_room_name: String) -> void:
 	invite_url = CrazyGames.Game.request_invite_url({"roomName": custom_room_name, "isPrivate": "true"})
 
@@ -332,4 +340,13 @@ func update_room_status(room_name: String, is_joinable: bool) -> void:
 			}
 		""" % [room_name, joinable_str, room_name, is_private_room_str]
 		
+		JavaScriptBridge.eval(js_code)
+
+func sdk_left_room() -> void:
+	if OS.get_name() == "Web":
+		var js_code = """
+			if (window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game) {
+				window.CrazyGames.SDK.game.leftRoom();
+			}
+		"""
 		JavaScriptBridge.eval(js_code)

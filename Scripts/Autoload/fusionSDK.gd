@@ -175,6 +175,7 @@ func leave_room() -> void:
 	formations.clear()
 	levels.clear()
 	skins.clear()
+	WebSdk.SDK.sdk_left_room()
 	Fusion.leave_room()
 
 func join_private_room(_room_name: String) -> void:

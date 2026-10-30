@@ -228,13 +228,32 @@ func _on_custom_lobby_cancel_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
 
 func check_is_instant_multiplayer_join() -> void:
-	if not WebSdk.SDK.instant_multiplayer_room_name.is_empty():
-		var room_name: String = WebSdk.SDK.instant_multiplayer_room_name
-		WebSdk.SDK.instant_multiplayer_room_name = ""
-		custom_lobby_menu.visible = true
+	#USAO PREKO ISNTANT MULTIPLAYER
+	if WebSdk.SDK.is_instant_multiplayer_join:
+		WebSdk.SDK.is_instant_multiplayer_join = false
 		not_searching_node.visible = false
 		while_waiting_custom_node.visible = false
 		create_custom_lobby_node.visible = false
 		instant_multiplayer_activated.emit()
+		custom_lobby_menu.visible = false
+		_on_join_button_pressed()
+		return
+	#USAO PREKO POZIVNOG LINKA (INVITE LINK)
+	if not WebSdk.SDK.instant_multiplayer_room_name.is_empty():
+		var room_name: String = WebSdk.SDK.instant_multiplayer_room_name
+		WebSdk.SDK.instant_multiplayer_room_name = ""
+		not_searching_node.visible = false
+		while_waiting_custom_node.visible = false
+		create_custom_lobby_node.visible = false
+		print("OVDE")
+		instant_multiplayer_activated.emit()
+		if FusionSdk.is_in_private_room:
+			print("PRIVATNA SOBA!")
+			custom_lobby_menu.visible = true
+		else:
+			custom_lobby_menu.visible = false
 		FusionSdk.join_instant_multiplayer_room_invite_link(room_name)
+
+		
+		
 		#FusionSdk.create_or_join_private_room(room_name)

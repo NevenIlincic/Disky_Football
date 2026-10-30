@@ -22,6 +22,7 @@ var remain_left_levels: int = 2
 
 var invite_url: String
 var instant_multiplayer_room_name: String
+var is_instant_multiplayer_join: bool = false
 
 @abstract
 func initialize_sdk();
@@ -82,3 +83,5 @@ func copy_invite_url() -> void;
 func get_room_name_from_invite_url() -> String;
 
 func update_room_status(room_name: String, is_joinable: bool) -> void: pass
+
+func sdk_left_room() -> void: pass

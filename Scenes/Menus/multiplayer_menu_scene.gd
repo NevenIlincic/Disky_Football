@@ -97,7 +97,10 @@ func _on_custom_lobby_button_pressed() -> void:
 	shop_menu.visible = false
 
 func _on_instant_multiplayer_activated() -> void:
-	_on_custom_lobby_button_pressed()
+	team_name_initial_input_node.visible = false
+	ad_node.visible = false
+	logged_player_stats.visible = false
+	shop_menu.visible = false
 
 func _on_edit_team_name_button_pressed() -> void:
 	team_name_initial_input_node.visible = true

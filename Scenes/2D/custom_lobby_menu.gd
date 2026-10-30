@@ -187,9 +187,9 @@ func hide_guest_elements() -> void:
 
 func _on_player_left(player_id: int, is_inactive: bool) -> void:
 	FusionSdk.remove_opponents_data()
-	WebSdk.SDK.update_room_status(Fusion.get_room().room_name, true)
 
 	if Fusion.is_master_client():
+		WebSdk.SDK.update_room_status(Fusion.get_room().room_name, true)
 		FusionSdk.ready_players[FusionSdk.id] = true
 		start_custom_lobby_button.visible = true
 		start_custom_lobby_button.disabled = true
