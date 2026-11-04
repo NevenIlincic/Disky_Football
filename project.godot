@@ -21,6 +21,7 @@ photon/connection/app_id="4e07bb6c-81aa-4f7f-ad6d-ebe7aaf66292"
 config/name="New Game Project"
 run/main_scene="uid://ccs2kesfln08v"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -49,7 +50,6 @@ enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", 
 
 connection/app_id="8056db0f-7ef2-4d62-90ac-3e727373a599"
 connection/default_region="eu"
-debug/log_level=0
 
 [gui]
 

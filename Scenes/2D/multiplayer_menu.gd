@@ -48,6 +48,11 @@ var formation_texture_dicts_guest: Dictionary
 
 @onready var custom_lobby_menu: CustomLobbyMenu = $CustomLobbyMenu
 
+#BUTTONS
+@onready var cancel_searching_button: TextureButton = $While_Searching_Node/Cancel_Searching_Button
+@onready var join_button: TextureButton = $Not_Searching_Node/Join_Button
+@onready var custom_game_button: TextureButton = $Not_Searching_Node/Custom_Game_Button
+
 func _ready() -> void:
 	formation_texture_dicts_host = {
 		0: _3_3_standard_texture_rect,
@@ -64,11 +69,18 @@ func _ready() -> void:
 		4: _5_1_front_texture_rect_guest
 	}
 	
+	check_is_in_room()
+		
 	Fusion.register_broadcast_receiver(self)
 	Fusion.room_left.connect(_on_search_canceled)
 	FusionSdk.match_found.connect(prepare_match_info)
 	logged_in_player_stats = get_tree().get_first_node_in_group("logged_player_stats")
-		
+
+func check_is_in_room() -> void:
+	if Fusion.is_in_room():
+		join_button.disabled = true
+		custom_game_button.disabled = true
+	
 func _exit_tree() -> void:
 	Fusion.unregister_broadcast_receiver(self)
 	if Fusion.room_left.is_connected(_on_search_canceled):
@@ -139,12 +151,16 @@ func _on_back_button_pressed() -> void:
 
 func _on_cancel_searching_button_pressed() -> void:
 	if Fusion.is_in_room():
+		cancel_searching_button.disabled = true
 		FusionSdk.leave_room()
 		search_canceled.emit()
 	else:
 		_on_search_canceled()
 		search_canceled.emit()
 func _on_search_canceled():
+	cancel_searching_button.disabled = false
+	join_button.disabled = false
+	custom_game_button.disabled = false
 	show_not_searching_node()
 	
 func show_not_searching_node():
