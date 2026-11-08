@@ -75,6 +75,7 @@ func _ready() -> void:
 	Fusion.room_left.connect(_on_search_canceled)
 	FusionSdk.match_found.connect(prepare_match_info)
 	logged_in_player_stats = get_tree().get_first_node_in_group("logged_player_stats")
+	WebSdk.SDK.join_room_requested.connect(_on_join_room_requested)
 
 func check_is_in_room() -> void:
 	if Fusion.is_in_room():
@@ -87,6 +88,9 @@ func _exit_tree() -> void:
 		Fusion.room_left.disconnect(_on_search_canceled)
 	if FusionSdk.match_found.is_connected(prepare_match_info):
 		FusionSdk.match_found.disconnect(prepare_match_info)
+	if WebSdk.SDK.join_room_requested.is_connected(_on_join_room_requested):
+		WebSdk.SDK.join_room_requested.disconnect(_on_join_room_requested)
+
 @rpc("any_peer","call_local")
 func _on_match_found():
 	FusionSdk.pre_match_info_showed.emit()
@@ -261,14 +265,25 @@ func check_is_instant_multiplayer_join() -> void:
 		not_searching_node.visible = false
 		while_waiting_custom_node.visible = false
 		create_custom_lobby_node.visible = false
-		print("OVDE")
 		instant_multiplayer_activated.emit()
 		if FusionSdk.is_in_private_room:
-			print("PRIVATNA SOBA!")
 			custom_lobby_menu.visible = true
 		else:
 			custom_lobby_menu.visible = false
 		FusionSdk.join_instant_multiplayer_room_invite_link(room_name)
+
+func _on_join_room_requested(room_name: String, is_private: bool) -> void:
+	FusionSdk.is_in_private_room = is_private
+	WebSdk.SDK.instant_multiplayer_room_name = ""
+	not_searching_node.visible = false
+	while_waiting_custom_node.visible = false
+	create_custom_lobby_node.visible = false
+	instant_multiplayer_activated.emit()
+	if FusionSdk.is_in_private_room:
+		custom_lobby_menu.visible = true
+	else:
+		custom_lobby_menu.visible = false
+	FusionSdk.join_instant_multiplayer_room_invite_link(room_name)
 
 		
 		

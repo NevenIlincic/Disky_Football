@@ -80,6 +80,9 @@ func _exit_tree() -> void:
 		Fusion.player_joined.disconnect(_on_player_joined)
 	if Fusion.connection_status_changed.is_connected(_on_connection_status_changed):
 		Fusion.connection_status_changed.disconnect(_on_connection_status_changed)
+	#if WebSdk.SDK.join_room_requested.is_connected(_on_join_room_requested):
+		#WebSdk.SDK.join_room_requested.disconnect(_on_join_room_requested)
+
 
 func _ready():
 	randomize()
@@ -95,10 +98,18 @@ func connect_to_signals():
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.player_joined.connect(_on_player_joined)
 	Fusion.connection_status_changed.connect(_on_connection_status_changed)
+
+
+func _on_join_room_requested(room_name: String, is_private: bool) -> void:
+	if is_private:
+		create_or_join_private_room(room_name)
+	else:
+		join_quick_match_room(room_name)
 func _on_connection_status_changed(status):
 	match status:
 		Fusion.ConnectionStatus.STATUS_DISCONNECTED:
 			has_connection_lost = true
+			WebSdk.SDK.sdk_left_room()
 			get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 
 
@@ -107,6 +118,7 @@ func connect_to_server():
 
 func _on_connected():
 	pass
+	#WebSdk.SDK.join_room_requested.connect(_on_join_room_requested)
 	#WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
@@ -129,6 +141,7 @@ func create_or_join_private_room(custom_room_name: String) -> void:
 
 func join_instant_multiplayer_room_invite_link(custom_room_name: String) -> void:
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	match_searching_started.emit()
 	room_options.max_players = 2
 	room_options.is_visible = false
 	room_options.custom_properties = {
@@ -147,6 +160,17 @@ func create_quick_match_room() -> void:
 		"fusion_map_data": "default_map"
 	}
 	Fusion.join_or_create_room("", room_options)
+
+func join_quick_match_room(room_name: String) -> void:
+	is_in_private_room = false
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = true
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	Fusion.join_or_create_room(room_name, room_options)
 
 #func create_room():
 	#is_in_private_room = false

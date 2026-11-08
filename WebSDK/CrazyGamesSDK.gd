@@ -5,6 +5,9 @@ var SINGLEPLAYER_STORAGE_KEY: String = "singleplayer_data"
 
 var user
 
+var _join_room_callback
+var _join_room_registered: bool = false
+
 func initialize_sdk():
 	await CrazyGames.is_initialised_async()
 	is_initialized = true
@@ -15,7 +18,6 @@ func initialize_sdk():
 	#FusionSdk.my_name = str("MeXa_",randi_range(0, 99999))
 	FusionSdk.my_name = get_player_name()
 	
-	#check_instant_multiplayer_join()
 	#CrazyGamesBridge.callbacks.ad_started.connect(_on_ad_started)
 	#CrazyGamesBridge.callbacks.ad_finished.connect(_on_ad_finished)
 	#CrazyGamesBridge.callbacks.ad_error.connect(_on_ad_error)
@@ -25,6 +27,11 @@ func initialize_sdk():
 	#save_singleplayer_data()
 	#delete_data()
 	#load_data()
+	
+	# Listener za situaciju kad je igra vec pokrenuta, a prijatelj klikne "Join"
+	register_join_room_listener()
+	# Proverava instant multiplayer i inviteParams pri startu igre
+	#check_instant_multiplayer_join()
 
 func check_is_on_mobile_device() -> bool:
 	var system_info: Dictionary = CrazyGamesBridge.get_system_info()
@@ -286,53 +293,160 @@ func _on_check_adblock_completed(result: bool):
 func check_is_ad_block_enabled() -> bool:
 	return CrazyGames.has_adblock
 
+
+# ======================================================================
+# INVITE / JOIN ROOM
+# ======================================================================
+
+# Poziva se jednom pri startu igre.
+# Pokriva: instant multiplayer, invite link (inviteParams) i fallback na URL parametre.
+
 func check_instant_multiplayer_join() -> void:
-	if OS.get_name() == "Web":
-		var is_instant: bool = bool(JavaScriptBridge.eval("!!(window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.isInstantMultiplayer)"))
-		if is_instant:
-			is_instant_multiplayer_join = true
-			instant_multiplayer_room_name = ""
+	if OS.get_name() != "Web":
+		return
+	
+	var is_instant: bool = bool(JavaScriptBridge.eval("!!(window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.isInstantMultiplayer)"))
+	if is_instant:
+		is_instant_multiplayer_join = true
+		instant_multiplayer_room_name = ""
+		if not Fusion.is_connected_to_photon():
+			await FusionSdk.connect_to_server()
+	else:
+		is_instant_multiplayer_join = false
+		var params: Dictionary = _get_initial_invite_params()
+		var room_name: String = str(params.get("roomName", ""))
+		
+		if params.has("isPrivate"):
+			FusionSdk.is_in_private_room = str(params["isPrivate"]) == "true"
+		
+		if room_name != "":
+			instant_multiplayer_room_name = room_name
 			if not Fusion.is_connected_to_photon():
 				await FusionSdk.connect_to_server()
 		else:
-			is_instant_multiplayer_join = false
-			var room_name: String = _get_invite_param("roomName")
-			var is_private_str: String = _get_invite_param("isPrivate")
-			#var room_name: String = CrazyGames.Game.get_invite_link_param("roomName")
-			#var is_private_str: String = CrazyGames.Game.get_invite_link_param("isPrivate")
-			#
-			var invite_params = JavaScriptBridge.eval("""
-			    JSON.stringify(window.CrazyGames.SDK.game.inviteParams)
-			""")
+			instant_multiplayer_room_name = ""
 
-			print("INVITE PARAMS: ", invite_params)
-			if is_private_str != "":
-				FusionSdk.is_in_private_room = true if is_private_str == "true" else false
-			if room_name != "":
-				instant_multiplayer_room_name = room_name
-				if not Fusion.is_connected_to_photon():
-					await FusionSdk.connect_to_server()
-			else:
-				instant_multiplayer_room_name = ""				
-			
 
-func _get_invite_param(key: String) -> String:
+# Cita window.CrazyGames.SDK.game.inviteParams kao JSON, isto kao listener
+func _get_initial_invite_params() -> Dictionary:
 	if OS.get_name() != "Web":
-		return ""
-	var js := """
-	(function() {
-		var q = new URLSearchParams(window.location.search);
-		var inner = q.get('czy_invite_params');
-		if (inner) {
-			var v = new URLSearchParams(inner).get('%s');
-			if (v !== null) return v;
-		}
-		var v2 = q.get('%s');
-		return v2 !== null ? v2 : '';
-	})()
-	""" % [key, key]
-	return str(JavaScriptBridge.eval(js))
-			
+		return {}
+	var json_str: String = str(JavaScriptBridge.eval("""
+		(function() {
+			try {
+				var q = new URLSearchParams(window.location.search);
+				var inner = q.get('czy_invite_params');
+				if (inner) {
+					var o = {};
+					new URLSearchParams(inner).forEach(function(v, k) { o[k] = v; });
+					if (o.roomName) return JSON.stringify(o);
+				}
+			} catch (e) {}
+			var p = window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.inviteParams;
+			return JSON.stringify(p || {});
+		})()
+	"""))
+	var params = JSON.parse_string(json_str)
+	if typeof(params) != TYPE_DICTIONARY:
+		return {}
+	return params
+#func check_instant_multiplayer_join() -> void:
+	#if OS.get_name() != "Web":
+		#return
+	#
+	#var is_instant: bool = bool(JavaScriptBridge.eval("!!(window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.isInstantMultiplayer)"))
+	#if is_instant:
+		#is_instant_multiplayer_join = true
+		#instant_multiplayer_room_name = ""
+		#if not Fusion.is_connected_to_photon():
+			#await FusionSdk.connect_to_server()
+	#else:
+		#is_instant_multiplayer_join = false
+		#var room_name: String = _get_invite_param("roomName")
+		#var is_private_str: String = _get_invite_param("isPrivate")
+		#
+		#if is_private_str != "":
+			#FusionSdk.is_in_private_room = true if is_private_str == "true" else false
+		#if room_name != "":
+			#instant_multiplayer_room_name = room_name
+			#if not Fusion.is_connected_to_photon():
+				#await FusionSdk.connect_to_server()
+		#else:
+			#instant_multiplayer_room_name = ""
+
+#
+#func _get_invite_param(key: String) -> String:
+	#if OS.get_name() != "Web":
+		#return ""
+	#
+	#var sdk_js := """
+	#(function() {
+		#var p = window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.inviteParams;
+		#if (!p) return '';
+		#var v = p['%s'];
+		#return (v === undefined || v === null) ? '' : String(v);
+	#})()
+	#""" % key
+	#var sdk_value: String = str(JavaScriptBridge.eval(sdk_js))
+	#if sdk_value != "" and sdk_value != "null" and sdk_value != "undefined":
+		#return sdk_value
+	#
+	#var js := """
+	#(function() {
+		#var q = new URLSearchParams(window.location.search);
+		#var inner = q.get('czy_invite_params');
+		#if (inner) {
+			#var v = new URLSearchParams(inner).get('%s');
+			#if (v !== null) return v;
+		#}
+		#var v2 = q.get('%s');
+		#return v2 !== null ? v2 : '';
+	#})()
+	#""" % [key, key]
+	#return str(JavaScriptBridge.eval(js))
+#
+
+func register_join_room_listener() -> void:
+	if OS.get_name() != "Web" or _join_room_registered:
+		return
+	_join_room_callback = JavaScriptBridge.create_callback(_on_join_room_js)
+	var window = JavaScriptBridge.get_interface("window")
+	window.__godotJoinRoomCb = _join_room_callback
+	JavaScriptBridge.eval("""
+		window.__godotJoinRoomListener = function(p) {
+			window.__godotJoinRoomCb(JSON.stringify(p || {}));
+		};
+		window.CrazyGames.SDK.game.addJoinRoomListener(window.__godotJoinRoomListener);
+	""")
+	_join_room_registered = true
+
+func unregister_join_room_listener() -> void:
+	if OS.get_name() != "Web" or not _join_room_registered:
+		return
+	JavaScriptBridge.eval("""
+		window.CrazyGames.SDK.game.removeJoinRoomListener(window.__godotJoinRoomListener);
+	""")
+	_join_room_registered = false
+
+func _on_join_room_js(args: Array) -> void:
+	_handle_invite_params_json(str(args[0]))
+
+func _handle_invite_params_json(json_str: String) -> void:
+	var params = JSON.parse_string(json_str)
+	if typeof(params) != TYPE_DICTIONARY:
+		return
+	var room_name: String = str(params.get("roomName", ""))
+	var is_private: bool = str(params.get("isPrivate", "false")) == "true"
+	if room_name == "":
+		return
+	
+	if Fusion.is_in_room():
+		FusionSdk.leave_room()
+		await Fusion.room_left
+		
+	join_room_requested.emit(room_name, is_private)
+
+
 func generate_invite_url(custom_room_name: String) -> void:
 	invite_url = CrazyGames.Game.request_invite_url({"roomName": custom_room_name, "isPrivate": "true"})
 
@@ -340,7 +454,9 @@ func copy_invite_url() -> void:
 	CrazyGamesBridge.copy_to_clipboard(invite_url)
 
 func get_room_name_from_invite_url() -> String:
-	return _get_invite_param("roomName")
+	var params: Dictionary = _get_initial_invite_params()
+	
+	return params["roomName"]
 
 func update_room_status(room_name: String, is_joinable: bool) -> void:
 	if not Fusion.is_connected_to_photon() or not Fusion.is_master_client():

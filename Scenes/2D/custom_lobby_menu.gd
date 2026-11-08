@@ -53,6 +53,7 @@ func _ready() -> void:
 	Fusion.player_left.connect(_on_player_left)
 	FusionSdk.player_introduced.connect(_on_player_introduced)
 	FusionSdk.custom_lobby_full.connect(_on_custom_lobby_full)
+	
 	if not Fusion.is_master_client():
 		start_custom_lobby_button.visible = false
 		invite_link_button.visible = false

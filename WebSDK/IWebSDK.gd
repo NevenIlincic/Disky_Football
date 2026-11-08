@@ -6,6 +6,8 @@ signal rewarded_ad_closed_early()
 signal interstitial_ad_watched()
 signal data_loaded()
 signal single_player_data_loaded()
+signal join_room_requested(room_name: String, is_private: bool)
+
 
 
 var is_initial_boot: bool = true
