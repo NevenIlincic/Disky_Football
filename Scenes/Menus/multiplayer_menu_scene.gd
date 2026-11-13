@@ -11,6 +11,7 @@ extends Node3D
 @onready var confirmation_dialog_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node
 @onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
 @onready var ad_button: TextureButton = $HUD/Main_Menu_Nodes/Ad_Node/Ad_Button
+@onready var not_logged_in_label: Label = $HUD/Main_Menu_Nodes/Not_Logged_In_Label
 
 var forbidden_names: Dictionary = {
 	"XXX": true,
@@ -45,6 +46,8 @@ func _ready() -> void:
 	check_is_ad_block_enabled()
 	
 	multiplayer_menu.check_is_instant_multiplayer_join()
+	if WebSdk.SDK.check_is_player_logged_in():
+		not_logged_in_label.visible = false
 	
 func check_is_ad_block_enabled() -> void:
 	if WebSdk.SDK.check_is_ad_block_enabled():

@@ -13,7 +13,14 @@
 	#Bridge.advertisement.check_adblock(Callable(self, "_on_check_adblock_completed"))
 	#check_is_game_audio_muted()
 	#load_singleplayer_data()
-	#load_multiplayer_data()
+	#if check_is_player_logged_in():
+		#load_multiplayer_data()
+	#else:
+		#FusionSdk.reset_multiplayer_data()
+		#FusionSdk.id = get_player_id()
+		#FusionSdk.my_name = get_player_name()
+		#FusionSdk.my_team_name = FusionSdk.get_random_3_letter_string()
+		#save_multiplayer_data()
 	##save_singleplayer_data()
 	##delete_data()
 	##load_data()
@@ -89,12 +96,15 @@
 	#Bridge.storage.set(MULTIPLAYER_STORAGE_KEY, data_json, Callable(self, "_on_multiplayer_data_saved"))
 #
 #func get_player_id() -> String:
-	#return Bridge.player.id
+	#if check_is_player_logged_in():
+		#return Bridge.player.id
+	#else:
+		#return str(randi_range(0, 99999))
 #func get_player_name() -> String:
-	#var player_name: String = Bridge.player.name
-	#if not player_name:
-		#player_name = "Player"
-	#return player_name
+	#if check_is_player_logged_in():
+		#return Bridge.player.name
+	#else:
+		#return str("Guest_", randi_range(0,99999))
 #
 #func load_singleplayer_data():
 	#Bridge.storage.get(SINGLEPLAYER_STORAGE_KEY, Callable(self, "_on_singleplayer_storage_loaded"))
@@ -188,3 +198,10 @@
 #
 #func check_is_ad_block_enabled() -> bool:
 	#return is_ad_block_enabled
+#
+#func generate_invite_url(custom_room_name: String) -> void:
+	#pass
+#func copy_invite_url() -> void:
+	#pass
+#func get_room_name_from_invite_url() -> String:
+	#return ""

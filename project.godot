@@ -26,6 +26,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+Bridge="*uid://cx4klxojbw6ck"
 FusionSdk="*uid://dirxpm6bjesk6"
 BallEffects="*uid://d0aufkeb8twm5"
 FormationsManager="*uid://yf0bkcqfv0fb"
@@ -33,8 +34,6 @@ SkinsManager="*uid://cis5rlfubeu4j"
 WebSdk="*uid://dwporwn7tse8u"
 TutorialText="*uid://cmq0ydirsm3kt"
 AudioManager="*uid://dfhem0lyyemw8"
-CrazyGamesBridge="*uid://ds5svweksph62"
-CrazyGames="*uid://7ja151qt4j2b"
 
 [display]
 
@@ -44,12 +43,13 @@ window/mode=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", "res://addons/crazygames/plugin.cfg", "res://addons/minimize_html_build/plugin.cfg")
+enabled=PackedStringArray("res://addons/brackeys_particle_controls/plugin.cfg", "res://addons/minimize_html_build/plugin.cfg", "res://addons/playgama_bridge/plugin.cfg")
 
 [fusion]
 
-connection/app_id="8056db0f-7ef2-4d62-90ac-3e727373a599"
+connection/app_id="d0726586-7812-4cb0-84d2-33ed225f5da3"
 connection/default_region="eu"
+debug/log_level=0
 
 [gui]
 

@@ -280,6 +280,7 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="Invite_Link_Button" type="TextureButton" parent="." unique_id=2021578239]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 offset_left = 880.0

@@ -159,7 +159,7 @@ func _on_room_joined() -> void:
 	if Fusion.is_master_client():
 		show_host_info_as_host()
 		start_custom_lobby_button.visible = true
-		invite_link_button.visible = true
+		invite_link_button.visible = false
 	else:
 		show_guest_info_as_guest()		
 		start_custom_lobby_button.visible = false
@@ -195,7 +195,7 @@ func _on_player_left(player_id: int, is_inactive: bool) -> void:
 		start_custom_lobby_button.visible = true
 		start_custom_lobby_button.disabled = true
 		
-		invite_link_button.visible = true
+		invite_link_button.visible = false
 		invite_link_button.disabled = false
 		
 		show_host_info_as_host()

@@ -16,7 +16,7 @@ func _ready() -> void:
 func initialize_sdk() -> void:
 	if is_initial_boot:
 		#is_initial_boot = false
-		SDK = CrazyGamesSdkClass.new()
+		SDK = ItchIoSDK.new()
 		add_child(SDK)
 		await SDK.initialize_sdk()
 		sdk_initialized.emit()
