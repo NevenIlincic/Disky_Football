@@ -8,12 +8,12 @@
 
 
 <a href="https://mexa123.itch.io/disky-football">
-  <img src="https://cdn.simpleicons.org/itchdotio/FA5C5C" alt="itch.io" width="24" height="24" />
+  <img src="https://cdn.simpleicons.org/itchdotio/FA5C5C" alt="itch.io" width="24" height="24" valign="middle" />
   Itch.io game page
 </a>
 <br>
 <a href="https://youtu.be/eAnGfGoKED4">
-  <img src="https://cdn.simpleicons.org/youtube/FA5C5C" alt="itch.io" width="24" height="24" />
+  <img src="https://cdn.simpleicons.org/youtube/FA5C5C" alt="itch.io" width="24" height="24" valign="middle" />
   Youtube gameplay preview video
 </a>
 
