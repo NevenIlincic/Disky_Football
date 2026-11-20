@@ -6,7 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://cwgd3dyb7awn1" path="res://Sprites/Buttons/Join_Button/Join_Button_Hovered.png" id="4_wq2yq"]
 [ext_resource type="Texture2D" uid="uid://cpdhim2kn7imy" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Enabled.png" id="5_1e1ep"]
 [ext_resource type="Texture2D" uid="uid://b45c0iogcufh5" path="res://Sprites/Buttons/Leave_Button/Leave_Button_Pressed.png" id="6_eekhh"]
+[ext_resource type="Texture2D" uid="uid://ch3u8yuhvmrib" path="res://Sprites/Buttons/Custom_Game_Button/Custom_Game_Button_Enabled.png" id="7_s3u1o"]
 [ext_resource type="Texture2D" uid="uid://1mlhrxgw4bj" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Enabled.png" id="8_1e1ep"]
+[ext_resource type="Texture2D" uid="uid://cvkfj2q8fybvh" path="res://Sprites/Buttons/Custom_Game_Button/Custom_Game_Button_Pressed.png" id="8_jdnxl"]
+[ext_resource type="Texture2D" uid="uid://b3qaoygsdul37" path="res://Sprites/Buttons/Custom_Game_Button/Custom_Game_Button_Hovered.png" id="9_b7j6m"]
 [ext_resource type="Texture2D" uid="uid://dueul4vgtbl3e" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Pressed.png" id="9_eekhh"]
 [ext_resource type="Texture2D" uid="uid://c0rua6goc4v3e" path="res://Sprites/Football_Field (5).png" id="10_1e1ep"]
 [ext_resource type="Texture2D" uid="uid://cmlvsr1jln0p2" path="res://Sprites/Buttons/Cancel_Button/Cancel_Button_Hovered.png" id="10_wq2yq"]
@@ -16,6 +19,12 @@
 [ext_resource type="Texture2D" uid="uid://c5iau1bap3uqa" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/4-2_Split_Formation_Display.png" id="17_wlmef"]
 [ext_resource type="Texture2D" uid="uid://duojkcc5tp5ws" path="res://Sprites/Multiplayer_Info/Pre_Match_Formations_Display/Host/2-4_Formation_Display.png" id="18_82ieo"]
 [ext_resource type="Texture2D" uid="uid://da8veegguuk7k" path="res://Sprites/Ball/Ball.png" id="19_s3u1o"]
+[ext_resource type="Texture2D" uid="uid://bkohb6262ajm6" path="res://Sprites/Multiplayer_Info/post_match_menu_background.png" id="20_w3bxt"]
+[ext_resource type="Texture2D" uid="uid://cw5ro8samsh1q" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Enabled.png" id="21_2x8p3"]
+[ext_resource type="Texture2D" uid="uid://dohme8yymib7u" path="res://Sprites/Multiplayer_Info/Input_Confirm_Button/Confirm_Button_Hovered.png" id="22_047r7"]
+[ext_resource type="Texture2D" uid="uid://uxjxkjwxwivp" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Enabled.png" id="23_uwotf"]
+[ext_resource type="Texture2D" uid="uid://deuhosc5t2q3u" path="res://Sprites/Buttons/Cancel_Icon_Button/Cancel_Icon_Hovered.png" id="24_k2m3g"]
+[ext_resource type="PackedScene" uid="uid://pi5d446fo35b" path="res://Scenes/2D/Custom_Lobby_Menu.tscn" id="25_2x8p3"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_skhyc"]
 load_path = "res://.godot/imported/Leave_Button_Hovered.png-41aa156ade9b30e804d06c0d2f9e8cee.ctex"
@@ -33,6 +42,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": ["SEARCHING..."]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("While_Waiting_Custom_Node/Waiting_Label:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["WAITING..."]
 }
 
 [sub_resource type="Animation" id="Animation_v1b01"]
@@ -52,11 +73,35 @@ tracks/0/keys = {
 "values": ["SEARCHING", "SEARCHING.", "SEARCHING..", "SEARCHING..."]
 }
 
+[sub_resource type="Animation" id="Animation_w3bxt"]
+resource_name = "Waiting_Animation"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("While_Waiting_Custom_Node/Waiting_Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.44, 0.83, 1.28),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["WAITING", "WAITING.", "WAITING..", "WAITING..."]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_skhyc"]
 _data = {
 &"RESET": SubResource("Animation_lwr0c"),
-&"Searching_Animation": SubResource("Animation_v1b01")
+&"Searching_Animation": SubResource("Animation_v1b01"),
+&"Waiting_Animation": SubResource("Animation_w3bxt")
 }
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xcrq"]
+texture = ExtResource("20_w3bxt")
+expand_margin_left = 15.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hfdtw"]
 
 [node name="MultiplayerMenu" type="Control" unique_id=48373522]
 layout_mode = 3
@@ -95,6 +140,19 @@ offset_bottom = 578.0
 texture_normal = ExtResource("5_1e1ep")
 texture_pressed = ExtResource("6_eekhh")
 texture_hover = SubResource("CompressedTexture2D_skhyc")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Custom_Game_Button" type="TextureButton" parent="Not_Searching_Node" unique_id=2031886992]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 880.0
+offset_top = 245.0
+offset_right = 1160.0
+offset_bottom = 349.0
+texture_normal = ExtResource("7_s3u1o")
+texture_pressed = ExtResource("8_jdnxl")
+texture_hover = ExtResource("9_b7j6m")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -353,9 +411,106 @@ text = "5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Create_Custom_Lobby_Node" type="Control" parent="." unique_id=1075505017]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Custom_Lobby_Create_Input_Node" type="Node2D" parent="Create_Custom_Lobby_Node" unique_id=932030304]
+
+[node name="Lobby_Name_Input" type="LineEdit" parent="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node" unique_id=1530571702]
+offset_left = 480.0
+offset_top = 192.0
+offset_right = 688.0
+offset_bottom = 256.0
+focus_mode = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_uneditable_color = Color(0.8745098, 0.8745098, 0.8745098, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_colors/font_placeholder_color = Color(0.45374805, 0.453749, 0.4537483, 0.6)
+theme_override_colors/caret_color = Color(0.36810172, 0.36810192, 0.3681028, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_0xcrq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hfdtw")
+placeholder_text = "Room name:"
+max_length = 5
+
+[node name="Label_Text" type="Label" parent="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node" unique_id=1860240431]
+custom_maximum_size = Vector2(900, -1)
+offset_left = 144.0
+offset_top = 8.0
+offset_right = 1044.0
+offset_bottom = 111.0
+theme_override_font_sizes/font_size = 32
+text = "Create or join custom lobby (5 characters). In custom lobby, gaining experience, fans and money is disabled."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Custom_Lobby_Confirm_Button" type="TextureButton" parent="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node" unique_id=1989550885]
+offset_left = 704.0
+offset_top = 205.0
+offset_right = 768.0
+offset_bottom = 245.0
+texture_normal = ExtResource("21_2x8p3")
+texture_hover = ExtResource("22_047r7")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Custom_Lobby_Cancel_Button" type="TextureButton" parent="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node" unique_id=1628731734]
+offset_left = 385.0
+offset_top = 206.0
+offset_right = 449.0
+offset_bottom = 246.0
+texture_normal = ExtResource("23_uwotf")
+texture_hover = ExtResource("24_k2m3g")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="While_Waiting_Custom_Node" type="Control" parent="." unique_id=241755574]
+visible = false
+anchors_preset = 0
+
+[node name="Waiting_Label" type="Label" parent="While_Waiting_Custom_Node" unique_id=631243853]
+layout_mode = 1
+offset_left = 920.0
+offset_top = 8.0
+offset_right = 1097.0
+offset_bottom = 58.0
+theme_override_font_sizes/font_size = 32
+text = "WAITING..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cancel_Waiting_Button" type="TextureButton" parent="While_Waiting_Custom_Node" unique_id=1081317530]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 880.0
+offset_top = 472.0
+offset_right = 1160.0
+offset_bottom = 576.0
+texture_normal = ExtResource("8_1e1ep")
+texture_pressed = ExtResource("9_eekhh")
+texture_hover = ExtResource("10_wq2yq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CustomLobbyMenu" parent="." unique_id=1031755761 instance=ExtResource("25_2x8p3")]
+visible = false
+layout_mode = 1
+
 [connection signal="mouse_entered" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Join_Button" to="." method="_on_join_button_pressed"]
 [connection signal="mouse_entered" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_mouse_entered"]
 [connection signal="pressed" from="Not_Searching_Node/Back_Button" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="Not_Searching_Node/Custom_Game_Button" to="." method="_on_custom_game_button_mouse_entered"]
+[connection signal="pressed" from="Not_Searching_Node/Custom_Game_Button" to="." method="_on_custom_game_button_pressed"]
 [connection signal="mouse_entered" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_mouse_entered"]
 [connection signal="pressed" from="While_Searching_Node/Cancel_Searching_Button" to="." method="_on_cancel_searching_button_pressed"]
+[connection signal="mouse_entered" from="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node/Custom_Lobby_Confirm_Button" to="." method="_on_custom_lobby_confirm_button_mouse_entered"]
+[connection signal="pressed" from="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node/Custom_Lobby_Confirm_Button" to="." method="_on_custom_lobby_confirm_button_pressed"]
+[connection signal="mouse_entered" from="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node/Custom_Lobby_Cancel_Button" to="." method="_on_custom_lobby_cancel_button_mouse_entered"]
+[connection signal="pressed" from="Create_Custom_Lobby_Node/Custom_Lobby_Create_Input_Node/Custom_Lobby_Cancel_Button" to="." method="_on_custom_lobby_cancel_button_pressed"]
+[connection signal="pressed" from="While_Waiting_Custom_Node/Cancel_Waiting_Button" to="." method="_on_cancel_waiting_button_pressed"]

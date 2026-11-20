@@ -17,23 +17,44 @@ var level_buttons: Array[LevelSelectionButton]
 
 @onready var mute_button: TextureButton = $HUD/Main_Menu_Nodes/Mute_Button
 @onready var unmute_button: TextureButton = $HUD/Main_Menu_Nodes/Unmute_Button
+@onready var start_button: TextureButton = $HUD/Main_Menu_Nodes/Buttons_Control/Start_Button
 
-func _ready() -> void:
-	WebSdk.SDK.set_game_ready()
+func connect_to_signals() -> void:
+	WebSdk.sdk_initialized.connect(_on_sdk_initialized)
+
+func enable_start_button() -> void:
+	start_button.disabled = false
+
+func set_up_mute_button() -> void:
 	if WebSdk.SDK.check_is_game_audio_muted() or AudioManager.is_audio_muted:
 		unmute_button.visible = true
 		mute_button.visible = false
-	
+
+func _on_sdk_initialized() -> void:		
+	WebSdk.SDK.single_player_data_loaded.connect(_on_singleplayer_data_loaded)
 	Fusion.connected_to_photon.connect(_on_online_connected)
 	Fusion.connection_failed.connect(_on_connection_failed)
 	multiplayer_menu.disconnected_from_multiplayer.connect(_on_disconnected_from_multiplayer)
+
+	if WebSdk.is_initial_boot:
+		WebSdk.is_initial_boot = false
+		await WebSdk.SDK.load_singleplayer_data()
+		await WebSdk.SDK.load_multiplayer_data()
+		if WebSdk.SDK.check_is_player_logged_in():
+			WebSdk.SDK.check_instant_multiplayer_join()
+	else:
+		set_up_menu()
+	
+func set_up_menu() -> void:
+	WebSdk.SDK.set_game_ready()
+	set_up_mute_button()
 	level_buttons = []
 	for button in level_buttons_node.get_children():
 		var level_button: LevelSelectionButton = button as LevelSelectionButton
 		level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
 		level_buttons.append(level_button)
-		if FusionSdk.has_connection_lost or FusionSdk.has_disconnected_intentionally:
-			level_button.update_display()
+		#if FusionSdk.has_connection_lost or FusionSdk.has_disconnected_intentionally:
+		level_button.update_display()
 	
 	if FusionSdk.has_connection_lost and not FusionSdk.has_disconnected_intentionally:
 		connecting_label.visible = true
@@ -41,9 +62,24 @@ func _ready() -> void:
 		await get_tree().create_timer(3.0).timeout
 		connecting_label.visible = false
 	
-		
+	enable_start_button()
 	check_is_login_supported()
 	
+func _ready() -> void:
+	connect_to_signals()
+	WebSdk.initialize_sdk()
+	#if not WebSdk.SDK.is_initial_boot:
+		#set_up_menu()
+		
+
+func _on_singleplayer_data_loaded() -> void:
+	set_up_menu()
+	#level_buttons = []
+	#for button in level_buttons_node.get_children():
+		#var level_button: LevelSelectionButton = button as LevelSelectionButton
+		#level_button.button_pressed.connect(_on_level_button_pressed.bind(level_button.level_number))
+		#level_buttons.append(level_button)
+		#level_button.update_display()
 
 func _on_level_button_pressed(level_number: int) -> void:
 	for level_button in level_buttons:
@@ -51,12 +87,13 @@ func _on_level_button_pressed(level_number: int) -> void:
 			level_button.level_selection_texture_button.set_pressed_no_signal(false)
 
 func check_is_login_supported() -> void:
-	if not WebSdk.SDK.check_is_login_supported():
-		multiplayer_button.visible = false
-	else:
-		if not WebSdk.SDK.check_is_player_logged_in():
-			multiplayer_button.disabled = true
-			must_be_logged_in_label.visible = true
+	pass
+	#if not WebSdk.SDK.check_is_login_supported():
+		#multiplayer_button.visible = false
+	#else:
+		#if not WebSdk.SDK.check_is_player_logged_in():
+			#multiplayer_button.disabled = true
+			#must_be_logged_in_label.visible = true
 
 func _exit_tree() -> void:
 	if Fusion.connected_to_photon.is_connected(_on_online_connected):
@@ -70,7 +107,10 @@ func _exit_tree() -> void:
 		if	level_button.button_pressed.is_connected(_on_level_button_pressed.bind(level_button.level_number)):
 			level_button.button_pressed.disconnect(_on_level_button_pressed.bind(level_button.level_number))
 
-
+	if WebSdk.SDK.single_player_data_loaded.is_connected(_on_singleplayer_data_loaded):
+		WebSdk.SDK.single_player_data_loaded.disconnect(_on_singleplayer_data_loaded)
+	if WebSdk.SDK.sdk_initialized.is_connected(_on_sdk_initialized):
+		WebSdk.SDK.sdk_initialized.disconnect(_on_sdk_initialized)
 
 func _on_start_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Test_Scene.tscn")

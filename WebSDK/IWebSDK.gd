@@ -6,6 +6,11 @@ signal rewarded_ad_closed_early()
 signal interstitial_ad_watched()
 signal data_loaded()
 signal single_player_data_loaded()
+signal join_room_requested(room_name: String, is_private: bool)
+
+
+
+var is_initial_boot: bool = true
 
 var is_initialized: bool = false
 var is_ad_block_enabled: bool = true
@@ -16,6 +21,10 @@ var last_unlocked_singleplayer_level: int = 1
 #LEAVE LEVELS
 const LEAVE_LEVEL_AMOUNT_BEFORE_AD: int = 2
 var remain_left_levels: int = 2 
+
+var invite_url: String
+var instant_multiplayer_room_name: String
+var is_instant_multiplayer_join: bool = false
 
 @abstract
 func initialize_sdk();
@@ -63,3 +72,18 @@ func check_is_on_mobile_device() -> bool;
 func check_is_game_audio_muted() -> bool;
 @abstract
 func set_audio_mute(is_muted: bool);
+func check_instant_multiplayer_join() -> void: pass
+
+@abstract
+func generate_invite_url(custom_room_name: String) -> void;
+
+func remove_invite_url() -> void:
+	invite_url = ""
+@abstract
+func copy_invite_url() -> void;
+@abstract
+func get_room_name_from_invite_url() -> String;
+
+func update_room_status(room_name: String, is_joinable: bool) -> void: pass
+
+func sdk_left_room() -> void: pass

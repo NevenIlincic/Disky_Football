@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://c6vh46ux6ymqj" path="res://Sprites/Buttons/Multiplayer_Button/Multiplayer_Button_Disabled.png" id="19_6skjw"]
 [ext_resource type="PackedScene" uid="uid://c50ttf4dwnk5i" path="res://Scenes/Level_Selection_Button/Level_Selection_Button.tscn" id="20_hvhnb"]
 [ext_resource type="PackedScene" uid="uid://dsvjqn70kehg5" path="res://Scenes/2D/Multiplayer_Menu.tscn" id="21_owhds"]
-[ext_resource type="Texture2D" uid="uid://bugt1fjnl44jw" path="res://Sprites/Game_Title/Game_Title.png" id="22_u07xp"]
 
 [sub_resource type="Environment" id="Environment_fom2g"]
 background_mode = 3
@@ -520,22 +519,6 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 grow_horizontal = 1
 grow_vertical = 1
-
-[node name="Game_Title_Rect" type="TextureRect" parent="HUD/Main_Menu_Nodes" unique_id=1879215299]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.38194445
-anchor_right = 1.0
-anchor_bottom = 0.38194445
-offset_left = -640.0
-offset_top = 24.0
-offset_right = -12.800049
-offset_bottom = 80.0
-grow_horizontal = 0
-texture = ExtResource("22_u07xp")
-expand_mode = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Connecting_Label" type="Label" parent="HUD" unique_id=318575064]
 visible = false

@@ -92,10 +92,13 @@ func show_experience_amount_flat() -> void:
 func show_experience_amount_percentage() -> void:
 	percentage_to_new_level_label.text = str(experience_percentage_amount, "%")
 
-func set_player_team_name(team_name: String) -> void:
+func set_player_team_name(team_name: String, is_initial_name_change: bool) -> void:
 	var new_display_name: String = str("TEAM: ", team_name)
 	team_name_label.text = new_display_name
-	FusionSdk.handle_initial_team_name_change(team_name)
+	if is_initial_name_change:
+		FusionSdk.handle_initial_team_name_change(team_name)
+	else:
+		FusionSdk.handle_team_name_change(team_name)
 	check_has_money_for_team_name_change()
 	#PlayGamaSDK.set_team_name()
 

@@ -7,13 +7,18 @@ signal money_spent(amount: int)
 signal fans_spent(amount: int)
 signal leveled_up()
 
+signal player_introduced()
+signal custom_lobby_full()
+
 var ready_players: Dictionary = {}
 
 var id: String
 var room_id: int
 var match_scene: PackedScene
-var my_name: String = str("MeXa", "_", randi())   
+var my_name: String 
 var my_team_name: String
+
+var is_in_private_room: bool = false
 
 var names: Dictionary = {}                 # player_id -> ime
 var teams: Dictionary = {} #player_id -> naziv_tima
@@ -75,25 +80,36 @@ func _exit_tree() -> void:
 		Fusion.player_joined.disconnect(_on_player_joined)
 	if Fusion.connection_status_changed.is_connected(_on_connection_status_changed):
 		Fusion.connection_status_changed.disconnect(_on_connection_status_changed)
-	
-	
+	#if WebSdk.SDK.join_room_requested.is_connected(_on_join_room_requested):
+		#WebSdk.SDK.join_room_requested.disconnect(_on_join_room_requested)
+
+
 func _ready():
 	randomize()
 	Fusion.register_broadcast_receiver(self)
-
-	id = str(randi(), my_name)
+	
+	#id = str(randi(), my_name)
 	#my_team_name = get_random_3_letter_string()
 	connect_to_signals()
+
 
 func connect_to_signals():
 	Fusion.connected_to_photon.connect(_on_connected)
 	Fusion.room_joined.connect(_on_room_joined)
 	Fusion.player_joined.connect(_on_player_joined)
 	Fusion.connection_status_changed.connect(_on_connection_status_changed)
+
+
+func _on_join_room_requested(room_name: String, is_private: bool) -> void:
+	if is_private:
+		create_or_join_private_room(room_name)
+	else:
+		join_quick_match_room(room_name)
 func _on_connection_status_changed(status):
 	match status:
 		Fusion.ConnectionStatus.STATUS_DISCONNECTED:
 			has_connection_lost = true
+			WebSdk.SDK.sdk_left_room()
 			get_tree().change_scene_to_file("res://Scenes/Menus/Menu_Scene.tscn")
 
 
@@ -101,7 +117,9 @@ func connect_to_server():
 	Fusion.connect_to_photon(id)
 
 func _on_connected():
-	WebSdk.SDK.load_multiplayer_data()
+	pass
+	#WebSdk.SDK.join_room_requested.connect(_on_join_room_requested)
+	#WebSdk.SDK.load_multiplayer_data()
 	#WebSDK.load_multiplayer_data()
 	#money_amount = 100
 	#fans_amount = 100
@@ -109,16 +127,62 @@ func _on_connected():
 	#experience_amount = 19
 
 
-func create_room():
+func create_or_join_private_room(custom_room_name: String) -> void:
+	is_in_private_room = true
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = false
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	
+	Fusion.join_or_create_room(custom_room_name, room_options)
+	
+
+func join_instant_multiplayer_room_invite_link(custom_room_name: String) -> void:
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	match_searching_started.emit()
+	room_options.max_players = 2
+	room_options.is_visible = false
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	
+	Fusion.join_or_create_room(custom_room_name, room_options)
+
+func create_quick_match_room() -> void:
+	is_in_private_room = false
 	match_searching_started.emit()
 	var room_options: FusionRoomOptions = FusionRoomOptions.new()
 	room_options.max_players = 2
+	room_options.is_visible = true
 	room_options.custom_properties = {
-		"fusion_map_data": "deafult_map"
+		"fusion_map_data": "default_map"
 	}
-	
-	var room_name: String = "Room_" + str(randi_range(100000, 999999))
 	Fusion.join_or_create_room("", room_options)
+
+func join_quick_match_room(room_name: String) -> void:
+	is_in_private_room = false
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.is_visible = true
+	room_options.custom_properties = {
+		"fusion_map_data": "default_map"
+	}
+	Fusion.join_or_create_room(room_name, room_options)
+
+#func create_room():
+	#is_in_private_room = false
+	#match_searching_started.emit()
+	#var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	#room_options.max_players = 2
+	#room_options.custom_properties = {
+		#"fusion_map_data": "deafult_map"
+	#}
+	#
+	##var room_name: String = "Room_" + str(randi_range(100000, 999999))
+	#Fusion.join_or_create_room("", room_options)
 
 
 func _notification(what: int) -> void:
@@ -135,14 +199,18 @@ func leave_room() -> void:
 	formations.clear()
 	levels.clear()
 	skins.clear()
+	WebSdk.SDK.sdk_left_room()
 	Fusion.leave_room()
 
-func join_room() -> void:
-	#var room_options: FusionRoomOptions = FusionRoomOptions.new()
-	#room_options.custom_properties = {
-		#"fusion_map_data": "default_map"
-	#}
-	Fusion.join_room("TEST_ROOM_1")
+func join_private_room(_room_name: String) -> void:
+	is_in_private_room = true
+	match_searching_started.emit()
+	var room_options: FusionRoomOptions = FusionRoomOptions.new()
+	room_options.max_players = 2
+	room_options.custom_properties = {
+		"fusion_map_data": "deafult_map"
+	}
+	Fusion.join_room(_room_name, room_options)
 
 func _on_player_joined(player_id: int, user_id: String):
 	if id == user_id:
@@ -157,12 +225,37 @@ func player_ready(received_data_array: PackedByteArray):
 	var player_id: String = buffer.get_utf8_string()
 	ready_players[player_id] = true
 	if ready_players.size() == 2:
-		match_found.emit()
-		#Fusion.rpc(start_match)
+		if not is_in_private_room:
+			match_found.emit()
+		else:
+			custom_lobby_full.emit()
+		WebSdk.SDK.update_room_status(Fusion.get_room().room_name, false)
 
+		#Fusion.rpc(start_match)
+	else:
+		WebSdk.SDK.update_room_status(Fusion.get_room().room_name, true)
 @rpc("any_peer", "call_local")
 func start_match():
 	get_tree().change_scene_to_file.call_deferred("res://Scenes/Multiplayer/Multiplayer_Scene.tscn")
+
+@rpc("any_peer", "call_local")
+func confirm_rematch(received_data_array: PackedByteArray) -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.data_array = received_data_array
+	var player_id: String = buffer.get_utf8_string()
+	
+	if not Fusion.is_master_client():
+		return
+		
+	ready_players[player_id] = true	
+	if ready_players.size() == 2:
+		ready_players.clear()
+		Fusion.rpc(start_match)
+		
+func request_rematch() -> void:
+	var buffer: StreamPeerBuffer = StreamPeerBuffer.new()
+	buffer.put_utf8_string(id)
+	Fusion.rpc(confirm_rematch, buffer.data_array)
 
 func _on_room_joined():
 	names[id] = my_name
@@ -245,6 +338,8 @@ func introduce(received_data_array: PackedByteArray):
 		reply_buffer.put_u8(SkinsManager.selected_skin)
 		
 		Fusion.rpc(introduce, reply_buffer.data_array)
+		player_introduced.emit()
+		
 
 func get_opponents_name() -> String:
 	var opponents_name: String
@@ -295,8 +390,19 @@ func get_opponents_skin_id() -> int:
 	return opponents_skin_id
 
 
+func remove_opponents_data() -> void:
+	for player_id in names.keys():
+		if player_id != id:
+			names.erase(player_id)
+			teams.erase(player_id)
+			formations.erase(player_id)
+			ball_effects.erase(player_id)
+			levels.erase(player_id)
+			skins.erase(player_id)
+			ready_players.erase(player_id)
+
+
 func get_team_name() -> String:
-	#ZAMENITI SA PLAYGAMA SDK
 	return get_random_3_letter_string()
 
 func get_random_3_letter_string() -> String:

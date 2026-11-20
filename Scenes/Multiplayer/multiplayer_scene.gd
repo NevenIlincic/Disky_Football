@@ -199,7 +199,6 @@ func _on_match_finished():
 	
 	turn_time_left_timer.stop()
 	turn_time_left_label.visible = false
-	FusionSdk.leave_room()
 	goal_scored_node.visible = false
 	post_match_screen.visible = true
 	post_match_screen.do_after_match()

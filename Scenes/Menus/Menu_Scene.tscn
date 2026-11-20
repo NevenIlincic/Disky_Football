@@ -365,6 +365,7 @@ offset_left = -144.0
 offset_top = -320.0
 offset_right = 136.0
 offset_bottom = -216.0
+disabled = true
 texture_normal = ExtResource("7_ntokn")
 texture_pressed = ExtResource("8_26fja")
 texture_hover = ExtResource("9_23287")

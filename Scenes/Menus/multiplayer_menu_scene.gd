@@ -11,6 +11,7 @@ extends Node3D
 @onready var confirmation_dialog_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node/Confirmation_Dialog_Node
 @onready var ad_node: Node2D = $HUD/Main_Menu_Nodes/Ad_Node
 @onready var ad_button: TextureButton = $HUD/Main_Menu_Nodes/Ad_Node/Ad_Button
+@onready var not_logged_in_label: Label = $HUD/Main_Menu_Nodes/Not_Logged_In_Label
 
 var forbidden_names: Dictionary = {
 	"XXX": true,
@@ -28,6 +29,9 @@ func _exit_tree() -> void:
 		multiplayer_menu.search_canceled.disconnect(_on_match_search_canceled)
 	if WebSdk.SDK.data_loaded.is_connected(_on_data_loaded):
 		WebSdk.SDK.data_loaded.disconnect(_on_data_loaded)
+	if multiplayer_menu.instant_multiplayer_activated.is_connected(_on_instant_multiplayer_activated):
+		multiplayer_menu.instant_multiplayer_activated.disconnect(_on_instant_multiplayer_activated)
+
 
 func _ready() -> void:	
 	logged_player_stats.set_player_stats()
@@ -37,7 +41,13 @@ func _ready() -> void:
 	logged_player_stats.edit_team_name_button_pressed.connect(_on_edit_team_name_button_pressed)
 	multiplayer_menu.search_started.connect(_on_match_search_started)
 	multiplayer_menu.search_canceled.connect(_on_match_search_canceled)
+	multiplayer_menu.custom_lobby_button_pressed.connect(_on_custom_lobby_button_pressed)
+	multiplayer_menu.instant_multiplayer_activated.connect(_on_instant_multiplayer_activated)
 	check_is_ad_block_enabled()
+	
+	multiplayer_menu.check_is_instant_multiplayer_join()
+	if WebSdk.SDK.check_is_player_logged_in():
+		not_logged_in_label.visible = false
 	
 func check_is_ad_block_enabled() -> void:
 	if WebSdk.SDK.check_is_ad_block_enabled():
@@ -78,13 +88,28 @@ func _on_confirm_button_pressed() -> void:
 	if entered_input.length() == 3 and entered_input != FusionSdk.my_team_name:
 		team_name_initial_input_node.visible = false
 		main_menu_nodes.visible = true
-		logged_player_stats.set_player_team_name(entered_input)
-		
+		var is_initial_team_change: bool = false
+		if FusionSdk.my_team_name.is_empty():
+			is_initial_team_change = true
+		logged_player_stats.set_player_team_name(entered_input, is_initial_team_change)
+
+func _on_custom_lobby_button_pressed() -> void:
+	team_name_initial_input_node.visible = false
+	ad_node.visible = false
+	logged_player_stats.visible = false
+	shop_menu.visible = false
+
+func _on_instant_multiplayer_activated() -> void:
+	team_name_initial_input_node.visible = false
+	ad_node.visible = false
+	logged_player_stats.visible = false
+	shop_menu.visible = false
+
 func _on_edit_team_name_button_pressed() -> void:
-		team_name_initial_input_node.visible = true
-		cancel_button.visible = true
-		label_text.visible = false
-		main_menu_nodes.visible = false
+	team_name_initial_input_node.visible = true
+	cancel_button.visible = true
+	label_text.visible = false
+	main_menu_nodes.visible = false
 
 
 func _on_cancel_button_pressed() -> void:
@@ -123,3 +148,5 @@ func _on_ad_confirm_button_mouse_entered() -> void:
 
 func _on_ad_cancel_button_mouse_entered() -> void:
 	AudioManager.play_hover_sound()
+
+		
